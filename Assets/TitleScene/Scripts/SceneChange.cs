@@ -15,7 +15,7 @@ public class SceneChange : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if(Input.anyKeyDown)
             StartFade();
     }
 
