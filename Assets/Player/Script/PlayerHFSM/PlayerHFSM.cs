@@ -8,12 +8,14 @@ using UnityHFSM;
 public class PlayerHFSM : MonoBehaviour
 {
     private StateMachine hfsm;
-    public bool isArm;
-    public bool isHit;
-    public bool isMove;
-    public bool isRun;
-    public bool isGrounded;
-    public bool isAvoidance;
+    public bool isArm = false;
+    public bool isHit = false;
+    public bool isMove = false;
+    public bool isRun = false;
+    public bool isGrounded = false;
+    public bool isAvoidance = false;
+    public bool isFall = false;
+
     public float isCharging;
 
 
@@ -64,22 +66,25 @@ public class PlayerHFSM : MonoBehaviour
 
         //상태 전이
         //손
-        hfsm.AddTwoWayTransition("Arm", "Unarmed", transition => isArm);
-        hfsm.AddTwoWayTransition("HitLayer", "Arm", transition => isHit && isArm);
-        hfsm.AddTwoWayTransition("HitLayer", "Unarmed", transition => isHit && !isArm);
-
-        unarmed.AddTwoWayTransition("NomalMoveLayer", "NomalIdle", transition => isMove);
-
-        nomalMoveLayer.AddTwoWayTransition("Run", "NomalMove", transition => isRun && isMove);
-        nomalMoveLayer.AddTwoWayTransition("NomalAvoidance", "NomalMove", transition => isAvoidance && isGrounded);
-        nomalMoveLayer.AddTransition("NomalFall", "NomalMove", transition => isGrounded);
-        nomalMoveLayer.AddTransition("Run", "NomalMove", transition => isGrounded);
-        nomalMoveLayer.AddTransition("NomalAvoidance", "NomalMove", transition => isGrounded);
-        nomalMoveLayer.AddTransition("Run", "NomalAvoidance", transition => isGrounded);
+        hfsm.AddTransition("Arm", "Unarmed", transition => !isArm);
+        hfsm.AddTransition("Unarmed", "Arm", transition => isArm);
+        hfsm.AddTransition("Arm", "HitLayer", transition => isHit && isArm);
+        hfsm.AddTransition("HitLayer", "Arm", transition => !isHit && !isArm);
+        hfsm.AddTransition("Unarmed", "HitLayer", transition => isHit && !isArm);
+        hfsm.AddTransition("HitLayer", "Unarmed", transition => !isHit && isArm);
 
 
-
-
+        unarmed.AddTransition("NomalIdle", "NomalMoveLayer", transition => isMove);
+        //unarmed.AddTransition("NomalMoveLayer", "NomalIdle", transition => isGrounded && !isRun && !isMove );
+        //여기 조건문
+        nomalMoveLayer.AddTransition("NomalMove", "Run", transition => isMove && isRun);
+        nomalMoveLayer.AddTransition("Run", "NomalMove", transition => isMove && !isRun);
+        nomalMoveLayer.AddTransition("NomalMove", "NomalAvoidance", transition => isAvoidance && isGrounded);
+        nomalMoveLayer.AddTransition("NomalAvoidance", "NomalMove", transition => !isAvoidance && isMove);
+        nomalMoveLayer.AddTransition("NomalMove", "NomalFall", transition => !isGrounded);
+        nomalMoveLayer.AddTransition("Run", "NomalAvoidance", transition => isAvoidance && isGrounded);
+        nomalMoveLayer.AddTransition("Run", "NomalFall", transition => !isGrounded);
+        nomalMoveLayer.AddTransition("NomalAvoidance", "NomalFall", transition => !isGrounded);
 
 
         //육
