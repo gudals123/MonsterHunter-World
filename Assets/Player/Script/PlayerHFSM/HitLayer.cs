@@ -7,6 +7,7 @@ public class HitLayer : StateMachine
     public override void OnEnter()
     {
         base.OnEnter();
+        Debug.Log("HitLayer");
     }
 
     public override void OnExit()

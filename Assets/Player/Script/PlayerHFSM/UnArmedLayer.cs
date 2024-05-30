@@ -2,27 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityHFSM;
-public class UnArmedLayer : StateMachine
+public class UnArmedLayer : MonoBehaviour
 {
+    public StateMachine unArmedLayer;
 
-    public override void OnEnter()
+    public bool isB = true;
+
+    private void Start()
     {
-        base.OnEnter();
+        unArmedLayer = new StateMachine();
+
+        unArmedLayer.AddState("A_State", onLogic: state => PrintState("A_State"));
+        unArmedLayer.AddState("B_State", onLogic: state => PrintState("B_State"));
+
+        unArmedLayer.SetStartState("A_State");
+
+        unArmedLayer.AddTwoWayTransition("B_State", "A_State", transition => isB);
+
+        unArmedLayer.Init();
     }
 
-    public override void OnExit()
+    void Update()
     {
-        base.OnExit();
+        unArmedLayer.OnLogic();
     }
 
-    public override void OnExitRequest()
+    void PrintState(string state)
     {
-        base.OnExitRequest();
+        Debug.Log(state);
     }
 
-    public override void OnLogic()
-    {
-        base.OnLogic();
-        //상태 전환
-    }
+
 }

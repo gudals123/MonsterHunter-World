@@ -7,6 +7,7 @@ public class ArmLayer : StateMachine
     public override void OnEnter()
     {
         base.OnEnter();
+        Debug.Log("ArmLayer");
     }
 
     public override void OnExit()
