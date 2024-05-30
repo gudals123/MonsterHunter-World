@@ -15,16 +15,18 @@ public class PlayerHFSM : MonoBehaviour
     public bool isGrounded = false;
     public bool isAvoidance = false;
     public bool isFall = false;
-
-    public float isCharging;
-
+    public bool isBattle = false;
+    public bool isCharging = false;
+    public bool isAttack1 = false;
+    public bool isAttack2 = false;
+    public bool isAttack3 = false;
+    public bool isAttack4 = false;
 
     private void Start()
     {
         //전체 FSM
         hfsm = new StateMachine();
 
-        //
         StateMachine unarmed = new StateMachine();
         StateMachine arm = new StateMachine();
         StateMachine hitLayer = new StateMachine();
@@ -41,19 +43,24 @@ public class PlayerHFSM : MonoBehaviour
         //전체 FSM
         hfsm.AddState("Unarmed", unarmed);
         unarmed.AddState("NomalMoveLayer", nomalMoveLayer);
+        nomalMoveLayer.AddState("NomalMoveIdle", onLogic: state => PrintState("NomalMoveIdle"));
         nomalMoveLayer.AddState("NomalMove", onLogic: state => PrintState("NomalMove"));
         nomalMoveLayer.AddState("Run", onLogic: state => PrintState("Run"));
         nomalMoveLayer.AddState("NomalAvoidance", onLogic: state => PrintState("NomalAvoidance"));
         nomalMoveLayer.AddState("NomalFall", onLogic: state => PrintState("NomalFall"));
         unarmed.AddState("NomalIdle", onLogic: stat => PrintState("NomalIdle"));
 
+
         hfsm.AddState("Arm", arm);
         arm.AddState("ArmMoveLayer", armMoveLayer);
+        armMoveLayer.AddState("ArmMoveIdle", onLogic: state => PrintState("ArmMoveIdle"));
         armMoveLayer.AddState("ArmMove", onLogic: state => PrintState("ArmMove"));
         armMoveLayer.AddState("ArmAvoidance", onLogic: state => PrintState("ArmAvoidance"));
         armMoveLayer.AddState("ArmFall", onLogic: state => PrintState("ArmFall"));
+
         arm.AddState("BattleLayer", battleLayer);
-        battleLayer.AddState("Charging", onLogic: state => { PrintState("Charging"); isCharging += Time.deltaTime; });
+        battleLayer.AddState("BattleIdle", onLogic: state => PrintState("BattleIdle"));
+        battleLayer.AddState("Charging", onLogic: state => PrintState("Charging"));
         battleLayer.AddState("Attack1", onLogic: state => PrintState("Attack1"));
         battleLayer.AddState("Attack2", onLogic: state => PrintState("Attack2"));
         battleLayer.AddState("Attack3", onLogic: state => PrintState("Attack3"));
@@ -74,13 +81,14 @@ public class PlayerHFSM : MonoBehaviour
         hfsm.AddTransition("HitLayer", "Unarmed", transition => !isHit && isArm);
 
 
-        unarmed.AddTransition("NomalIdle", "NomalMoveLayer", transition => isMove);
-        //unarmed.AddTransition("NomalMoveLayer", "NomalIdle", transition => isGrounded && !isRun && !isMove );
-        //여기 조건문
-        nomalMoveLayer.AddTransition("NomalMove", "Run", transition => isMove && isRun);
-        nomalMoveLayer.AddTransition("Run", "NomalMove", transition => isMove && !isRun);
+        unarmed.AddTransition("NomalIdle", "NomalMoveLayer", transition => isMove || isAvoidance);
+        unarmed.AddTransition("NomalMoveLayer", "NomalIdle", transition => !isMove && !isAvoidance);
+        nomalMoveLayer.AddTransition("NomalMoveIdle", "NomalMove", transition => isMove && !isAvoidance);
+        nomalMoveLayer.AddTransition("NomalMoveIdle", "NomalAvoidance", transition => isAvoidance);
+        nomalMoveLayer.AddTransition("NomalMove", "Run", transition => isMove && isRun && !isFall);
+        nomalMoveLayer.AddTransition("Run", "NomalMove", transition => isMove && !isRun && !isFall);
         nomalMoveLayer.AddTransition("NomalMove", "NomalAvoidance", transition => isAvoidance && isGrounded);
-        nomalMoveLayer.AddTransition("NomalAvoidance", "NomalMove", transition => !isAvoidance && isMove);
+        nomalMoveLayer.AddTransition("NomalAvoidance", "NomalMove", transition => !isAvoidance && isMove && !isFall);
         nomalMoveLayer.AddTransition("NomalMove", "NomalFall", transition => !isGrounded);
         nomalMoveLayer.AddTransition("Run", "NomalAvoidance", transition => isAvoidance && isGrounded);
         nomalMoveLayer.AddTransition("Run", "NomalFall", transition => !isGrounded);
@@ -88,30 +96,32 @@ public class PlayerHFSM : MonoBehaviour
 
 
         //육
-        #region Layer
-        arm.AddTwoWayTransition("ArmMoveLayer", "ArmIdle", transition => isMove && isArm);
-        arm.AddTwoWayTransition("BattleLayer", "ArmIdle", transition => isHit && isArm);
-        #endregion
+        arm.AddTransition("ArmIdle", "ArmMoveLayer", transition => isMove || isAvoidance);
+        arm.AddTransition("ArmMoveLayer", "ArmIdle", transition => !isMove && !isAvoidance);
+        arm.AddTransition("BattleLayer", "ArmIdle", transition => !isBattle);
+        arm.AddTransition("ArmIdle", "BattleLayer", transition => isBattle);
+        arm.AddTransition("ArmMoveLayer", "BattleLayer", transition => isBattle);
+        arm.AddTransition("BattleLayer", "ArmMoveLayer", transition => !isBattle);
 
-        #region Move
+        armMoveLayer.AddTransition("ArmMoveIdle", "ArmMove", transition => isMove && !isAvoidance);
+        armMoveLayer.AddTransition("ArmMoveIdle", "ArmAvoidance", transition => isAvoidance);
         armMoveLayer.AddTransition("ArmMove", "ArmAvoidance", transition => isArm && isGrounded && isAvoidance);
         armMoveLayer.AddTransition("ArmAvoidance", "ArmMove", transition => isArm && isGrounded && !isAvoidance);
-        armMoveLayer.AddTransition("ArmMove", "ArmFall", transition => isArm && isGrounded);
-        armMoveLayer.AddTransition("ArmAvoidance", "ArmFall", transition => isArm && isGrounded);
-        #endregion
+        armMoveLayer.AddTransition("ArmMove", "ArmFall", transition => isArm && isFall);
+        armMoveLayer.AddTransition("ArmAvoidance", "ArmFall", transition => isArm && isFall);
 
-        #region Battle
-        battleLayer.AddTransition("Charging", "Attack1", transition => isArm && isGrounded && Input.GetMouseButtonUp(0) && isCharging <= 1f);
-        battleLayer.AddTransition("Charging", "Attack2", transition => isArm && isGrounded && Input.GetMouseButtonUp(0) && isCharging > 2f);
-        battleLayer.AddTransition("Attack1", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
-        battleLayer.AddTransition("Attack1", "Attack3", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
-        battleLayer.AddTransition("Attack2", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
-        battleLayer.AddTransition("Attack2", "Attack3", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
-        battleLayer.AddTransition("Attack3", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
-        battleLayer.AddTransition("Attack3", "Attack4", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
-        battleLayer.AddTransition("Attack4", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
-        battleLayer.AddTransition("Attack4", "Attack3", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
-        #endregion
+        battleLayer.AddTransition("BattleIdle", "Charging", transition => isCharging);
+        battleLayer.AddTransition("BattleIdle", "Attack3", transition => isAttack3);
+        battleLayer.AddTransition("Charging", "Attack1", transition => isAttack1);
+        battleLayer.AddTransition("Charging", "Attack2", transition => isAttack2);
+        battleLayer.AddTransition("Attack1", "Charging", transition => isCharging);
+        battleLayer.AddTransition("Attack1", "Attack3", transition => isAttack3);
+        battleLayer.AddTransition("Attack2", "Charging", transition => isCharging);
+        battleLayer.AddTransition("Attack2", "Attack3", transition => isAttack3);
+        battleLayer.AddTransition("Attack3", "Charging", transition => isCharging);
+        battleLayer.AddTransition("Attack3", "Attack4", transition => isAttack4);
+        battleLayer.AddTransition("Attack4", "Charging", transition => isCharging);
+        battleLayer.AddTransition("Attack4", "Attack3", transition => isAttack3);
 
         hfsm.Init();
     }
