@@ -14,6 +14,7 @@ public class PlayerHFSM : MonoBehaviour
     public bool isRun;
     public bool isGrounded;
     public bool isAvoidance;
+    public float isCharging;
 
 
     private void Start()
@@ -50,12 +51,12 @@ public class PlayerHFSM : MonoBehaviour
         armMoveLayer.AddState("ArmAvoidance", onLogic: state => PrintState("ArmAvoidance"));
         armMoveLayer.AddState("ArmFall", onLogic: state => PrintState("ArmFall"));
         arm.AddState("BattleLayer", battleLayer);
-        battleLayer.AddState("Charging", onLogic: state => PrintState("Charging"));
+        battleLayer.AddState("Charging", onLogic: state => { PrintState("Charging"); isCharging += Time.deltaTime; });
         battleLayer.AddState("Attack1", onLogic: state => PrintState("Attack1"));
         battleLayer.AddState("Attack2", onLogic: state => PrintState("Attack2"));
         battleLayer.AddState("Attack3", onLogic: state => PrintState("Attack3"));
         battleLayer.AddState("Attack4", onLogic: state => PrintState("Attack4"));
-        arm.AddState("ArmIdle", onLogic: state => PrintState("Attack4"));
+        arm.AddState("ArmIdle", onLogic: state => PrintState("ArmIdle"));
 
         hfsm.AddState("HitLayer", hitLayer);
         hitLayer.AddState("Hit", onLogic: state => PrintState("Hit"));
@@ -88,13 +89,23 @@ public class PlayerHFSM : MonoBehaviour
         #endregion
 
         #region Move
-        armMoveLayer.AddTwoWayTransition("ArmMove", "ArmAvoidance", transition => isArm && isGrounded && isAvoidance);
+        armMoveLayer.AddTransition("ArmMove", "ArmAvoidance", transition => isArm && isGrounded && isAvoidance);
+        armMoveLayer.AddTransition("ArmAvoidance", "ArmMove", transition => isArm && isGrounded && !isAvoidance);
         armMoveLayer.AddTransition("ArmMove", "ArmFall", transition => isArm && isGrounded);
         armMoveLayer.AddTransition("ArmAvoidance", "ArmFall", transition => isArm && isGrounded);
         #endregion
 
         #region Battle
-
+        battleLayer.AddTransition("Charging", "Attack1", transition => isArm && isGrounded && Input.GetMouseButtonUp(0) && isCharging <= 1f);
+        battleLayer.AddTransition("Charging", "Attack2", transition => isArm && isGrounded && Input.GetMouseButtonUp(0) && isCharging > 2f);
+        battleLayer.AddTransition("Attack1", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
+        battleLayer.AddTransition("Attack1", "Attack3", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
+        battleLayer.AddTransition("Attack2", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
+        battleLayer.AddTransition("Attack2", "Attack3", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
+        battleLayer.AddTransition("Attack3", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
+        battleLayer.AddTransition("Attack3", "Attack4", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
+        battleLayer.AddTransition("Attack4", "Charging", transition => isArm && isGrounded && Input.GetMouseButtonDown(0));
+        battleLayer.AddTransition("Attack4", "Attack3", transition => isArm && isGrounded && Input.GetMouseButtonDown(1));
         #endregion
 
         hfsm.Init();
