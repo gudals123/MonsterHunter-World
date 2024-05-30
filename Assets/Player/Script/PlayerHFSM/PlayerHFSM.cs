@@ -1,74 +1,101 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityHFSM;
 
 public class PlayerHFSM : MonoBehaviour
 {
     private StateMachine hfsm;
-    public bool isTest;
+    public bool isArm;
     public bool isHit;
     public bool isMove;
     public bool isRun;
-
-
-    /*    private ArmLayer armLayer;
-        private UnArmedLayer unArmedLayer;
-        private HitLayer hitLayer;*/
+    public bool isGrounded;
+    public bool isAvoidance;
 
 
     private void Start()
     {
-
         //전체 FSM
         hfsm = new StateMachine();
 
-        var unArmedLayer = new UnArmedLayer();
+        //
+        StateMachine unarmed = new StateMachine();
+        StateMachine arm = new StateMachine();
+        StateMachine hitLayer = new StateMachine();
 
+        //비무장 FSM 내부 FSM
+        StateMachine nomalMoveLayer = new StateMachine();
 
-        hfsm.AddState("Idle", onLogic: state => PrintState("Idle"));
-        hfsm.AddState("UnArmedLayer", unArmedLayer.unArmedLayer);
-
-        hfsm.AddTwoWayTransition("Idle", "UnArmedLayer", transition => isTest);
-        hfsm.SetStartState("Idle");
-
-       /* hfsm = new StateMachine();
-        var MoveLayer = new StateMachine();
-
-
-
-        hfsm.AddState("IdleState", onLogic: state => PrintState("Idle"));
-        hfsm.AddState("HitState", onLogic: state => PrintState("HitState"));
-        hfsm.AddState("MoveLayer", MoveLayer);
-        MoveLayer.AddState("MoveState", onLogic: state => PrintState("MoveState"));
-        MoveLayer.AddState("RunState", onLogic: state => PrintState("RunState"));
-        hfsm.SetStartState("IdleState");
-        MoveLayer.SetStartState("MoveState");
-
-        hfsm.AddTwoWayTransition("IdleState", "HitState", transition => isHit);
-        hfsm.AddTwoWayTransition("IdleState", "MoveLayer", transition => isMove);
-        MoveLayer.AddTwoWayTransition("RunState", "MoveState", transition => isRun);*/
+        //무장 FSM 내부 FSM
+        StateMachine armMoveLayer = new StateMachine();
+        StateMachine battleLayer = new StateMachine();
 
 
 
-        /* 
-        unArmedLayer = new UnArmedLayer();
+        //전체 FSM
+        hfsm.AddState("Unarmed", unarmed);
+        unarmed.AddState("NomalMoveLayer", nomalMoveLayer);
+        nomalMoveLayer.AddState("NomalMove", onLogic: state => PrintState("NomalMove"));
+        nomalMoveLayer.AddState("Run", onLogic: state => PrintState("Run"));
+        nomalMoveLayer.AddState("NomalAvoidance", onLogic: state => PrintState("NomalAvoidance"));
+        nomalMoveLayer.AddState("NomalFall", onLogic: state => PrintState("NomalFall"));
+        unarmed.AddState("NomalIdle", onLogic: stat => PrintState("NomalIdle"));
 
-        armLayer = new ArmLayer();
-        hitLayer = new HitLayer();
+        hfsm.AddState("Arm", arm);
+        arm.AddState("ArmMoveLayer", armMoveLayer);
+        armMoveLayer.AddState("ArmMove", onLogic: state => PrintState("ArmMove"));
+        armMoveLayer.AddState("ArmAvoidance", onLogic: state => PrintState("ArmAvoidance"));
+        armMoveLayer.AddState("ArmFall", onLogic: state => PrintState("ArmFall"));
+        arm.AddState("BattleLayer", battleLayer);
+        battleLayer.AddState("Charging", onLogic: state => PrintState("Charging"));
+        battleLayer.AddState("Attack1", onLogic: state => PrintState("Attack1"));
+        battleLayer.AddState("Attack2", onLogic: state => PrintState("Attack2"));
+        battleLayer.AddState("Attack3", onLogic: state => PrintState("Attack3"));
+        battleLayer.AddState("Attack4", onLogic: state => PrintState("Attack4"));
+        arm.AddState("ArmIdle", onLogic: state => PrintState("Attack4"));
+
+        hfsm.AddState("HitLayer", hitLayer);
+        hitLayer.AddState("Hit", onLogic: state => PrintState("Hit"));
+        hitLayer.AddState("Dead", onLogic: state => PrintState("Dead"));
+
+        //상태 전이
+        //손
+        hfsm.AddTwoWayTransition("Arm", "Unarmed", transition => isArm);
+        hfsm.AddTwoWayTransition("HitLayer", "Arm", transition => isHit && isArm);
+        hfsm.AddTwoWayTransition("HitLayer", "Unarmed", transition => isHit && !isArm);
+
+        unarmed.AddTwoWayTransition("NomalMoveLayer", "NomalIdle", transition => isMove);
+
+        nomalMoveLayer.AddTwoWayTransition("Run", "NomalMove", transition => isRun && isMove);
+        nomalMoveLayer.AddTwoWayTransition("NomalAvoidance", "NomalMove", transition => isAvoidance && isGrounded);
+        nomalMoveLayer.AddTransition("NomalFall", "NomalMove", transition => isGrounded);
+        nomalMoveLayer.AddTransition("Run", "NomalMove", transition => isGrounded);
+        nomalMoveLayer.AddTransition("NomalAvoidance", "NomalMove", transition => isGrounded);
+        nomalMoveLayer.AddTransition("Run", "NomalAvoidance", transition => isGrounded);
 
 
-        hfsm.AddState("UnArmedLayer", unArmedLayer);
-        hfsm.SetStartState("UnArmedLayer");
-               hfsm.AddState("ArmLayer", armLayer);
-              hfsm.AddState("HitLayer", hitLayer);
 
-              
 
-              hfsm.AddTwoWayTransition(new Transition("ArmLayer", "UnArmedLayer", transition => isArm));
-              hfsm.AddTwoWayTransition(new Transition("HitLayer", "ArmLayer", transition => isHit));
-              hfsm.AddTwoWayTransition(new Transition("HitLayer", "UnArmedLayer", transition => isHit));*/
+
+
+        //육
+        #region Layer
+        arm.AddTwoWayTransition("ArmMoveLayer", "ArmIdle", transition => isMove && isArm);
+        arm.AddTwoWayTransition("BattleLayer", "ArmIdle", transition => isHit && isArm);
+        #endregion
+
+        #region Move
+        armMoveLayer.AddTwoWayTransition("ArmMove", "ArmAvoidance", transition => isArm && isGrounded && isAvoidance);
+        armMoveLayer.AddTransition("ArmMove", "ArmFall", transition => isArm && isGrounded);
+        armMoveLayer.AddTransition("ArmAvoidance", "ArmFall", transition => isArm && isGrounded);
+        #endregion
+
+        #region Battle
+
+        #endregion
 
         hfsm.Init();
     }
