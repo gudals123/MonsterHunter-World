@@ -5,7 +5,6 @@ using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
-    BattleManager INSTANCE;
     [Header("Speed")]
     private float moveSpeed;
     private float walkSpeed = 2f;
@@ -38,7 +37,8 @@ public class PlayerController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
-        INSTANCE = BattleManager.GetInstance();
+        _weapon.SetActive(false);
+
 
     }
 
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
     private void DeadCheck()
     {
-        if(INSTANCE._currentPlayerHP < 0)
+        if(BattleManager.Instance._currentPlayerHP < 0)
         {
             isDead = true;
         }
