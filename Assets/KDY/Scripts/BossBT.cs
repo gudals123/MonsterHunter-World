@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
+using System;
 
 public class BossBT : MonoBehaviour
 {
@@ -11,42 +12,60 @@ public class BossBT : MonoBehaviour
     public BehaviorTree tree;
     public Transform player;
 
+    [SerializeField] Rigidbody bossRb;
+
     public Animator animator;
 
-    public bool _detectedPlayer = true;
-
     public bool rotationToPlayer = false;
+    public bool startTracking = false;
+    Vector3 wayToGoPlayer;
 
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+        bossRb = GetComponent<Rigidbody>();
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
             // Left SubTree_NormalAttack
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => CombatManager._isPlayerInRange)
-                    .StateAction("NomalAttack", () => rotationToPlayer = true )
+                    .StateAction("NomalAttack", () =>
+                    {
+                        bossRb.velocity = Vector3.zero;
+                        rotationToPlayer = false;
+                    })
                     .Do(() =>
                     {
                         Debug.Log("NomalAttack");
                         return TaskStatus.Success;
                     })
                 .End()
-            // Middle SubTree
-/*                .Sequence()
-                    .Condition("detectedPlayer", () => _detectedPlayer)
-                    .StateAction("BattleTracking")
+
+                // Middle SubTree
+                .Sequence()
+                    .Condition("detectedPlayer", () => CombatManager._isPlayerInBossView )
+                    .StateAction("BattleTracking", () =>
+                    {
+                        rotationToPlayer = true;
+                        startTracking = true;
+                    })
                     .Do("TrackingPlayer", () =>
                     {
+                        // 시야 범위 안이면서 공격 범위 밖일 때 플레이어로 향하는 코드
                         Debug.Log("BattleTracking");
                         return TaskStatus.Success;
                     })
                 .End()
-*/
-            // Right SubTree
+
+                // Right SubTree
                 .Sequence()
                     .StateAction("NomalWalking", () => rotationToPlayer = false )
+                    .Do("IdleWalking", () =>
+                    {
+                        // Nomal 배회하는 코드
+                        return TaskStatus.Success;
+                    })
                 .End()
             .End()
             .Build();
@@ -55,10 +74,15 @@ public class BossBT : MonoBehaviour
     private void Update()  
     {
         CombatManager.isPlayerInRange(player, gameObject.transform);
-
+        wayToGoPlayer.y = 0;
         if (rotationToPlayer)
         {
             LookAtPlayer();
+        }
+
+        if (startTracking)
+        {
+            TrackingPlayer();
         }
 
 
@@ -68,6 +92,16 @@ public class BossBT : MonoBehaviour
                 }
         */
     }
+
+    private void TrackingPlayer()
+    {
+        if (!CombatManager._isPlayerInRange)
+        {
+            wayToGoPlayer = (player.transform.position - transform.position).normalized;
+            bossRb.velocity = wayToGoPlayer * movementSpeed;
+        }
+    }
+
     private void Start() { ActivateAi(); }
 
     IEnumerator ActivateAiCo()
