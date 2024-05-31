@@ -136,4 +136,13 @@ public class PlayerHFSM : MonoBehaviour
         Debug.Log(state);
     }
 
+    private void Hit(ControllerColliderHit hit)
+    {
+        //asssssdasfa
+
+
+
+
+    }
+
 }
