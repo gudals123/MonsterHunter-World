@@ -18,7 +18,7 @@ public class CombatManager : MonoBehaviour
 
     public static float distancePtoB;
     public static bool _isPlayerInRange;
-    private static bool _isPlayerInBossView;
+    public static bool _isPlayerInBossView;
 
     void Awake()
     {
