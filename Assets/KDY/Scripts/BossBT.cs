@@ -2,9 +2,6 @@ using CleverCrow.Fluid.BTs.Trees;
 using CleverCrow.Fluid.BTs.Tasks;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Animations;
-using System;
 
 public class BossBT : MonoBehaviour
 {
@@ -14,6 +11,8 @@ public class BossBT : MonoBehaviour
     public Transform player;
     private Vector3 moveDirection;
 
+    public GameObject breath;
+
     private Animator animator;
     private Rigidbody bossRb;
 
@@ -21,7 +20,10 @@ public class BossBT : MonoBehaviour
     private bool startTracking = false;
     private Vector3 wayToGoPlayer;
 
-    // «¡∑Œ≈‰≈∏¿‘ ¡¯«‡¿ª ¿ß«— ¿”Ω√ ∫Øºˆ
+    public bool canBreathAttack = false;
+    Vector3 wayToGoPlayer;
+    
+    // ÌîÑÎ°úÌÜ†ÌÉÄÏûÖ ÏßÑÌñâÏùÑ ÏúÑÌïú ÏûÑÏãú Î≥ÄÏàò
     public bool isBossGetHit = false;
     public bool isBossDead = false;
 
@@ -33,19 +35,33 @@ public class BossBT : MonoBehaviour
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
-            // Left SubTree_NormalAttack
+                // Left SubTree
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => CombatManager._isPlayerInRange)
-                    .StateAction("NomalAttack", () =>
-                    {
-                        bossRb.velocity = Vector3.zero;
-                        rotationToPlayer = false;
-                    })
-                    .Do(() =>
-                    {
-                        Debug.Log("NomalAttack");
-                        return TaskStatus.Success;
-                    })
+                        .Selector()
+                            .Sequence()
+                                .Condition("canBreathAttack", () => canBreathAttack = SetBreathChance())
+                                .StateAction("BreathAttack", () => { breath.SetActive(true); })
+                                .Do(() =>
+                                {
+                                    CombatManager._instance.StartBreathAttack();
+                                    breath.SetActive(false);
+                                    Debug.Log("Breath Attack");
+                                    canBreathAttack = !canBreathAttack;
+                                    return TaskStatus.Success;
+                                })
+                            .End()
+                            .StateAction("NomalAttack", () =>
+                            {
+                                bossRb.velocity = Vector3.zero;
+                                rotationToPlayer = false;
+                            })
+                            .Do(() =>
+                            {
+                                Debug.Log("NomalAttack");
+                                return TaskStatus.Success;
+                            })
+                        .End()
                 .End()
 
                 // Middle SubTree
@@ -99,12 +115,12 @@ public class BossBT : MonoBehaviour
     {
         while (true)
         {
-            if (isBossGetHit)   // √ﬂ»ƒ CombatManager._bossGetHit∑Œ ∫Ø∞Ê øπ¡§
+            if (isBossGetHit)   // Ï∂îÌõÑ CombatManager._bossGetHitÎ°ú Î≥ÄÍ≤Ω ÏòàÏ†ï
             {
                 animator.Play("Hit");
             }
 
-            if (isBossDead)   // √ﬂ»ƒ !CombatManager._isBossDead∑Œ ∫Ø∞Ê øπ¡§
+            if (isBossDead)   // Ï∂îÌõÑ !CombatManager._isBossDeadÎ°ú Î≥ÄÍ≤Ω ÏòàÏ†ï
             {
                 animator.Play("Die");
                 CombatManager._isBossDead = true;
@@ -129,8 +145,17 @@ public class BossBT : MonoBehaviour
         if (!CombatManager._isPlayerInRange)
         {
             Vector3 direction = (player.position - transform.position).normalized;
-            moveDirection = new Vector3(direction.x, 0, direction.z); // y√‡ πÊ«‚¿∫ π´Ω√
+            moveDirection = new Vector3(direction.x, 0, direction.z); // yÏ∂ï Î∞©Ìñ•ÏùÄ Î¨¥Ïãú
             bossRb.MovePosition(transform.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+        }
+    }
+
+    private void TrackingPlayer()
+    {
+        if (!CombatManager._isPlayerInRange)
+        {
+            wayToGoPlayer = (player.transform.position - transform.position).normalized;
+            bossRb.velocity = wayToGoPlayer * movementSpeed;
         }
     }
 
@@ -144,6 +169,14 @@ public class BossBT : MonoBehaviour
             Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
             bossRb.MoveRotation(rotation);
         }
+    }
+
+    public bool SetBreathChance()
+    {
+        float ran = UnityEngine.Random.value;
+        Debug.Log(ran);
+        if(ran <= 0.5) return canBreathAttack = true;   // Ï∂îÌõÑ boss HP Í∞Ä 30% Ïù¥ÌïòÏùº Ï°∞Í±¥ Ï∂îÍ∞Ä : CombatManager._currentBossHP <= 600 && 
+        else return canBreathAttack = false;
     }
 
 
