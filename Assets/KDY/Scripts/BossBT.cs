@@ -21,7 +21,6 @@ public class BossBT : MonoBehaviour
     private Vector3 wayToGoPlayer;
 
     public bool canBreathAttack = false;
-    Vector3 wayToGoPlayer;
     
     // 프로토타입 진행을 위한 임시 변수
     public bool isBossGetHit = false;
@@ -147,15 +146,6 @@ public class BossBT : MonoBehaviour
             Vector3 direction = (player.position - transform.position).normalized;
             moveDirection = new Vector3(direction.x, 0, direction.z); // y축 방향은 무시
             bossRb.MovePosition(transform.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
-        }
-    }
-
-    private void TrackingPlayer()
-    {
-        if (!CombatManager._isPlayerInRange)
-        {
-            wayToGoPlayer = (player.transform.position - transform.position).normalized;
-            bossRb.velocity = wayToGoPlayer * movementSpeed;
         }
     }
 
