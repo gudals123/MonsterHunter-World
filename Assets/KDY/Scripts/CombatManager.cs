@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
@@ -22,15 +23,18 @@ public class CombatManager : MonoBehaviour
 
     void Awake()
     {
-        if (_instance != null)
+        if (_instance == null)
         {
             _instance = this;
+            DontDestroyOnLoad(gameObject);
+            InitializeStats();
         }
-
-        DontDestroyOnLoad(gameObject);
-
-        InitializeStats();
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
+
 
     public void InitializeStats()
     {
@@ -78,6 +82,21 @@ public class CombatManager : MonoBehaviour
             _currentBossHP -= damage;
         if (type == "Boss")
             _currentPlayerHP -= damage;
+    }
+
+    public void StartBreathAttack()
+    {
+        StartCoroutine(BreathAttack()); 
+    }
+
+    public static IEnumerator BreathAttack()
+    {
+        Debug.Log("Start Breath Attacking~~~~~~");
+        // 직선 브레스 오브젝트 켬
+        // CollisionEnter 시 TakeDamage
+        yield return new WaitForSeconds(2f);
+        // 직선 브레스 오브젝트 끔
+        Debug.Log("Quit Breath Attack~~~~~~");
     }
 
 }
