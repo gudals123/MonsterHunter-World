@@ -4,83 +4,107 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
+using System;
 
 public class BossBT : MonoBehaviour
 {
-    public float movementSpeed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float rotationSpeed;
     public BehaviorTree tree;
     public Transform player;
+    private Vector3 moveDirection;
 
-    public Animator animator;
+    private Animator animator;
+    private Rigidbody bossRb;
 
-    public bool _detectedPlayer = true;
+    private bool rotationToPlayer = false;
+    private bool startTracking = false;
+    private Vector3 wayToGoPlayer;
 
-    public bool rotationToPlayer = false;
+    // 프로토타입 진행을 위한 임시 변수
+    public bool isBossGetHit = false;
+    public bool isBossDead = false;
 
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+        bossRb = GetComponent<Rigidbody>();
+        bossRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
             // Left SubTree_NormalAttack
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => CombatManager._isPlayerInRange)
-                    .StateAction("NomalAttack", () => rotationToPlayer = true )
+                    .StateAction("NomalAttack", () =>
+                    {
+                        bossRb.velocity = Vector3.zero;
+                        rotationToPlayer = false;
+                    })
                     .Do(() =>
                     {
                         Debug.Log("NomalAttack");
                         return TaskStatus.Success;
                     })
                 .End()
-            // Middle SubTree
-/*                .Sequence()
-                    .Condition("detectedPlayer", () => _detectedPlayer)
-                    .StateAction("BattleTracking")
+
+                // Middle SubTree
+                .Sequence()
+                    .Condition("detectedPlayer", () => CombatManager._isPlayerInBossView )
+                    .StateAction("BattleTracking", () =>
+                    {
+                        rotationToPlayer = true;
+                        startTracking = true;
+                    })
                     .Do("TrackingPlayer", () =>
                     {
                         Debug.Log("BattleTracking");
                         return TaskStatus.Success;
                     })
                 .End()
-*/
-            // Right SubTree
+
+                // Right SubTree
                 .Sequence()
                     .StateAction("NomalWalking", () => rotationToPlayer = false )
+                    .Do("NomalWalking", () =>
+                    {
+                        Debug.Log("NomalWalking");
+                        return TaskStatus.Success;
+                    })
                 .End()
             .End()
             .Build();
     }
 
-    private void Update()  
+    private void Update()
     {
         CombatManager.isPlayerInRange(player, gameObject.transform);
+        wayToGoPlayer.y = 0;
 
         if (rotationToPlayer)
         {
             LookAtPlayer();
         }
 
+        if (startTracking)
+        {
+            TrackingPlayer();
+        }
 
-        /*        if (CombatManager._checkParrying)
-                {
-                    BossParrying();
-                }
-        */
     }
+
     private void Start() { ActivateAi(); }
 
     IEnumerator ActivateAiCo()
     {
         while (true)
         {
-            /*if (CombatManager._isIdle == false)
+            if (isBossGetHit)   // 추후 CombatManager._bossGetHit로 변경 예정
             {
-                yield return null;
-                continue;
-            }*/
+                animator.Play("Hit");
+            }
 
-            if (!CombatManager._isBossDead)
+            if (isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
             {
                 animator.Play("Die");
                 CombatManager._isBossDead = true;
@@ -95,28 +119,20 @@ public class BossBT : MonoBehaviour
         }
     }
 
-/*    public void BreakDefense()
-    {
-        if (CombatManager._isForward && CombatManager._dist <= CombatManager._attackRange)
-        {
-            transform.LookAt(_player.position);
-            _player.GetComponent<PlayerController>().isDamage = true;
-            CombatManager.ConsumeStamina(CombatManager._currentPlayerST);
-        }
-    }
-*/
-/*    void BossParrying()
-    {
-        _animator.Play("Hit");
-        _tree.RemoveActiveTask(_tree.Root);
-    }
-*/
-
     public void ActivateAi()
     {
         StartCoroutine(ActivateAiCo());
     }
 
+    private void TrackingPlayer()
+    {
+        if (!CombatManager._isPlayerInRange)
+        {
+            Vector3 direction = (player.position - transform.position).normalized;
+            moveDirection = new Vector3(direction.x, 0, direction.z); // y축 방향은 무시
+            bossRb.MovePosition(transform.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+        }
+    }
 
     public void LookAtPlayer()
     {
@@ -124,11 +140,11 @@ public class BossBT : MonoBehaviour
 
         if (targetDirection != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 7.5f * Time.deltaTime);
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            bossRb.MoveRotation(rotation);
         }
     }
-
 
 
     /*    public void BossSound(string name)
