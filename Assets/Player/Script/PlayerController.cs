@@ -80,8 +80,6 @@ public class PlayerController : MonoBehaviour
             isAttack = false;
             _weapon.SetActive(false);
         }
-        
-
     }
 
     private void DeadCheck()
@@ -115,11 +113,11 @@ public class PlayerController : MonoBehaviour
             isMove = true;
         }
 
-/*        Vector3 direction = new Vector3(horizontal, 0, vertical);
+        Vector3 direction = new Vector3(horizontal, 0f, vertical);
 
-        Vector3 newVelocity = direction * moveSpeed * Time.deltaTime;
+        Vector3 newVelocity = direction * moveSpeed;
 
-        _rigidbody.velocity = newVelocity;  */  
+        _rigidbody.velocity = newVelocity;
     }
 
     private void RunCheck()
