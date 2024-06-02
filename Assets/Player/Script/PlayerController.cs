@@ -7,39 +7,40 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
     private float moveSpeed;
-    private float walkSpeed = 2f;
-    private float RunSpeed = 4f;
+    [SerializeField] private float walkSpeed = 2f;
+    [SerializeField] private float RunSpeed = 4f;
+    public float rotationSpeed = 360f; // 초당 회전 속도 (각도)
+    public float dodgeSpeed = 10f;
 
     [Header("Component")]
     private Rigidbody _rigidbody;
     private Animator _animator;
+    [SerializeField] private Transform _modle;
 
 
     [Header("Behaviour bool")]
-    [SerializeField]private bool isMove = false;
-    [SerializeField] private bool isAvoidance = false;
-    [SerializeField] private bool isGrounded = false;
-    [SerializeField] private bool isRun = false;
-    [SerializeField] private bool isUnarmed = true;
-    [SerializeField] private bool isAttack = false;
-    [SerializeField] private bool isHit = false;
-    [SerializeField] private bool isMouseLeft = false;
-    [SerializeField] private bool isDead = false;
+    [SerializeField]private bool isMoveing = false;
+    [SerializeField]private bool isWalk = false;
+    [SerializeField]private bool isRun = false;
+    [SerializeField]private bool isDodge = false;
+    [SerializeField]private bool isGetHit = false;
+    [SerializeField]private bool isDead = false;
+    [SerializeField]private bool isGrounded = false;
+    [SerializeField]private bool isFall = false;
+    [SerializeField]private bool isArmed = false;
+    [SerializeField]private bool isAttacking = false;
+    private bool isSwitchDone = true;
 
-    private float chargingDurationTime = 0;
-    private int comboCount = 0;
 
-    [Header("Object")]
-    [SerializeField]private GameObject _weapon;
+
 
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
-        _weapon.SetActive(false);
+        _animator = _modle.GetComponent<Animator>();
 
-
+        moveSpeed = walkSpeed;
     }
 
     private void FixedUpdate()
@@ -49,107 +50,113 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (!isHit)
-        {
-            Move();
-        }
-        
+        Move();
+
+
+
     }
 
     void Update()
     {
         DeadCheck();
-        ArmCheck();
-    }
-
-    private void ArmCheck()
-    {
-        if (!Input.GetMouseButtonDown(0) && !Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            return;
-        }
-        if (isUnarmed && (isHit || Input.GetMouseButtonDown(0)))
-        {
-            isUnarmed = false;
-            isAttack = true;
-            _weapon.SetActive(true);
-        }
-        if(!isUnarmed && Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            isUnarmed = true;
-            isAttack = false;
-            _weapon.SetActive(false);
-        }
+        HandleInput();
+        AnimatorControll();
     }
 
     private void DeadCheck()
     {
-        if(BattleManager.Instance._currentPlayerHP < 0)
+        if (BattleManager.Instance._currentPlayerHP <= 0)
         {
             isDead = true;
         }
     }
 
-
     private void Move()
     {
-        if (isMove)
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+
+
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+
+        if(movement == Vector3.zero)
         {
-            RunCheck();
-        }
-
-        DoAvoidance();
-
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-
-
-        if (horizontal == 0 && vertical == 0)
-        {
-            isMove = false;
-        }
-        else
-        {
-            isMove = true;
-        }
-
-        Vector3 direction = new Vector3(horizontal, 0f, vertical);
-
-        Vector3 newVelocity = direction * moveSpeed;
-
-        _rigidbody.velocity = newVelocity;
-    }
-
-    private void RunCheck()
-    {
-        if(Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            isRun = true;
-            moveSpeed = RunSpeed;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            isRun = false;
-            moveSpeed = walkSpeed;
-        }
-
-    }
-    
-    private void DoAvoidance()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            isAvoidance  = true;    
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            isAvoidance = false;
-        }
-        else
-        {
+            isMoveing = false;
+            isWalk = false;
             return;
         }
+        else
+        {
+            isMoveing = true;
+            isWalk = true;
+
+            _rigidbody.MovePosition(transform.position + movement * moveSpeed * Time.fixedDeltaTime);
+            
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            _rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
+        }
+    } 
+
+
+    private void HandleInput()
+    {
+        //회피
+        if (Input.GetKeyDown(KeyCode.Space) && !isDodge)
+        {
+            isDodge = true;
+            StartCoroutine(Dodge());
+        }
+
+        //무기 스위칭
+        if ((isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
+            (!isArmed && Input.GetMouseButtonDown(0)))
+        {
+            isArmed = !isArmed;
+        }
+
+        //달리기
+        if (!isArmed && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            moveSpeed = RunSpeed;
+            isRun = true;
+        }
+        else if (!isArmed && Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            moveSpeed = walkSpeed;
+            isRun = false;
+        }
     }
+
+
+    IEnumerator Dodge()
+    {
+        float rollTime = 0.7f; // 앞구르기 시간
+        float timer = 0f;
+
+        while (timer < rollTime)
+        {
+            // 캐릭터를 앞으로 이동시킵니다.
+            transform.Translate(Vector3.forward * dodgeSpeed * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // 앞구르기가 끝났을 때
+        isDodge = false;
+    }
+
+    private void AnimatorControll()
+    {
+        _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
+        _animator.SetBool(PlayerAnimatorParamiter.IsMoveing, isMoveing);
+        _animator.SetBool(PlayerAnimatorParamiter.IsWalk, isWalk);
+        _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
+        _animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
+        _animator.SetBool(PlayerAnimatorParamiter.IsDodge, isDodge);
+        _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
+    }
+
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -159,7 +166,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.transform.CompareTag("Monster"))
         {
-            isHit = true;
+            isGetHit = true;
         }
     }
 
@@ -171,7 +178,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.transform.CompareTag("Monster"))
         {
-            isHit = false;
+            isGetHit = false;
         }
     }
 
