@@ -5,24 +5,33 @@ using UnityEngine;
 
 public class BossBT : MonoBehaviour
 {
-    public float movementSpeed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float rotationSpeed;
     public BehaviorTree tree;
     public Transform player;
+    private Vector3 moveDirection;
 
-    [SerializeField] Rigidbody bossRb;
     public GameObject breath;
 
-    public Animator animator;
+    private Animator animator;
+    private Rigidbody bossRb;
 
-    public bool rotationToPlayer = false;
-    public bool startTracking = false;
+    private bool rotationToPlayer = false;
+    private bool startTracking = false;
+    private Vector3 wayToGoPlayer;
+
     public bool canBreathAttack = false;
     Vector3 wayToGoPlayer;
+    
+    // í”„ë¡œí† íƒ€ì… ì§„í–‰ì„ ìœ„í•œ ì„ì‹œ ë³€ìˆ˜
+    public bool isBossGetHit = false;
+    public bool isBossDead = false;
 
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
         bossRb = GetComponent<Rigidbody>();
+        bossRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
@@ -65,7 +74,6 @@ public class BossBT : MonoBehaviour
                     })
                     .Do("TrackingPlayer", () =>
                     {
-                        // ½Ã¾ß ¹üÀ§ ¾ÈÀÌ¸é¼­ °ø°İ ¹üÀ§ ¹ÛÀÏ ¶§ ÇÃ·¹ÀÌ¾î·Î ÇâÇÏ´Â ÄÚµå
                         Debug.Log("BattleTracking");
                         return TaskStatus.Success;
                     })
@@ -74,9 +82,9 @@ public class BossBT : MonoBehaviour
                 // Right SubTree
                 .Sequence()
                     .StateAction("NomalWalking", () => rotationToPlayer = false )
-                    .Do("IdleWalking", () =>
+                    .Do("NomalWalking", () =>
                     {
-                        // Nomal ¹èÈ¸ÇÏ´Â ÄÚµå
+                        Debug.Log("NomalWalking");
                         return TaskStatus.Success;
                     })
                 .End()
@@ -84,10 +92,11 @@ public class BossBT : MonoBehaviour
             .Build();
     }
 
-    private void Update()  
+    private void Update()
     {
         CombatManager.isPlayerInRange(player, gameObject.transform);
         wayToGoPlayer.y = 0;
+
         if (rotationToPlayer)
         {
             LookAtPlayer();
@@ -106,7 +115,12 @@ public class BossBT : MonoBehaviour
     {
         while (true)
         {
-            if (!CombatManager._isBossDead)
+            if (isBossGetHit)   // ì¶”í›„ CombatManager._bossGetHitë¡œ ë³€ê²½ ì˜ˆì •
+            {
+                animator.Play("Hit");
+            }
+
+            if (isBossDead)   // ì¶”í›„ !CombatManager._isBossDeadë¡œ ë³€ê²½ ì˜ˆì •
             {
                 animator.Play("Die");
                 CombatManager._isBossDead = true;
@@ -126,6 +140,15 @@ public class BossBT : MonoBehaviour
         StartCoroutine(ActivateAiCo());
     }
 
+    private void TrackingPlayer()
+    {
+        if (!CombatManager._isPlayerInRange)
+        {
+            Vector3 direction = (player.position - transform.position).normalized;
+            moveDirection = new Vector3(direction.x, 0, direction.z); // yì¶• ë°©í–¥ì€ ë¬´ì‹œ
+            bossRb.MovePosition(transform.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+        }
+    }
 
     private void TrackingPlayer()
     {
@@ -142,8 +165,9 @@ public class BossBT : MonoBehaviour
 
         if (targetDirection != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 7.5f * Time.deltaTime);
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            bossRb.MoveRotation(rotation);
         }
     }
 
@@ -151,10 +175,9 @@ public class BossBT : MonoBehaviour
     {
         float ran = UnityEngine.Random.value;
         Debug.Log(ran);
-        if(ran <= 0.5) return canBreathAttack = true;   // ÃßÈÄ boss HP °¡ 30% ÀÌÇÏÀÏ Á¶°Ç Ãß°¡ : CombatManager._currentBossHP <= 600 && 
+        if(ran <= 0.5) return canBreathAttack = true;   // ì¶”í›„ boss HP ê°€ 30% ì´í•˜ì¼ ì¡°ê±´ ì¶”ê°€ : CombatManager._currentBossHP <= 600 && 
         else return canBreathAttack = false;
     }
-
 
 
     /*    public void BossSound(string name)

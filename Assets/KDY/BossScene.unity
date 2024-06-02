@@ -347,12 +347,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &311204399 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7197882686852157380, guid: e95bb50e515ecf24bb97c543ec22416d,
-    type: 3}
-  m_PrefabInstance: {fileID: 907181306}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &361080603
 GameObject:
   m_ObjectHideFlags: 0
@@ -2144,7 +2138,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -2199,7 +2193,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -2467,7 +2461,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 668cdace8166210438a529efa22b6874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 7
+  moveSpeed: 10
+  rotationSpeed: 200
   player: {fileID: 361080608}
   bossRb: {fileID: 1478099715}
   breath: {fileID: 696858655}

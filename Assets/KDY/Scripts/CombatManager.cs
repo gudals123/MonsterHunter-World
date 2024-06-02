@@ -21,6 +21,8 @@ public class CombatManager : MonoBehaviour
     public static bool _isPlayerInRange;
     public static bool _isPlayerInBossView;
 
+    public static bool _bossGetHit;
+
     void Awake()
     {
         if (_instance == null)
@@ -81,7 +83,11 @@ public class CombatManager : MonoBehaviour
         if (type == "Player")
             _currentBossHP -= damage;
         if (type == "Boss")
+        {
             _currentPlayerHP -= damage;
+            _bossGetHit = !_bossGetHit;
+            _bossGetHit = !_bossGetHit;
+        }
     }
 
     public void StartBreathAttack()
