@@ -17,7 +17,7 @@ public class BossCollider : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             CombatManager.TakeDamage("Boss", nomalAttack);
-            Debug.Log($"NomalAttack to Player!!!!! Player HP : {CombatManager._currentPlayerHP}");
+            Debug.Log($"Nomal!!! Attack to Player!!!!! Player HP : {CombatManager._currentPlayerHP}");
         }
         
     }
