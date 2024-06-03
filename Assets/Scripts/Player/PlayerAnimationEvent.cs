@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerAnimationEvent : MonoBehaviour
+{
+    [Header("Weapons")]
+    [SerializeField] private GameObject _handWeapon;
+    [SerializeField] private GameObject _BackWeapon;
+
+    private void Awake()
+    {
+/*        _handWeapon.SetActive(false);
+        _BackWeapon.SetActive(true);*/
+    }
+
+    public void DrawWeapon()
+    {
+        _handWeapon.SetActive(true);
+        _BackWeapon.SetActive(false);
+    }
+
+    public void SheatheWeapon()
+    {
+        _handWeapon.SetActive(false);
+        _BackWeapon.SetActive(true);
+    }
+
+
+}
