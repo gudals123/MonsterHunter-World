@@ -2,24 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DodgeState : StateMachineBehaviour
+public class RollState : StateMachineBehaviour
 {
+    private Rigidbody _rigidbody;
+    private PlayerController _playerController;
+
+    [Header("Power")]
+    private float dodgePower = 8.5f;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool(PlayerAnimatorParamiter.IsSwitchDone, false);
-        //스테미너 시스템
 
-        // 구르기 모션
+        _rigidbody = animator.GetComponent<Rigidbody>();
+        _playerController = animator.GetComponent<PlayerController>();
 
+        Vector3 rollDirection = new Vector3(animator.transform.localRotation.x, 0, animator.transform.localRotation.z);
+        Roll(animator, rollDirection);
     }
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+
+    public void Roll(Animator animator, Vector3 lastMoveDirection)
     {
-        animator.SetBool(PlayerAnimatorParamiter.IsSwitchDone, true);
-
+        _rigidbody.velocity = lastMoveDirection + animator.transform.forward * dodgePower;
 
     }
-
-
 
 }
 

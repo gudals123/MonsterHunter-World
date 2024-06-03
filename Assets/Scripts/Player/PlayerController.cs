@@ -125,7 +125,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
             isRoll = true;
-
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            isRoll = false;
         }
 
         //¹«±â ½ºÀ§Äª
