@@ -5,22 +5,22 @@ using UnityEngine;
 
 public class BossBT : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float rotationSpeed;
-    public BehaviorTree tree;
-    public Transform player;
-    private Vector3 moveDirection;
+    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _rotationSpeed;
+    public BehaviorTree _tree;
+    public Transform _player;
+    private Vector3 _moveDirection;
 
-    public GameObject breath;
+    private Animator _animator;
+    private Rigidbody _bossRb;
 
-    private Animator animator;
-    private Rigidbody bossRb;
+    private bool _rotationToPlayer = false;
+    private bool _startTracking = false;
+    private bool _canBreathAttack = false;
+    private Vector3 _wayToGoPlayer;
 
-    private bool rotationToPlayer = false;
-    private bool startTracking = false;
-    private Vector3 wayToGoPlayer;
-
-    public bool canBreathAttack = false;
+    public GameObject _nomalAtt;
+    public GameObject _breathAtt;
     
     // 프로토타입 진행을 위한 임시 변수
     public bool isBossGetHit = false;
@@ -28,36 +28,41 @@ public class BossBT : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
-        bossRb = GetComponent<Rigidbody>();
-        bossRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        _animator = GetComponentInChildren<Animator>();
+        _bossRb = GetComponent<Rigidbody>();
+        _bossRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        tree = new BehaviorTreeBuilder(gameObject)
+        _tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
                 // Left SubTree
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => CombatManager._isPlayerInRange)
                         .Selector()
-                            .Sequence()
-                                .Condition("canBreathAttack", () => canBreathAttack = SetBreathChance())
-                                .StateAction("BreathAttack", () => { breath.SetActive(true); })
+/*                            .Sequence()
+                                .Condition("canBreathAttack", () => _canBreathAttack = SetBreathChance())
+                                .StateAction("BreathAttack", () => 
+                                { 
+                                    _bossRb.velocity = Vector3.zero;
+                                    _rotationToPlayer = false;
+                                    _breathAtt.SetActive(true);
+                                })
                                 .Do(() =>
                                 {
                                     CombatManager._instance.StartBreathAttack();
-                                    breath.SetActive(false);
+                                    _breathAtt.SetActive(false);
                                     Debug.Log("Breath Attack");
-                                    canBreathAttack = !canBreathAttack;
+                                    _canBreathAttack = !_canBreathAttack;
                                     return TaskStatus.Success;
                                 })
                             .End()
-                            .StateAction("NomalAttack", () =>
+*/                            .StateAction("NomalAttack", () =>
                             {
-                                bossRb.velocity = Vector3.zero;
-                                rotationToPlayer = false;
+                                _bossRb.velocity = Vector3.zero;
+                                _rotationToPlayer = false;
                             })
                             .Do(() =>
                             {
-                                Debug.Log("NomalAttack");
+                                Debug.Log("Nomal Attack");
                                 return TaskStatus.Success;
                             })
                         .End()
@@ -68,8 +73,8 @@ public class BossBT : MonoBehaviour
                     .Condition("detectedPlayer", () => CombatManager._isPlayerInBossView )
                     .StateAction("BattleTracking", () =>
                     {
-                        rotationToPlayer = true;
-                        startTracking = true;
+                        _rotationToPlayer = true;
+                        _startTracking = true;
                     })
                     .Do("TrackingPlayer", () =>
                     {
@@ -80,7 +85,7 @@ public class BossBT : MonoBehaviour
 
                 // Right SubTree
                 .Sequence()
-                    .StateAction("NomalWalking", () => rotationToPlayer = false )
+                    .StateAction("NomalWalking", () => _rotationToPlayer = false )
                     .Do("NomalWalking", () =>
                     {
                         Debug.Log("NomalWalking");
@@ -93,15 +98,15 @@ public class BossBT : MonoBehaviour
 
     private void Update()
     {
-        CombatManager.isPlayerInRange(player, gameObject.transform);
-        wayToGoPlayer.y = 0;
+        CombatManager.isPlayerInRange(_player, gameObject.transform);
+        _wayToGoPlayer.y = 0;
 
-        if (rotationToPlayer)
+        if (_rotationToPlayer)
         {
             LookAtPlayer();
         }
 
-        if (startTracking)
+        if (_startTracking)
         {
             TrackingPlayer();
         }
@@ -116,18 +121,18 @@ public class BossBT : MonoBehaviour
         {
             if (isBossGetHit)   // 추후 CombatManager._bossGetHit로 변경 예정
             {
-                animator.Play("Hit");
+                _animator.Play("Hit");
             }
 
             if (isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
             {
-                animator.Play("Die");
+                _animator.Play("Die");
                 CombatManager._isBossDead = true;
             }
 
             else
             {
-                tree.Tick();
+                _tree.Tick();
             }
 
             yield return null;
@@ -143,32 +148,48 @@ public class BossBT : MonoBehaviour
     {
         if (!CombatManager._isPlayerInRange)
         {
-            Vector3 direction = (player.position - transform.position).normalized;
-            moveDirection = new Vector3(direction.x, 0, direction.z); // y축 방향은 무시
-            bossRb.MovePosition(transform.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+            Vector3 direction = (_player.position - transform.position).normalized;
+            _moveDirection = new Vector3(direction.x, 0, direction.z); // y축 방향은 무시
+            _bossRb.MovePosition(transform.position + _moveDirection * _moveSpeed * Time.fixedDeltaTime);
         }
     }
 
     public void LookAtPlayer()
     {
-        Vector3 targetDirection = (player.position - transform.position).normalized;
+        Vector3 targetDirection = (_player.position - transform.position).normalized;
 
         if (targetDirection != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-            bossRb.MoveRotation(rotation);
+            Quaternion targetRotation = Quaternion.LookRotation(_moveDirection);
+            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.fixedDeltaTime);
+            _bossRb.MoveRotation(rotation);
         }
     }
 
     public bool SetBreathChance()
     {
         float ran = UnityEngine.Random.value;
-        Debug.Log(ran);
-        if(ran <= 0.5) return canBreathAttack = true;   // 추후 boss HP 가 30% 이하일 조건 추가 : CombatManager._currentBossHP <= 600 && 
-        else return canBreathAttack = false;
+        if(ran <= 0.5) return _canBreathAttack = true;   // 추후 boss HP 가 30% 이하일 조건 추가 : CombatManager._currentBossHP <= 600 && 
+        else return _canBreathAttack = false;
     }
 
+    void OnDrawGizmos()
+    {
+        if (gameObject.transform != null)
+        {
+            // 플레이어가 범위 내에 있을 때 빨간색으로, 아니면 녹색으로 범위를 표시
+            Gizmos.color = CombatManager._isPlayerInRange ? Color.red : Color.green;
+            Gizmos.DrawWireSphere(gameObject.transform.position, 9f);
+
+            // 보스의 시야 범위를 파란색으로 표시
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(gameObject.transform.position, 18f);
+
+            // 보스의 전방 방향 표시
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + gameObject.transform.forward * 18f);
+        }
+    }
 
     /*    public void BossSound(string name)
         {

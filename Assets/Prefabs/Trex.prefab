@@ -582,7 +582,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4578358827111341722}
-  - component: {fileID: 1381406709609683829}
+  - component: {fileID: 3805335795443356703}
   - component: {fileID: 3103622398804924886}
   m_Layer: 6
   m_Name: NomalAttackCollider
@@ -599,16 +599,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2717294989959313186}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.54860204, y: -0.4461334, z: -0.548603, w: -0.44613406}
+  m_LocalRotation: {x: -0.49759445, y: 0.5023941, z: 0.49759445, w: 0.5023941}
   m_LocalPosition: {x: -0.30585736, y: 1.3055472, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7523497139849238587}
   m_Father: {fileID: 1381617344614925454}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &1381406709609683829
-SphereCollider:
+  m_LocalEulerAnglesHint: {x: -89.45, y: 90, z: 0}
+--- !u!136 &3805335795443356703
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -625,9 +625,11 @@ SphereCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.7
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.96
+  m_Height: 2.46
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: -0.34}
 --- !u!114 &3103622398804924886
 MonoBehaviour:
   m_ObjectHideFlags: 0

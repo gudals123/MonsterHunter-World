@@ -29,7 +29,7 @@ public class CombatManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeStats();
+            Initialize();
         }
         else if (_instance != this)
         {
@@ -38,7 +38,7 @@ public class CombatManager : MonoBehaviour
     }
 
 
-    public void InitializeStats()
+    public void Initialize()
     {
         _currentBossHP = _bossMaxHP;
         _currentPlayerHP = _playerMaxHP;
@@ -46,6 +46,7 @@ public class CombatManager : MonoBehaviour
         _isBossDead = false;
         _isPlayerDead = false;
     }
+
 
     /// <summary>
     /// 플레이어가 Boss의 범위 안에 있는 지 확인하는 메소드 입니다.
@@ -63,7 +64,6 @@ public class CombatManager : MonoBehaviour
 
         if (_isForward > 0 && distancePtoB <= 9f)
         {
-            Debug.Log("StartAttackToPlayer");
             _isPlayerInRange = true;
         }
         else _isPlayerInRange = false;
@@ -104,5 +104,4 @@ public class CombatManager : MonoBehaviour
         // 직선 브레스 오브젝트 끔
         Debug.Log("Quit Breath Attack~~~~~~");
     }
-
 }
