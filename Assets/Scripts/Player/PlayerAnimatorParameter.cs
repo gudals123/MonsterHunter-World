@@ -13,5 +13,5 @@ public class PlayerAnimatorParamiter
     public static readonly int IsGrouned = Animator.StringToHash("IsGrouned");
     public static readonly int IsFall = Animator.StringToHash("IsFall");
     public static readonly int IsArmed = Animator.StringToHash("IsArmed");
-    public static readonly int IAttacking = Animator.StringToHash("IAttacking");
+    public static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
 }
