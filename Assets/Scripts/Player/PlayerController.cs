@@ -5,26 +5,22 @@ using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Speed")]
+    [Header("Speed/Force")]
     private float moveSpeed;
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float RunSpeed = 4f;
-    public float rotationSpeed = 720; // 초당 회전 속도 (각도)
-    public float dodgeSpeed = 10f;
+    private float rollForce = 10f; 
+    private float rollDuration = 0.5f;
 
     [Header("Component")]
     private Rigidbody _rigidbody;
     private Animator _animator;
-    [SerializeField] private Transform _modle;
-    [SerializeField]private Transform cameraArm;
-    private Camera _mainCamera;
 
 
     [Header("Behaviour bool")]
     private bool isMoveing = false;
     private bool isWalk = false;
     private bool isRun = false;
-    private bool isDodge = false;
     private bool isGetHit = false;
     private bool isDead = false;
     private bool isGrounded = false;
@@ -32,16 +28,23 @@ public class PlayerController : MonoBehaviour
     private bool isArmed = false;
     private bool isAttacking = false;
     private bool isSwitchDone = true;
+    private bool isRoll = false;
+    private bool isRolling = false;
+    
 
-
-
+    [SerializeField] private Transform _characterBody;
+    [SerializeField] private Transform _cameraArm;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = _modle.GetComponent<Animator>();
-        _mainCamera = Camera.main;  
         moveSpeed = walkSpeed;
+    }
+
+    private void Start()
+    {
+        _animator = _characterBody.GetComponent<Animator>();
+
     }
 
     private void FixedUpdate()
@@ -50,7 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
+        Move();
     }
 
     void Update()
@@ -58,7 +61,7 @@ public class PlayerController : MonoBehaviour
         DeadCheck();
         HandleInput();
         AnimatorControll();
-        Move();
+        LookAround();
     }
 
     private void DeadCheck()
@@ -69,94 +72,60 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     private void Move()
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
+        
         if (moveInput == Vector2.zero)
         {
             isMoveing = false;
             isWalk = false;
             return;
         }
-        else
+        else if(isSwitchDone)
         {
             isMoveing = true;
             isWalk = true;
 
-            Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
-            Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
+            Vector3 lookForward = new Vector3(_cameraArm.forward.x, 0f, _cameraArm.forward.z).normalized;
+            Vector3 lookRight = new Vector3(_cameraArm.right.x, 0f, _cameraArm.right.z).normalized;
             Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
-            _modle.forward = lookForward;
-            transform.position += moveDir * Time.deltaTime * 5f;
+            _characterBody.forward = moveDir;
+
+            _rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
 
         }
     }
-    /*private void Move()
+
+    private void LookAround()
     {
-        Vector2 moverInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector3 camAngle = _cameraArm.rotation.eulerAngles;
+
+        float x = camAngle.x - mouseDelta.y;
 
 
-
-        Vector3 forward = _mainCamera.transform.forward;
-        Vector3 right = _mainCamera.transform.right;
-
-
-        //Vector3 movement = new Vector3(moveHorizontal * forward.x, 0.0f, moveVertical * right.z);
-
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
-        if (movement == Vector3.zero)
+        if (x < 180f)
         {
-            isMoveing = false;
-            isWalk = false;
-            return;
+            x = Mathf.Clamp(x, -1f, 70f);
         }
         else
         {
-            isMoveing = true;
-            isWalk = true;
-
-            //movement = vec.normalized;
-            _rigidbody.MovePosition(transform.position + movement * moveSpeed * Time.fixedDeltaTime);
-
-            Quaternion targetRotation = Quaternion.LookRotation(movement);
-            _rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, 
-                rotationSpeed * Time.fixedDeltaTime));
-            *//*
-             * 
-                        Quaternion targetRotation = Quaternion.LookRotation(movement);
-
-                        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-                        _modle.rotation = newRotation;
-            *//*
-            //Quaternion targetRotation = Quaternion.LookRotation(vec);
-            //_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
-
-
-            *//*            Vector3 forward = _mainCamera.transform.forward;
-                        forward.y = 0f; // y축은 회전에 사용하지 않으므로 0으로 설정
-
-                        Quaternion targetRotation = Quaternion.LookRotation(forward); // 목표 회전 설정
-
-                        // 현재 방향에서 목표 방향까지 회전하기
-                        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-
-                        // 캐릭터의 회전 적용
-                        transform.rotation = newRotation;*//*
+            x = Mathf.Clamp(x, 335, 361);
         }
-    } */
 
+        _cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+    }
+   
 
     private void HandleInput()
     {
         //회피
-        if (Input.GetKeyDown(KeyCode.Space) && !isDodge)
+        if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
-            isDodge = true;
-            StartCoroutine(Dodge());
+            isRoll = true;
+
         }
 
         //무기 스위칭
@@ -180,23 +149,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    IEnumerator Dodge()
-    {
-        float rollTime = 0.7f; // 앞구르기 시간
-        float timer = 0f;
-
-        while (timer < rollTime)
-        {
-            // 캐릭터를 앞으로 이동시킵니다.
-            transform.Translate(Vector3.forward * dodgeSpeed * Time.deltaTime);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        // 앞구르기가 끝났을 때
-        isDodge = false;
-    }
-
     private void AnimatorControll()
     {
         _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
@@ -204,11 +156,9 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsWalk, isWalk);
         _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
         _animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
-        _animator.SetBool(PlayerAnimatorParamiter.IsDodge, isDodge);
+        _animator.SetBool(PlayerAnimatorParamiter.IsRoll, isRoll);
         _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
     }
-
-
 
     private void OnCollisionEnter(Collision collision)
     {
