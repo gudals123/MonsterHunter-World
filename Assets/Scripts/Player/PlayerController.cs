@@ -213,7 +213,14 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, isRightAttak);
     }
 
-   
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Boss"))
+        {
+            Debug.Log("GetHit");
+        }
+    }
 
 
 
