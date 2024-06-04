@@ -53,8 +53,8 @@ public class CombatManager : MonoBehaviour
 
     /// <summary>
     /// 플레이어가 Boss의 범위 안에 있는 지 확인하는 메소드 입니다.
-    /// 1. player.position이 boss 보다 앞이고, Distance가 9 이하일 때 공격 범위 여부 체크
-    /// 2. player.position이 boss 보다 앞이고, Distance가 18 이하일 때 시야 범위 여부 체크
+    /// 1. boss.position이 player 보다 앞이고, Distance가 9 이하일 때 공격 범위 여부 체크
+    /// 2. boss.position이 player 보다 앞이고, Distance가 18 이하일 때 시야 범위 여부 체크
     /// </summary>
     /// <param name="player">플레이어의 위치</param>
     /// <param name="boss">보스의 위치</param>
