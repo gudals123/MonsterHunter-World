@@ -22,13 +22,15 @@ public class BossBT : MonoBehaviour
 
     public GameObject _nomalAtt;
     public GameObject _breathAtt;
-    
+
     // 프로토타입 진행을 위한 임시 변수
     public bool isBossGetHit = false;
     public bool isBossDead = false;
     public bool _detectedPlayer = false;
     public bool _trackingPlayer = false;
     public float _perceptionTime = 0;
+    public bool _canNomalWalking;
+    public Vector3 _randomPosToWalk;
 
     private void Awake()
     {
@@ -41,8 +43,8 @@ public class BossBT : MonoBehaviour
                 // Left SubTree
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => CombatManager._bossAttackRange)
-                        .Do(() => 
-                        { 
+                        .Do(() =>
+                        {
                             return TaskStatus.Success;
                         })
                         .Selector()
@@ -91,14 +93,27 @@ public class BossBT : MonoBehaviour
                 .End()
 
                 // Right SubTree
-                .Sequence()
-                    .StateAction("NomalWalking", () => 
+                .Selector()
+                    .Sequence()
+                        .Condition("ChanceForWalking", () => SetNomalWalkingChance())
+                        .StateAction("NomalWalking", () => 
+                        {
+                            _randomPosToWalk = RandomPosForWalking();
+                            _canNomalWalking = true;
+                        })
+                        .Do("NomalWalking", () =>
+                        {
+                            Debug.Log("NomalWalking");
+                            _canNomalWalking = false;
+                            return TaskStatus.Success;
+                        })
+                    .End()
+                    .StateAction("Idle", () =>
                     {
-                        //_trackingPlayer = false;
+                        Debug.Log("Idle");
                     })
-                    .Do("NomalWalking", () =>
+                    .Do(() =>
                     {
-                        Debug.Log("NomalWalking");
                         return TaskStatus.Success;
                     })
                 .End()
@@ -123,16 +138,21 @@ public class BossBT : MonoBehaviour
 
         if (_trackingPlayer)
         {
-            LookAtPlayer();
-            TrackingPlayer();
+            RotationToTarget();
+            MovingWalkOrTracking(_player.position, 1f);
 
-            if(!CombatManager._bossVisualRange || !CombatManager._bossPerceptionRange)
+            if (!CombatManager._bossVisualRange || !CombatManager._bossPerceptionRange)
             {
                 _perceptionTime += Time.deltaTime;
             }
         }
 
-        if(_perceptionTime >= 3)
+        if (_canNomalWalking)
+        {
+            BossNomalWalking(_randomPosToWalk);
+        }
+
+        if (_perceptionTime >= 3)
         {
             _trackingPlayer = false;
             _detectedPlayer = false;
@@ -176,20 +196,14 @@ public class BossBT : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 플레이어를 트래킹합니다. 
-    /// </summary>
-    private void TrackingPlayer()
+    private void MovingWalkOrTracking(Vector3 targetPos, float speedRate)
     {
-        Vector3 direction = (_player.position - transform.position).normalized;
+        Vector3 direction = (targetPos - transform.position).normalized;
         _moveDirection = new Vector3(direction.x, 0, direction.z); // y축 방향은 무시
-        _bossRb.MovePosition(transform.position + _moveDirection * _moveSpeed * Time.fixedDeltaTime);
+        _bossRb.MovePosition(transform.position + _moveDirection * _moveSpeed * speedRate * Time.fixedDeltaTime);
     }
 
-    /// <summary>
-    /// 플레이어로 몸을 향합니다.
-    /// </summary>
-    public void LookAtPlayer()
+    public void RotationToTarget()
     {
         Quaternion targetRotation = Quaternion.LookRotation(_moveDirection);
         Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.fixedDeltaTime);
@@ -199,8 +213,34 @@ public class BossBT : MonoBehaviour
     public bool SetBreathChance()
     {
         float ran = Random.value;
-        if(ran <= 0.5) return _canBreathAttack = true;   // 추후 boss HP 가 30% 이하일 조건 추가 : CombatManager._currentBossHP <= 600 && 
+        if (ran <= 0.5) return _canBreathAttack = true;   // 추후 boss HP 가 30% 이하일 조건 추가 : CombatManager._currentBossHP <= 600 && 
         else return _canBreathAttack = false;
+    }
+
+    public bool SetNomalWalkingChance()
+    {
+        float ran = Random.value;
+        if (ran <= 0.5) return true;
+        else return false;
+    }
+
+    public Vector3 RandomPosForWalking()
+    {
+        float targetX = Random.Range(transform.position.x - 100, transform.position.x + 100);
+        float targetZ = Random.Range(transform.position.z - 100, transform.position.z + 100);
+        return new Vector3(targetX, 0, targetZ);
+    }
+
+    public void BossNomalWalking(Vector3 targetPos)
+    {
+        MovingWalkOrTracking(targetPos, 0.7f);
+        RotationToTarget();
+
+        if (transform.position == targetPos)
+        {
+            _canNomalWalking = false;
+        }
+
     }
 
     void OnDrawGizmos()
