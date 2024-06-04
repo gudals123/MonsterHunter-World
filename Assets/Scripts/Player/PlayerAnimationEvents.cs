@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimationEvent : MonoBehaviour
+public class PlayerAnimationEvents : MonoBehaviour
 {
     [Header("Weapons")]
     [SerializeField] private GameObject _handWeapon;
@@ -10,8 +10,8 @@ public class PlayerAnimationEvent : MonoBehaviour
 
     private void Awake()
     {
-/*        _handWeapon.SetActive(false);
-        _BackWeapon.SetActive(true);*/
+        _handWeapon.SetActive(false);
+        _BackWeapon.SetActive(true);
     }
 
     public void DrawWeapon()

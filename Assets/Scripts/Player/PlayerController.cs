@@ -7,41 +7,42 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Speed")]
     private float moveSpeed;
-    [SerializeField] private float walkSpeed = 2f;
-    [SerializeField] private float RunSpeed = 4f;
-    public float rotationSpeed = 360f; // 초당 회전 속도 (각도)
-    public float dodgeSpeed = 10f;
+    [SerializeField] private float walkSpeed = 4f;
+    [SerializeField] private float RunSpeed = 7f;
 
     [Header("Component")]
     private Rigidbody _rigidbody;
     private Animator _animator;
-    [SerializeField] private Transform _modle;
 
+    [Header("State bool")]
+    internal bool isMoveing = false;
+    internal bool isWalk = false;
+    internal bool isRun = false;
+    internal bool isGetHit = false;
+    internal bool isDead = false;
+    internal bool isGrounded = false;
+    internal bool isFall = false;
+    internal bool isArmed = false;
+    internal bool isAttacking = false;
+    internal bool isSwitchDone = true;
+    internal bool isRoll = false;
+    internal bool isRolling = false;
 
-    [Header("Behaviour bool")]
-    [SerializeField]private bool isMoveing = false;
-    [SerializeField]private bool isWalk = false;
-    [SerializeField]private bool isRun = false;
-    [SerializeField]private bool isDodge = false;
-    [SerializeField]private bool isGetHit = false;
-    [SerializeField]private bool isDead = false;
-    [SerializeField]private bool isGrounded = false;
-    [SerializeField]private bool isFall = false;
-    [SerializeField]private bool isArmed = false;
-    [SerializeField]private bool isAttacking = false;
-    private bool isSwitchDone = true;
+    [Header("Object")]
+    [SerializeField] private Transform _characterBody;
+    [SerializeField] private Transform _cameraArm;
 
-
-
-
+    [Header("GroundCheck")]
+    [SerializeField] private float groundcheckDistance;
+    [SerializeField] protected LayerMask whatIsGround;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = _modle.GetComponent<Animator>();
-
         moveSpeed = walkSpeed;
+        _animator = _characterBody.GetComponent<Animator>();
     }
+
 
     private void FixedUpdate()
     {
@@ -49,18 +50,34 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
+        if (!isSwitchDone)
+        {
+            return;
+        }
         Move();
-
-
-
     }
 
     void Update()
     {
         DeadCheck();
         HandleInput();
+        GroundCheck();
         AnimatorControll();
+        LookAround();
+
+    }
+
+    
+    private void GroundCheck()
+    {
+        if (Physics.Raycast(transform.position, Vector2.down, groundcheckDistance, whatIsGround))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 
     private void DeadCheck()
@@ -73,13 +90,9 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-
-
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
-        if(movement == Vector3.zero)
+        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        
+        if (moveInput == Vector2.zero)
         {
             isMoveing = false;
             isWalk = false;
@@ -90,21 +103,46 @@ public class PlayerController : MonoBehaviour
             isMoveing = true;
             isWalk = true;
 
-            _rigidbody.MovePosition(transform.position + movement * moveSpeed * Time.fixedDeltaTime);
-            
-            Quaternion targetRotation = Quaternion.LookRotation(movement);
-            _rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
-        }
-    } 
+            Vector3 lookForward = new Vector3(_cameraArm.forward.x, 0f, _cameraArm.forward.z).normalized;
+            Vector3 lookRight = new Vector3(_cameraArm.right.x, 0f, _cameraArm.right.z).normalized;
+            Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
+            _characterBody.forward = moveDir;
+
+            _rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
+        }
+    }
+
+    private void LookAround()
+    {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector3 camAngle = _cameraArm.rotation.eulerAngles;
+
+        float x = camAngle.x - mouseDelta.y;
+
+        if (x < 180f)
+        {
+            x = Mathf.Clamp(x, -1f, 70f);
+        }
+        else
+        {
+            x = Mathf.Clamp(x, 335, 361);
+        }
+
+        _cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+    }
+   
 
     private void HandleInput()
     {
         //회피
-        if (Input.GetKeyDown(KeyCode.Space) && !isDodge)
+        if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
-            isDodge = true;
-            StartCoroutine(Dodge());
+            isRoll = true;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            isRoll = false;
         }
 
         //무기 스위칭
@@ -128,23 +166,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    IEnumerator Dodge()
-    {
-        float rollTime = 0.7f; // 앞구르기 시간
-        float timer = 0f;
-
-        while (timer < rollTime)
-        {
-            // 캐릭터를 앞으로 이동시킵니다.
-            transform.Translate(Vector3.forward * dodgeSpeed * Time.deltaTime);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        // 앞구르기가 끝났을 때
-        isDodge = false;
-    }
-
     private void AnimatorControll()
     {
         _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
@@ -152,18 +173,13 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsWalk, isWalk);
         _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
         _animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
-        _animator.SetBool(PlayerAnimatorParamiter.IsDodge, isDodge);
+        _animator.SetBool(PlayerAnimatorParamiter.IsRoll, isRoll);
         _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
+        _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
     }
-
-
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
         if (collision.transform.CompareTag("Monster"))
         {
             isGetHit = true;
@@ -172,10 +188,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.transform.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
         if (collision.transform.CompareTag("Monster"))
         {
             isGetHit = false;
