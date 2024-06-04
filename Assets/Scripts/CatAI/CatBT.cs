@@ -13,12 +13,11 @@ public class CatBT : MonoBehaviour
     [SerializeField] private Transform boss;
     //[SerializeField] private SphereCollider Detectcollider;
     //[SerializeField] private SphereCollider Attackcollider;
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     private Vector3 moveDirection;
     [SerializeField] private Rigidbody catRigidbody;
     [SerializeField] private float rotationSpeed;
-
 
     private bool isBossInRange;
     private bool isBossAttackInRange;
@@ -39,7 +38,6 @@ public class CatBT : MonoBehaviour
                     .Do(() =>
                     {
                         Debug.Log("Attack");
-                        CatManager._isBossInAttackRange = false;
                         return TaskStatus.Success;
                     })
                 .End()
@@ -51,23 +49,21 @@ public class CatBT : MonoBehaviour
                         .Do(() =>
                         {
                             Debug.Log("Move To Boss");
-                            //LookAtBoss();
-                            CatManager._isBossInCatView = false;
+                            animator.SetBool("isRun", true);
                             return TaskStatus.Success;
                         })
                     .End()
 
                     // 플레이어 감지 트리
                     .Sequence()
-                        .Condition("isPlayerInRange", () => isPlayerInRange)
+                        .Condition("isPlayerInRange", () => CatManager._isPlayerInCatView)
                         .Do(() =>
                         {
                             Debug.Log("Move To Player");
-                            //LookAtPlayer();
-                            animator.Play("Idle");
-                            isPlayerInRange = false;
+                            animator.SetBool("isRun", true);
                             return TaskStatus.Success;
                         })
+
                         .Sequence()
                             .Condition("isPlayerAlmostDie", () => isPlayerAlmostDie)
                             .Do(() =>
@@ -82,102 +78,11 @@ public class CatBT : MonoBehaviour
             .Build();
     }
 
-    //private bool BossDetected()
-    //{
-    //    DetectCollider = Physics.OverlapSphere(transform.position, 4f);
-
-    //    if (DetectCollider != null && DetectCollider.Length > 0)
-    //    {
-    //        player = DetectCollider[0].transform;
-
-    //        return false;
-    //    }
-    //    return true;
-    //}
-
-    //private void OnDrawGizmos()
-
-    //{
-    //    DetectCollider = Physics.OverlapSphere(transform.position, 4f);
-    //    Gizmos.DrawWireSphere(transform.position, 4f);
-
-    //    for (int i = 0; i < DetectCollider.Length; ++i)
-    //    {
-    //        Gizmos.color = Color.white;
-    //        if (DetectCollider[i].name == "Boss")
-    //        {
-    //            Gizmos.color = Color.red;
-    //        }
-
-    //        if (DetectCollider[i].name == "Player")
-    //        {
-    //            Gizmos.color = Color.green;
-    //        }
-    //    }
-
-    //    var Attackcollider = Physics.OverlapSphere(transform.position, 1.5f);
-    //    Gizmos.DrawWireSphere(transform.position, 1.5f);
-    //    Gizmos.color = Color.blue;
-
-    //    for (int i = 0; i < Attackcollider.Length; ++i)
-    //    {
-    //        if (Attackcollider[i].name == "Boss")
-    //        {
-    //            Debug.Log($"{Attackcollider[i].name}");
-    //            isBossInRange = false;
-    //            isBossAttackInRange = true;
-    //        }
-
-    //        if (Attackcollider[i].name == "Player")
-    //        {
-    //            Debug.Log($"{Attackcollider[i].name}");
-    //            isPlayerInRange = false;
-    //            isPlayerInDetectRange = true;
-    //        }
-    //    }
-    //}
-
     private void Update()
     {
         CatManager.IsBossInRange(boss, gameObject.transform);
-        CatManager.IsPlayerInRange(player, gameObject.transform);
+        CatManager.FollowPlayer(player, gameObject.transform);
 
         catTree.Tick();
     }
-
-    //public void LookAtPlayer()
-    //{
-    //    transform.LookAt(player);
-
-    //    Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-    //    Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-    //    catRigidbody.MoveRotation(rotation);
-
-    //    Vector3 targetDirection = (player.position - transform.position).normalized;
-
-    //    if (targetDirection != Vector3.zero)
-    //    {
-    //        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-    //        Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-    //        catRigidbody.MoveRotation(rotation);
-    //    }
-    //}
-
-    //public void LookAtBoss()
-    //{
-    //    transform.LookAt(boss);
-
-    //    Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-    //    Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-    //    catRigidbody.MoveRotation(rotation);
-
-    //    Vector3 targetDirection = (boss.position - transform.position).normalized;
-
-    //    if (targetDirection != Vector3.zero)
-    //    {
-    //        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-    //        Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-    //        catRigidbody.MoveRotation(rotation);
-    //    }
-    //}
 }

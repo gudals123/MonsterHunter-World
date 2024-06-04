@@ -7,6 +7,7 @@ public class CatManager : MonoBehaviour
     public static CatManager instance;
     [SerializeField] private static Rigidbody catRigidbody;
 
+    [Header("Distance")]
     public static float distanceCanDetect = 4f; // 감지 범위
     public static float distanceCanAttack = 1.5f; // 공격 범위
 
@@ -21,6 +22,8 @@ public class CatManager : MonoBehaviour
     public static bool _isPlayerInAttackRange;
     public static bool _isPlayerInCatView;
     [SerializeField] private Transform player;
+
+    private static float rotationSpeed = 10;
 
     private void Awake()
     {
@@ -43,9 +46,8 @@ public class CatManager : MonoBehaviour
         distanceCatToBoss = Vector3.Distance(boss.position, cat.position);
 
         Vector3 normalized = (boss.position - cat.position).normalized;
-        //float _isForward = Vector3.Dot(normalized, cat.forward);
 
-        if (/*_isForward > 0 &&*/ distanceCatToBoss <= distanceCanDetect && distanceCatToBoss >= distanceCanAttack)
+        if (distanceCatToBoss <= distanceCanDetect && distanceCatToBoss >= distanceCanAttack)
         {
             _isBossInCatView = true;
             Debug.Log($"CanDetectBoss : {_isBossInCatView}");
@@ -54,7 +56,7 @@ public class CatManager : MonoBehaviour
         }
         else _isBossInCatView = false;
 
-        if (/*_isForward > 0 &&*/ distanceCatToBoss <= distanceCanAttack)
+        if (distanceCatToBoss <= distanceCanAttack)
         {
             _isBossInAttackRange = true;
             Debug.Log($"StartAttackToBoss: {_isBossInAttackRange}");
@@ -62,14 +64,13 @@ public class CatManager : MonoBehaviour
         else _isBossInAttackRange = false;
     }
 
-    public static void IsPlayerInRange(Transform player, Transform cat)
+    public static void FollowPlayer(Transform player, Transform cat)
     {
         distanceCatToPlayer = Vector3.Distance(player.position, cat.position);
 
         Vector3 normalized = (player.position - cat.position).normalized;
-        //float _isForward = Vector3.Dot(normalized, cat.forward);
 
-        if (/*_isForward > 0 &&*/ distanceCatToPlayer <= distanceCanDetect && distanceCatToPlayer >= distanceCanAttack)
+        if (!_isBossInCatView && !_isBossInAttackRange && distanceCatToPlayer >= distanceCanAttack)
         {
             _isPlayerInAttackRange = true;
             Debug.Log($"StartFollowPlayer : {_isPlayerInAttackRange}");
@@ -78,7 +79,7 @@ public class CatManager : MonoBehaviour
         }
         else _isPlayerInAttackRange = false;
 
-        if (/*_isForward > 0 &&*/ distanceCatToPlayer <= distanceCanAttack)
+        if (distanceCatToPlayer <= distanceCanAttack)
         {
             _isPlayerInCatView = true;
             Debug.Log($"CanDetectPlayer : {_isPlayerInCatView}");
@@ -108,17 +109,7 @@ public class CatManager : MonoBehaviour
 
     private static void LookAtTarget(Transform target)
     {
-        Vector3 dir = target.transform.position - catRigidbody.transform.position;
-        catRigidbody.transform.rotation = Quaternion.Lerp(catRigidbody.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime);
+        Vector3 dir = new Vector3 (target.transform.position.x, 0, target.transform.position.z) - new Vector3 (catRigidbody.transform.position.x, 0, catRigidbody.transform.position.z);
+        catRigidbody.transform.rotation = Quaternion.Lerp(catRigidbody.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotationSpeed);
     }
-
-    //public void LookAtPlayer()
-    //{
-    //    transform.LookAt(player);
-    //}
-
-    //public void LookAtBoss()
-    //{
-    //    transform.LookAt(boss);
-    //}
 }

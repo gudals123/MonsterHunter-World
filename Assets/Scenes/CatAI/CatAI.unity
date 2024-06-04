@@ -338,7 +338,7 @@ Transform:
   m_GameObject: {fileID: 300884076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.05}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -359,6 +359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1083054402}
   boss: {fileID: 2110852268}
+  animator: {fileID: 634925976}
   catRigidbody: {fileID: 1952443211}
   rotationSpeed: 10
 --- !u!1001 &498578880
@@ -374,11 +375,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2917617824821667798, guid: f140e689e2a78d54e828536c733f1d4e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4464783020766103924, guid: f140e689e2a78d54e828536c733f1d4e,
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 341b5840aaf21b049b80fe4de569b1b6, type: 2}
+      objectReference: {fileID: 9100000, guid: dba2ba94d8b3c564fbf302e57ff9f3fd, type: 2}
     - target: {fileID: 9055791104001212950, guid: f140e689e2a78d54e828536c733f1d4e,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -449,12 +455,23 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9116157678702734532, guid: f140e689e2a78d54e828536c733f1d4e,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1955419867365339950, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
+--- !u!95 &634925976 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4464783020766103924, guid: f140e689e2a78d54e828536c733f1d4e,
+    type: 3}
+  m_PrefabInstance: {fileID: 498578880}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &807205005
 GameObject:
   m_ObjectHideFlags: 0
