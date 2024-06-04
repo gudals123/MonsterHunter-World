@@ -14,4 +14,6 @@ public class PlayerAnimatorParamiter
     public static readonly int IsArmed = Animator.StringToHash("IsArmed");
     public static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
     public static readonly int IsSwitchDone = Animator.StringToHash("IsSwitchDone");
+    public static readonly int IsRightAttak = Animator.StringToHash("IsRightAttak");
+    public static readonly int ComboCount = Animator.StringToHash("ComboCount");
 }
