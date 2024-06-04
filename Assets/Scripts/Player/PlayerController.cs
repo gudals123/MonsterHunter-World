@@ -211,9 +211,17 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
         _animator.SetBool(PlayerAnimatorParamiter.IsAttacking, isAttacking);
         _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, isRightAttak);
+        
     }
 
-   
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Boss"))
+        {
+            Debug.Log("GetHit");
+        }
+    }
 
 
 
