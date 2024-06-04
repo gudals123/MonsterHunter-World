@@ -26,5 +26,10 @@ public class PlayerAnimationEvents : MonoBehaviour
         _BackWeapon.SetActive(true);
     }
 
+    public void AnimationPause()
+    {
+        GetComponent<Animator>().speed = 0.0001f;
+    }
+
 
 }

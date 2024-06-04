@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class switchSwordState : StateMachineBehaviour
+public class SwitchSwordState : StateMachineBehaviour
 {
     private PlayerController _playerController;
 
@@ -10,11 +10,11 @@ public class switchSwordState : StateMachineBehaviour
     {
         _playerController = animator.GetComponentInParent<PlayerController>();
 
-        _playerController.isSwitchDone = false; 
+        _playerController.IsSwitchDone = false; 
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _playerController.isSwitchDone = true;
+        _playerController.IsSwitchDone = true;
     }
 }

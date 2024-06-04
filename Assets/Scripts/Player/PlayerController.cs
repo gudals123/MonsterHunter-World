@@ -15,18 +15,17 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
 
     [Header("State bool")]
-    internal bool isMoveing = false;
-    internal bool isWalk = false;
-    internal bool isRun = false;
-    internal bool isGetHit = false;
-    internal bool isDead = false;
-    internal bool isGrounded = false;
-    internal bool isFall = false;
-    internal bool isArmed = false;
-    internal bool isAttacking = false;
-    internal bool isSwitchDone = true;
-    internal bool isRoll = false;
-    internal bool isRolling = false;
+    private bool isMoveing = false;
+    private bool isWalk = false;
+    private bool isRun = false;
+    private bool isDead = false;
+    private bool isGrounded = false;
+    private bool isArmed = false;
+    private bool isSwitchDone = true;
+    private bool isRoll = false;
+    private bool isAttacking = false;
+    private bool isRightAttak = false;
+    //private bool isGetHit = false;
 
     [Header("Object")]
     [SerializeField] private Transform _characterBody;
@@ -35,6 +34,14 @@ public class PlayerController : MonoBehaviour
     [Header("GroundCheck")]
     [SerializeField] private float groundcheckDistance;
     [SerializeField] protected LayerMask whatIsGround;
+
+    public bool IsSwitchDone
+    {
+        get { return isSwitchDone; }
+        set { isSwitchDone = value; }
+    }
+
+
 
     private void Awake()
     {
@@ -64,7 +71,6 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         AnimatorControll();
         LookAround();
-
     }
 
     
@@ -135,7 +141,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleInput()
     {
-        //회피
+        //구르기 감지
         if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
             isRoll = true;
@@ -145,14 +151,14 @@ public class PlayerController : MonoBehaviour
             isRoll = false;
         }
 
-        //무기 스위칭
+        //무기 스위칭 감지
         if ((isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
             (!isArmed && Input.GetMouseButtonDown(0)))
         {
             isArmed = !isArmed;
         }
 
-        //달리기
+        //달리기 감지
         if (!isArmed && Input.GetKeyDown(KeyCode.LeftShift))
         {
             moveSpeed = RunSpeed;
@@ -163,6 +169,30 @@ public class PlayerController : MonoBehaviour
             moveSpeed = walkSpeed;
             isRun = false;
         }
+
+        //공격 감지
+        if (isArmed)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                isRightAttak = false;
+                isAttacking = true;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                isAttacking = false;
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                isRightAttak = true;
+                isAttacking = true;
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                isAttacking = false;
+            }
+        }
+
     }
 
 
@@ -176,23 +206,11 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsRoll, isRoll);
         _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
         _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
+        _animator.SetBool(PlayerAnimatorParamiter.IsAttacking, isAttacking);
+        _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, isRightAttak);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.CompareTag("Monster"))
-        {
-            isGetHit = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.transform.CompareTag("Monster"))
-        {
-            isGetHit = false;
-        }
-    }
+   
 
 
 
