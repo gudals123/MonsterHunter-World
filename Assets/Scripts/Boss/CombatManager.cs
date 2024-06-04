@@ -18,8 +18,11 @@ public class CombatManager : MonoBehaviour
     public static bool _isBossDead { get; set; } = false;
 
     public static float distancePtoB;
-    public static bool _isPlayerInRange;
-    public static bool _isPlayerInBossView;
+    public static bool _bossAttackRange;
+    public static bool _bossAttackBackRange;
+    public static bool _bossVisualRange;
+    public static bool _bossPerceptionRange;
+    public static bool _isbossRecognizedPlayer;
 
     public static bool _bossGetHit;
 
@@ -62,14 +65,32 @@ public class CombatManager : MonoBehaviour
         Vector3 normalized = (player.position - boss.position).normalized;
         float _isForward = Vector3.Dot(normalized, boss.forward);
 
+        // 공격 범위
         if (_isForward > 0 && distancePtoB <= 9f)
         {
-            _isPlayerInRange = true;
+            _bossAttackRange = true;
+            _bossAttackBackRange = false;
+            _isbossRecognizedPlayer = true;
         }
-        else _isPlayerInRange = false;
+        else if (_isForward < 0 && distancePtoB <= 9f)
+        {
+            _bossAttackRange = false;
+            _bossAttackBackRange = true;
+            _isbossRecognizedPlayer = true;
+        }
+        else
+        {
+            _bossAttackRange = false;
+            _bossAttackBackRange = false;
+        }
 
-        if (_isForward > 0 && distancePtoB <= 18f) _isPlayerInBossView = true;
-        else _isPlayerInBossView = false;
+        // 시야 범위
+        if (_isForward > 0 && distancePtoB <= 18f) _bossVisualRange = true;
+        else _bossVisualRange = false;
+
+        //인식 범위
+        if (distancePtoB <= 18f) _bossPerceptionRange = true;
+        else _bossPerceptionRange = false;
     }
 
 
@@ -82,14 +103,17 @@ public class CombatManager : MonoBehaviour
     {
         if (type == "Player")
             _currentBossHP -= damage;
+            _isbossRecognizedPlayer = true;
         if (type == "Boss")
         {
             _currentPlayerHP -= damage;
-            _bossGetHit = !_bossGetHit;
-            _bossGetHit = !_bossGetHit;
+            _bossGetHit = true;
+            _bossGetHit = false;
         }
     }
 
+
+    //////////////////////////////////////////////////////////////////////////
     public void StartBreathAttack()
     {
         StartCoroutine(BreathAttack()); 
