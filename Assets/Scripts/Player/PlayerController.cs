@@ -5,51 +5,52 @@ using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Speed/Force")]
+    [Header("Speed")]
     private float moveSpeed;
-    [SerializeField] private float walkSpeed = 2f;
-    [SerializeField] private float RunSpeed = 4f;
-    private float rollForce = 10f; 
-    private float rollDuration = 0.5f;
+    [SerializeField] private float walkSpeed = 4f;
+    [SerializeField] private float RunSpeed = 7f;
 
     [Header("Component")]
     private Rigidbody _rigidbody;
     private Animator _animator;
 
+    [Header("State bool")]
+    internal bool isMoveing = false;
+    internal bool isWalk = false;
+    internal bool isRun = false;
+    internal bool isGetHit = false;
+    internal bool isDead = false;
+    internal bool isGrounded = false;
+    internal bool isFall = false;
+    internal bool isArmed = false;
+    internal bool isAttacking = false;
+    internal bool isSwitchDone = true;
+    internal bool isRoll = false;
+    internal bool isRolling = false;
 
-    [Header("Behaviour bool")]
-    private bool isMoveing = false;
-    private bool isWalk = false;
-    private bool isRun = false;
-    private bool isGetHit = false;
-    private bool isDead = false;
-    private bool isGrounded = false;
-    private bool isFall = false;
-    private bool isArmed = false;
-    private bool isAttacking = false;
-    private bool isSwitchDone = true;
-    private bool isRoll = false;
-    private bool isRolling = false;
-    
-
+    [Header("Object")]
     [SerializeField] private Transform _characterBody;
     [SerializeField] private Transform _cameraArm;
+
+    [Header("GroundCheck")]
+    [SerializeField] private float groundcheckDistance;
+    [SerializeField] protected LayerMask whatIsGround;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         moveSpeed = walkSpeed;
-    }
-
-    private void Start()
-    {
         _animator = _characterBody.GetComponent<Animator>();
-
     }
+
 
     private void FixedUpdate()
     {
         if(isDead)
+        {
+            return;
+        }
+        if (!isSwitchDone)
         {
             return;
         }
@@ -60,8 +61,23 @@ public class PlayerController : MonoBehaviour
     {
         DeadCheck();
         HandleInput();
+        GroundCheck();
         AnimatorControll();
         LookAround();
+
+    }
+
+    
+    private void GroundCheck()
+    {
+        if (Physics.Raycast(transform.position, Vector2.down, groundcheckDistance, whatIsGround))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 
     private void DeadCheck()
@@ -82,7 +98,7 @@ public class PlayerController : MonoBehaviour
             isWalk = false;
             return;
         }
-        else if(isSwitchDone)
+        else
         {
             isMoveing = true;
             isWalk = true;
@@ -94,7 +110,6 @@ public class PlayerController : MonoBehaviour
             _characterBody.forward = moveDir;
 
             _rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
-
         }
     }
 
@@ -104,7 +119,6 @@ public class PlayerController : MonoBehaviour
         Vector3 camAngle = _cameraArm.rotation.eulerAngles;
 
         float x = camAngle.x - mouseDelta.y;
-
 
         if (x < 180f)
         {
@@ -161,14 +175,11 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
         _animator.SetBool(PlayerAnimatorParamiter.IsRoll, isRoll);
         _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
+        _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
         if (collision.transform.CompareTag("Monster"))
         {
             isGetHit = true;
@@ -177,10 +188,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.transform.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
         if (collision.transform.CompareTag("Monster"))
         {
             isGetHit = false;
