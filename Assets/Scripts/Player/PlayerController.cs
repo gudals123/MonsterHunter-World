@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [Header("Component")]
     private Rigidbody _rigidbody;
     private Animator _animator;
+    
 
     [Header("State bool")]
     private bool isMoveing = false;
@@ -21,7 +22,6 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
     private bool isGrounded = false;
     private bool isArmed = false;
-    private bool isSwitchDone = true;
     private bool isRoll = false;
     private bool isAttacking = false;
     private bool isRightAttak = false;
@@ -30,16 +30,12 @@ public class PlayerController : MonoBehaviour
     [Header("Object")]
     [SerializeField] private Transform _characterBody;
     [SerializeField] private Transform _cameraArm;
+    [SerializeField] private Transform _rangeOfAttack;
 
     [Header("GroundCheck")]
     [SerializeField] private float groundcheckDistance;
     [SerializeField] protected LayerMask whatIsGround;
 
-    public bool IsSwitchDone
-    {
-        get { return isSwitchDone; }
-        set { isSwitchDone = value; }
-    }
 
 
 
@@ -57,10 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if (!isSwitchDone)
-        {
-            return;
-        }
+
         Move();
     }
 
@@ -71,9 +64,15 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         AnimatorControll();
         LookAround();
+
+        
     }
 
-    
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(_rangeOfAttack.position, new Vector3(1, 2 , 1.5f));
+    }
+
     private void GroundCheck()
     {
         if (Physics.Raycast(transform.position, Vector2.down, groundcheckDistance, whatIsGround))
@@ -88,7 +87,7 @@ public class PlayerController : MonoBehaviour
 
     private void DeadCheck()
     {
-        if (BattleManager.Instance._currentPlayerHP <= 0)
+        if (BattleManager._currentPlayerHP <= 0f)
         {
             isDead = true;
         }
@@ -98,6 +97,11 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Don'tMove"))
+        {
+            return;
+        }
+
         if (moveInput == Vector2.zero)
         {
             isMoveing = false;
@@ -194,7 +198,6 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-
 
     private void AnimatorControll()
     {

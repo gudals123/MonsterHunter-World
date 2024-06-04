@@ -4,74 +4,91 @@ using UnityEngine;
 
 public class AttackState : StateMachineBehaviour
 {
-    private int comboCount;
-    private float lastTimeAttacked;
-    private float comboWindow = 2;
     private float attackStartTime;
-    private float maxChargingTime = 3;
-    private float minChargingTime = 2.1f;
-    private const float chargingMaxDamege = 100;
-    private float damege;
-    private float currentDamege;
-    private float currentPoint;
+    private float maxChargingTime = 4;
+    private float chargingTime;
+    private float damege = 20;
     private bool isCharging;
-
+    private int comboCount;
+    private Animator _animator;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log(Time.time);
-        animator.GetComponent<Animator>().speed = 0.5f;
+        _animator = animator.GetComponent<Animator>();
+        _animator.speed = 0.5f;
+        chargingTime = 0;
         isCharging = true;
-        if (!animator.GetBool(PlayerAnimatorParamiter.IsRightAttak))
+
+        attackStartTime = Time.time;
+        if (animator.GetBool(PlayerAnimatorParamiter.IsRightAttak))
         {
-            attackStartTime = Time.time;
-            return;
+            if (comboCount == 0)
+            {
+                damege = 30;
+            }
+            if (comboCount == 1)
+            {
+                damege = 40;
+            }
+            BattleManager._playerAttackDamege = damege;
         }
-        if (comboCount >= 2 || Time.time >= lastTimeAttacked + comboWindow)
-        {
-            comboCount = 0;
-        }
-        animator.SetInteger(PlayerAnimatorParamiter.ComboCount, comboCount);
+        
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        currentPoint = (Time.time - attackStartTime + minChargingTime) / (maxChargingTime + minChargingTime);
-        currentDamege = Mathf.Lerp(20,100, currentPoint);
+        chargingTime += Time.deltaTime;
 
-        if (Time.time >= attackStartTime + maxChargingTime)
+        if (animator.GetBool(PlayerAnimatorParamiter.IsRightAttak))
         {
-            isCharging = false;
-            animator.GetComponent<Animator>().speed = 0.5f;
-            damege = chargingMaxDamege;
+            if (comboCount == 0)
+            {
+                damege = 30;
+            }
+            else if(comboCount == 1)
+            {
+                damege = 40;
+            }
+            
             return;
         }
         if (Input.GetMouseButtonUp(0))
         {
             isCharging = false;
         }
-        if (!isCharging)
+        if (!isCharging || Time.time >= attackStartTime + maxChargingTime)
         {
-            animator.GetComponent<Animator>().speed = 0.5f;
-            damege = currentDamege;
+            _animator.speed = 0.5f;
+
+            if(chargingTime < 3)
+            {
+                damege = 20;
+            }
+            else if (chargingTime < 4)
+            {
+                damege = 50;
+            }
+            else
+            {
+                damege = 100;
+            }
             return;
         }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<Animator>().speed = 1f;
-        if (!animator.GetBool(PlayerAnimatorParamiter.IsRightAttak))
-        {
-            Debug.Log($"damege : {damege}");
-            Debug.Log($"currentPoint : {currentPoint}");
-            //BattleManager.SetDamege(damege);
-            return;
-        }
+        _animator.speed = 1f;
+        chargingTime = 0;
         comboCount++;
-        lastTimeAttacked = Time.time;
-        Debug.Log(Time.time);
+        if (comboCount >= 2)
+        {
+            comboCount = 0;
+        }
+        animator.SetInteger(PlayerAnimatorParamiter.ComboCount, comboCount);
+        animator.SetBool(PlayerAnimatorParamiter.IsAttacking, false);
 
+        BattleManager._playerAttackDamege = damege;
     }
 
 
