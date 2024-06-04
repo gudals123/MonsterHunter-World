@@ -27,6 +27,10 @@ public class NomalAttackTrigger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// NomalAttack을 한 번 실행하는 동안 공격이 중첩되지 않도록 
+    /// _isNomalAttacking를 잠시 켰다 꺼는 코루틴 CoNomalAttack을 실행합니다.
+    /// </summary>
     public void NowNomalAttacking()
     {
         StartCoroutine(CoNomalAttack());
@@ -40,6 +44,12 @@ public class NomalAttackTrigger : MonoBehaviour
         _isNomalAttacking = false;
     }
 
+    /// <summary>
+    /// boss의 nomalAttack에 충돌된 위치에 HitEffect를 나타내는 코루틴을 실행합니다.
+    /// 해당 코루틴은 CoHitEffect입니다.
+    /// </summary>
+    /// <param name="hitPos">플레이어가 보스에게 맞은 곳</param>
+    /// <param name="player">충돌된 개체 = Player</param>
     public void AppearHitEffect(Vector3 hitPos, GameObject player)
     {
         StartCoroutine(CoHitEffect(hitPos, player));
