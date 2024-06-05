@@ -1,0 +1,585 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Gravity" Collapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\Code\Gravity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerCamera" Collapsed="true">
+    <Position X="16.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAABCAAAAEAIAAAJAAAAAIAABBAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\Code\PlayerCamera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerInputController" Collapsed="true">
+    <Position X="19.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACCAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\Code\PlayerInputController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerMachine" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAUAMAAACQIBgEiQAIAAACAAAAAABEAABQACAACIhA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\Code\PlayerMachine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerMachineDebug" Collapsed="true">
+    <Position X="7.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAQCAAAAAAEA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\Code\PlayerMachineDebug.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleStateMachine" Collapsed="true">
+    <Position X="12.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEwAgAACAoAAAgIAoAACIAAAAAAAAAAEAAWAAAAgAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\Code\SimpleStateMachine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BruteForceMesh" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAABAAAAACAAACAAAAAQAAARAAAAAAACAAAAAEA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\BruteForceMesh.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BSPTree" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAABEAAJACAAACAAgSgAQABQAAERAAAQAAACAAAAAEA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\BSPTree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionSphere" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\CollisionSphere.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SuperCharacterController" Collapsed="true">
+    <Position X="19.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>g24UKQqAioECgAQJBkBBIkRIAEEKIBAIgAkAAhCCEEA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\IgnoredCollider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SuperCollider" Collapsed="true">
+    <Position X="21.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperCollider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SuperCollisionType" Collapsed="true">
+    <Position X="7.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperCollisionType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SuperMath" Collapsed="true">
+    <Position X="9.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAEAAEAAAAAAAAABAAEAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperMath.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SuperStateMachine" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEgAgAACAIAAAgAAIAACAAAAAABAAAAEAAQAAAAgAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperStateMachine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DebugDraw" Collapsed="true">
+    <Position X="19.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAIAAAAAAAAACEAAgAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\DebugDraw.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Math3d" Collapsed="true">
+    <Position X="19.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAEYAKQAhEIQAAkhAAEAAAAQARIQAJMQCAAAQAwA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Math3d.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PointAtAimTarget" Collapsed="true">
+    <Position X="18" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\DualTarget\PointAtAimTarget.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharacterMovementNoCamera" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIhAAAgEgAAgAAAAAAgAAIAAAAQAACgABCAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Models\UnityCharacter\Scripts\CharacterMovementNoCamera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BehaviorTreeBuilderExtensions" Collapsed="true">
+    <Position X="16.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Boss\BehaviorTreebuilderExtensitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BossBT" Collapsed="true">
+    <Position X="19.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQEAgkgCCAAABIAAAAECIAAAACMAAAA4IECOBYAAMA=</HashCode>
+      <FileName>Assets\Scripts\Boss\BossBT.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreathAttackTrigger" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Boss\BreathAttackTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CombatManager" Collapsed="true">
+    <Position X="16.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAEAEAAAEQkMQAABABBAAAgAAAACAABAABAgCAAgEA=</HashCode>
+      <FileName>Assets\Scripts\Boss\CombatManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NomalAttackTrigger" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAACACAAQAAAAAIQAAAAAAAAAAQgAAAAAAASA=</HashCode>
+      <FileName>Assets\Scripts\Boss\NomalAttackTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerSample" Collapsed="true">
+    <Position X="16.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Boss\PlayerSample.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateAction" Collapsed="true">
+    <Position X="18" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAQAAAQAIAAAAAFAAAA=</HashCode>
+      <FileName>Assets\Scripts\Boss\StateAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgentDestination" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAQAAAAAAAEAEAA=</HashCode>
+      <FileName>Assets\Scripts\CatAI\AgentDestination.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BehaviourTreeBuildersExtension" Collapsed="true">
+    <Position X="18" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\CatAI\BehaviourTreeBuilderExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CatAttack" Collapsed="true">
+    <Position X="18" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\CatAI\CatAttack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CatBT" Collapsed="true">
+    <Position X="19.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BCQAAAABAACAAAAAAAABoECAAABACAABIABAAQAAAEA=</HashCode>
+      <FileName>Assets\Scripts\CatAI\CatBT.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CatManager" Collapsed="true">
+    <Position X="21.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICAEAAAACAAAACAAAAAAAEAYEBDAgBABAABAAAAAAGA=</HashCode>
+      <FileName>Assets\Scripts\CatAI\CatManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BattleManager" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEIAAAAAABAAAAAABAEAAAQAAAgAQAAMA=</HashCode>
+      <FileName>Assets\Scripts\Player\BattleManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerAnimationEvents" Collapsed="true">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAEwAAAEAAAACAAAAAAMAAAAAAAIAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Player\PlayerAnimationEvents.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerAnimatorParamiter" Collapsed="true">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIABAABAAIgAEAAAAAAAEAAAAAAggAAAAAACDAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player\PlayerAnimatorParameter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerController" Collapsed="true">
+    <Position X="18" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAmAEoAgCACIggQAAAAAIBAAABAIYIAAACCAAUQ=</HashCode>
+      <FileName>Assets\Scripts\Player\PlayerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RollState" Collapsed="true">
+    <Position X="21.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAAIAAIAAAAAAAACAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player\State\RollState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Test" Collapsed="true">
+    <Position X="14.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BARAAAAAAKAAAAAAAgAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player\Test.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HPBar" Collapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAiACAAAAAAAIAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\HPBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneChange" Collapsed="true">
+    <Position X="7.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAAAAAQACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\SceneChange.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaminaBar" Collapsed="true">
+    <Position X="16.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAQACAACAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\UI\StaminaBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Readme" Collapsed="true">
+    <Position X="19.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAQAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\TutorialInfo\Scripts\Readme.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorCharacterAnimatorEvents" Collapsed="true">
+    <Position X="19.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAQAAABAAAAAIgABgAAAAAEABAAgAoAAAAQAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorAnimatorEvents.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorAnimatorParentMove" Collapsed="true">
+    <Position X="18" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAQAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorAnimatorParentMove.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorController" Collapsed="true">
+    <Position X="5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>lw8wgAApIgGoGFAE+EUQRVRISrgFSQWkmiJJew4OiGI=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorInputController" Collapsed="true">
+    <Position X="7.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQwggAAAAgAAAAAAAEAAFlgAEAAACAAEgAAAAAIGAAI=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorInputController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorInputSystemController" Collapsed="true">
+    <Position X="9.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQgggAAAAgAAAAAAAEAABFAAAAAACQQEgAAAAAIGAAI=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorInputSytemController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorMovementController" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QFAcIIgAAGiAIgggQgYBIAAAAIGBCAWACAREQAAAYlA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorMovementController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorTiming" Collapsed="true">
+    <Position X="11" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorTiming.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.CameraController" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgSAgABCACAAAAQAAAAQIAgEAEAABACAAAQAAAAAAEA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Demo Elements\Code\CameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.GUIControls" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAACAAAAAAAIBAAAQAIAAACAAAAAAAACBAAAAYEI=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Demo Elements\Code\GUIControls.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarriorAnims.WarriorIKHands" Collapsed="true">
+    <Position X="21.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAAAACAAAAAAAAAAAgCAQAAAABAAAAAAQAEIgAQQUA=</HashCode>
+      <FileName>Assets\Scripts\Player\WarriorIKHands.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.LoseSightWhenTargetsFallsOffThePlatform" Collapsed="true">
+    <Position X="18" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAgAAAAAAAAAAAgAAAACAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\2D\LoseSightWhenTargetsFallsOffThePlatform.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.MouseScrollZoom2D" Collapsed="true">
+    <Position X="7.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAAAAEAAAAAEQEAAAVAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\2D\MouseScrollZoom2D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.ActivateOnKeypress" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAACAAgAAAAAAAABABQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\3rdPersonWithAimMode\ActivateOnKeypress.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.PlayerLookAt" Collapsed="true">
+    <Position X="21.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\Anywhere Door\PlayerLookAt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.PlayerMovement" Collapsed="true">
+    <Position X="11" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\Anywhere Door\PlayerMovement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.TagChanger" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\Anywhere Door\TagChanger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.BossLookAt" Collapsed="true">
+    <Position X="21.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAQAAAAAASAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\BossCamera\BossLookAt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.CustomLockCameraY" Collapsed="true">
+    <Position X="18" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\BossCamera\CustomLockCameraY.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.CameraMagnetProperty" Collapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAgAAAAAAAAAYAAAAAACA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\CameraMagnets\CameraMagnetProperty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.CameraMagnetTargetController" Collapsed="true">
+    <Position X="16.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAEA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\CameraMagnets\CameraMagnetTargetController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.MoveAimTarget" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQAAAAECBADQAAAAEAAAAAAAoQAAAIAAAAAAIACBA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\DualTarget\MoveAimTarget.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.CinemachineFadeOutNearbyObjects" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAEAAEAAiAAAIAACAAAAAQBAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\FadeOutNearbyObjects\CinemachineFadeOutNearbyObjects.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.ScriptingExample" Collapsed="true">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAACAAAAABAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Scenes\Scripting\ScriptingExample.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.CharacterMovement" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAABBAAjAAIAAAAQAAAAAAAgAAMRAAEUQAAAAAQAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Models\UnityCharacter\Scripts\CharacterMovement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.CharacterMovement2D" Collapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BgQAACAAAjAIAAAAAAgAAAAAAgAAIVAIAQQgAAAAACA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Models\UnityCharacter\Scripts\CharacterMovement2D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.ActivateCameraWithDistance" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIQAAAAAACAAAAAAAAgCAAAAAAAACAAAAAAAAACAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\ActivateCameraWithDistance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.ActivateCamOnPlay" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\ActivateCamOnPlay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.ExampleHelpWindow" Collapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAQAAAAAAAAAAAAgAACEAABAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\ExampleHelpWindow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.InputSystemHelper" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\InputSystemHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.InvokeEventFromInspector" Collapsed="true">
+    <Position X="16.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\InvokeEventFromInspector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.GenerateEventEditor" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\InvokeEventFromInspector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.MixingCameraBlend" Collapsed="true">
+    <Position X="21.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAACQAAAAABAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\MixingCameraBlend.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.PlayerMove" Collapsed="true">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEgAAIhiAABAABAAAACAABAAAAAAAAAAAAAAEACAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\PlayerMove.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.PlayerMoveOnSphere" Collapsed="true">
+    <Position X="12.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAEAAAQEAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\PlayerMoveOnSphere.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.PlayerMovePhysics" Collapsed="true">
+    <Position X="14.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAiAACAAEAAAEAQAAAAAAAQAAAAAAAAAACAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\PlayerMovePhysics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.SimpleElevator" Collapsed="true">
+    <Position X="11" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAgAAAAgAAAAAAAAAAAAAAAAIAAQAAAAAAACAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\SimpleElevator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.SpawnInCircle" Collapsed="true">
+    <Position X="14.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIAIAAAAAAAAAAAgAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\SpawnInCircle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cinemachine.Examples.ThirdPersonFollowDistanceModifier" Collapsed="true">
+    <Position X="16.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAIAABAAAAAEEAAAAAQAAAAAYAAAAIAAACAA=</HashCode>
+      <FileName>Assets\Samples\Cinemachine\2.9.7\Cinemachine Example Scenes\Shared\Scripts\ThirdPersonFollowDistanceModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="PlayerInputData" Collapsed="true">
+    <Position X="7.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAgAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\Code\PlayerInputController.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SuperCollision" Collapsed="true">
+    <Position X="9.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAgAAAAAAAAAIkAAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\SuperCharacterController\SuperCharacterController\Core\SuperCollision.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="WarriorAnims.Warrior" Collapsed="true">
+    <Position X="9.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgLAAAAAEQAAAAAAAIABAAAAAAAACAgAAAAAYAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="WarriorAnims.WarriorState" Collapsed="true">
+    <Position X="11" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAABAAoAQAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="WarriorAnims.AnimatorTrigger" Collapsed="true">
+    <Position X="7.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAQAgCAAIQAAABAAAAAQBgBACIAAAABBAAAAIAQAA=</HashCode>
+      <FileName>Assets\ExplosiveLLC\Warrior\Code\WarriorData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Malgun Gothic" Size="9" />
+</ClassDiagram>
