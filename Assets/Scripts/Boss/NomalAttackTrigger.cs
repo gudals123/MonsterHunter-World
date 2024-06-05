@@ -21,6 +21,7 @@ public class NomalAttackTrigger : MonoBehaviour
         if (other.CompareTag("Player") && !_isNomalAttacking)
         {
             Debug.Log("Start Nomal Attacking~~~~~~");
+            NowNomalAttacking();
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
             CombatManager.TakeDamage("Boss", _nomalAttack);

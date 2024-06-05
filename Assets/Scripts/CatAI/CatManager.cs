@@ -6,7 +6,7 @@ public class CatManager : MonoBehaviour
 {
     public static CatManager instance;
     
-    [SerializeField] private static Rigidbody catRigidbody;
+    [SerializeField] private Rigidbody catRigidbody;
 
     [Header("Distance")]
     public static float distanceCanDetect = 4f; // ���� ����
@@ -20,12 +20,14 @@ public class CatManager : MonoBehaviour
 
     [Header("Player Detect")]
     public static float distanceCatToPlayer;
+    public static Vector3 normalized;
     public static bool _isPlayerInAttackRange;
     public static bool _isPlayerInCatView;
 
     [SerializeField] private Transform player;
 
-    private static float rotationSpeed = 10;
+    private float rotationSpeed = 10;
+    private float moveSpeed = 20;
 
     private void Awake()
     {
@@ -39,11 +41,9 @@ public class CatManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        catRigidbody = GetComponentInChildren<Rigidbody>();
     }
 
-    public static void IsBossInRange(Transform boss, Transform cat)
+    public void IsBossInRange(Transform boss, Transform cat)
     {
         distanceCatToBoss = Vector3.Distance(boss.position, cat.position);
 
@@ -53,7 +53,7 @@ public class CatManager : MonoBehaviour
         {
             _isBossInCatView = true;
             Debug.Log($"CanDetectBoss : {_isBossInCatView}");
-            cat.position += normalized / 100;
+            cat.position += normalized / moveSpeed;
             LookAtTarget(boss);
         }
         else _isBossInCatView = false;
@@ -67,17 +67,17 @@ public class CatManager : MonoBehaviour
 
     }
 
-    public static void FollowPlayer(Transform player, Transform cat)
+    public void FollowPlayer(Transform player, Transform cat)
     {
         distanceCatToPlayer = Vector3.Distance(player.position, cat.position);
 
-        Vector3 normalized = (player.position - cat.position).normalized;
+        normalized = (player.position - cat.position).normalized;
 
         if (!_isBossInCatView && !_isBossInAttackRange && distanceCatToPlayer >= distanceCanAttack)
         {
             _isPlayerInAttackRange = true;
             Debug.Log($"StartFollowPlayer : {_isPlayerInAttackRange}");
-            cat.position += normalized / 100;
+            cat.position += normalized / moveSpeed;
             LookAtTarget(player);
         }
         else _isPlayerInAttackRange = false;
@@ -111,7 +111,7 @@ public class CatManager : MonoBehaviour
         }
     }
 
-    private static void LookAtTarget(Transform target)
+    public void LookAtTarget(Transform target)
     {
         Vector3 dir = new Vector3 (target.transform.position.x, 0, target.transform.position.z) - new Vector3 (catRigidbody.transform.position.x, 0, catRigidbody.transform.position.z);
         catRigidbody.transform.rotation = Quaternion.Lerp(catRigidbody.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotationSpeed);
