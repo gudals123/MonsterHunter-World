@@ -13,7 +13,10 @@ public class CatBT : MonoBehaviour
     [SerializeField] private Transform boss;
     //[SerializeField] private SphereCollider Detectcollider;
     //[SerializeField] private SphereCollider Attackcollider;
+
     [SerializeField] private Animator animator;
+
+
 
     private Vector3 moveDirection;
     [SerializeField] private Rigidbody catRigidbody;
@@ -31,39 +34,42 @@ public class CatBT : MonoBehaviour
     private void Awake()
     {
         catTree = new BehaviorTreeBuilder(gameObject)
-            // °ø°Ý Æ®¸®
+            // ê³µê²© íŠ¸ë¦¬
             .Selector()
                 .Sequence()
                     .Condition("isBossAttackInRange", () => CatManager._isBossInAttackRange)
                     .Do(() =>
                     {
                         Debug.Log("Attack");
+
+                        CatManager._isBossInAttackRange = false;
                         return TaskStatus.Success;
                     })
                 .End()
 
                 .Selector()
-                    // º¸½º °¨Áö Æ®¸®
+                    // ë³´ìŠ¤ ê°ì§€ íŠ¸ë¦¬
                     .Sequence()
                         .Condition("isBossInRange", () => CatManager._isBossInCatView)
                         .Do(() =>
                         {
                             Debug.Log("Move To Boss");
-                            animator.SetBool("isRun", true);
+                            LookAtBoss();
+                            CatManager._isBossInCatView = false;
                             return TaskStatus.Success;
                         })
                     .End()
 
-                    // ÇÃ·¹ÀÌ¾î °¨Áö Æ®¸®
+                     // í”Œë ˆì´ì–´ ê°ì§€ íŠ¸ë¦¬
                     .Sequence()
-                        .Condition("isPlayerInRange", () => CatManager._isPlayerInCatView)
+                        .Condition("isPlayerInRange", () => isPlayerInRange)
                         .Do(() =>
                         {
                             Debug.Log("Move To Player");
-                            animator.SetBool("isRun", true);
+                            LookAtPlayer();
+                            isPlayerInRange = false;
                             return TaskStatus.Success;
                         })
-
                         .Sequence()
                             .Condition("isPlayerAlmostDie", () => isPlayerAlmostDie)
                             .Do(() =>
@@ -85,4 +91,5 @@ public class CatBT : MonoBehaviour
 
         catTree.Tick();
     }
+
 }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a65d0722b1710d24b86c10e32a79d315
+guid: 78f6be759bd54a24e82094a5e1bebe3d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -455,7 +455,7 @@ ModelImporter:
     second: 2Handed-Sword
   - first:
       74: 7400000
-    second: Attack3
+    second: Attack1
   - first:
       95: 9500000
     second: //RootNode
@@ -504,8 +504,8 @@ ModelImporter:
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
       might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'B_Spine1' has translation animation that
-      will be discarded.\n"
+      to improve retargeting quality.\n\t'B_Spine' has translation animation that
+      will be discarded.\n\t'B_Spine1' has translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -519,11 +519,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Attack3
+      name: Attack1
       takeName: Take 001
       internalID: 7400000
-      firstFrame: 50
-      lastFrame: 91
+      firstFrame: 0
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -542,7 +542,15 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.43188477
+        functionName: AnimationPause
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: c39a0f918ce523344a209600d8f9ec40,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1

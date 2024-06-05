@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 330ccf4ddc406a04cb24ee589fdaee98
+guid: d0217423dad9b1444b28a973b2c1a362
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -455,7 +455,7 @@ ModelImporter:
     second: 2Handed-Sword
   - first:
       74: 7400000
-    second: Attack1
+    second: Attack2
   - first:
       95: 9500000
     second: //RootNode
@@ -519,11 +519,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Attack1
+      name: Attack2
       takeName: Take 001
       internalID: 7400000
-      firstFrame: 0
-      lastFrame: 40
+      firstFrame: 30
+      lastFrame: 64
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -542,7 +542,23 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.465941
+        functionName: AttackRangeCollierTurnOn
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: c39a0f918ce523344a209600d8f9ec40,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5976123
+        functionName: AttackRangeCollierTurnOff
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: c39a0f918ce523344a209600d8f9ec40,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -654,7 +670,7 @@ ModelImporter:
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 30
     isReadable: 1
   meshes:
     lODScreenPercentages: []

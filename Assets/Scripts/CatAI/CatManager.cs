@@ -5,25 +5,28 @@ using UnityEngine;
 public class CatManager : MonoBehaviour
 {
     public static CatManager instance;
+    
     [SerializeField] private static Rigidbody catRigidbody;
 
     [Header("Distance")]
-    public static float distanceCanDetect = 4f; // °¨Áö ¹üÀ§
-    public static float distanceCanAttack = 1.5f; // °ø°Ý ¹üÀ§
+    public static float distanceCanDetect = 4f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public static float distanceCanAttack = 1.5f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     [Header("Boss Detect")]
-    public static float distanceCatToBoss; // °Å¸®
-    public static bool _isBossInAttackRange; // °ø°Ý
-    public static bool _isBossInCatView; // °¨Áö
+    public static float distanceCatToBoss; // ï¿½Å¸ï¿½
+    public static bool _isBossInAttackRange; // ï¿½ï¿½ï¿½ï¿½
+    public static bool _isBossInCatView; // ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private Transform boss;
 
     [Header("Player Detect")]
     public static float distanceCatToPlayer;
     public static bool _isPlayerInAttackRange;
     public static bool _isPlayerInCatView;
+
     [SerializeField] private Transform player;
 
     private static float rotationSpeed = 10;
+
 
     private void Awake()
     {
@@ -39,6 +42,7 @@ public class CatManager : MonoBehaviour
         }
 
         catRigidbody = GetComponentInChildren<Rigidbody>();
+
     }
 
     public static void IsBossInRange(Transform boss, Transform cat)
@@ -62,9 +66,17 @@ public class CatManager : MonoBehaviour
             Debug.Log($"StartAttackToBoss: {_isBossInAttackRange}");
         }
         else _isBossInAttackRange = false;
+
+        if (/*_isForward > 0 &&*/ distanceCatToBoss <= distanceCanDetect)
+        {
+            _isBossInCatView = true;
+            Debug.Log($"CanDetectBoss : {_isBossInCatView}");
+        }
+        else _isBossInCatView = false;
     }
 
-    public static void FollowPlayer(Transform player, Transform cat)
+    public static void IsPlayerInRange(Transform player, Transform cat)
+
     {
         distanceCatToPlayer = Vector3.Distance(player.position, cat.position);
 
@@ -95,6 +107,7 @@ public class CatManager : MonoBehaviour
         {
             Gizmos.color = Color.red;
         }
+
         else
         {
             Gizmos.color = Color.white;
