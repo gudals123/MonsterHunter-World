@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     [Header("Object")]
     [SerializeField] private Transform _characterBody;
     [SerializeField] private Transform _cameraArm;
-    [SerializeField] private Transform _rangeOfAttack;
 
     [Header("GroundCheck")]
     [SerializeField] private float groundcheckDistance;
@@ -66,11 +65,6 @@ public class PlayerController : MonoBehaviour
         LookAround();
 
         
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(_rangeOfAttack.position, new Vector3(1, 2 , 1.5f));
     }
 
     private void GroundCheck()
