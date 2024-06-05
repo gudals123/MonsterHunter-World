@@ -54,7 +54,6 @@ public class CatBT : MonoBehaviour
                         .Do(() =>
                         {
                             Debug.Log("Move To Boss");
-                            LookAtBoss();
                             CatManager._isBossInCatView = false;
                             return TaskStatus.Success;
                         })
@@ -66,7 +65,6 @@ public class CatBT : MonoBehaviour
                         .Do(() =>
                         {
                             Debug.Log("Move To Player");
-                            LookAtPlayer();
                             isPlayerInRange = false;
                             return TaskStatus.Success;
                         })
@@ -87,7 +85,7 @@ public class CatBT : MonoBehaviour
     private void Update()
     {
         CatManager.IsBossInRange(boss, gameObject.transform);
-        CatManager.FollowPlayer(player, gameObject.transform);
+        CatManager.IsPlayerInRange(player, gameObject.transform);
 
         catTree.Tick();
     }

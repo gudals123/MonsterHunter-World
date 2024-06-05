@@ -27,7 +27,6 @@ public class CatManager : MonoBehaviour
 
     private static float rotationSpeed = 10;
 
-
     private void Awake()
     {
         if (instance == null)
@@ -42,7 +41,6 @@ public class CatManager : MonoBehaviour
         }
 
         catRigidbody = GetComponentInChildren<Rigidbody>();
-
     }
 
     public static void IsBossInRange(Transform boss, Transform cat)
@@ -67,16 +65,9 @@ public class CatManager : MonoBehaviour
         }
         else _isBossInAttackRange = false;
 
-        if (/*_isForward > 0 &&*/ distanceCatToBoss <= distanceCanDetect)
-        {
-            _isBossInCatView = true;
-            Debug.Log($"CanDetectBoss : {_isBossInCatView}");
-        }
-        else _isBossInCatView = false;
     }
 
     public static void IsPlayerInRange(Transform player, Transform cat)
-
     {
         distanceCatToPlayer = Vector3.Distance(player.position, cat.position);
 
