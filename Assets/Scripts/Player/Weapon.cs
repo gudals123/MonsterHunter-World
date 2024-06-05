@@ -51,7 +51,7 @@ public class Weapon : MonoBehaviour
     {
         if (_hitEffect == null)
         {
-            _hitprefab = Resources.Load<GameObject>("Prefabs/HitEffectSample");
+            _hitprefab = Resources.Load<GameObject>("Prefabs/HitEffectSample 1");
             _hitEffect = Instantiate(_hitprefab);
             _hitEffect.transform.parent = player.transform;
         }
