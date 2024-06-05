@@ -36,6 +36,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     public void AnimationPause()
     {
         GetComponent<Animator>().speed = 0.03f;
+        BattleManager.Instance._isCharging = true;
     }
 
     public void AttackRangeCollierTurnOn()

@@ -27,12 +27,13 @@ public class BattleManager : MonoBehaviour
     [SerializeField] public static float _PlayerMaxHP = 100;
     [SerializeField] public static float _BossMaxHP = 1000;
 
-    public static float _currentPlayerHP;
-    public static float _currentBossHP;
+    public float _currentPlayerHP;
+    public float _currentBossHP;
 
-    public static bool _isPlayerDead = false;
+    public bool _isPlayerDead = false;
+    public bool _isCharging = false;
 
-    public static float _playerAttackDamege;
+    public float _playerAttackDamege;
 
     void Awake()
     {
@@ -42,7 +43,7 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    public static void TakeDamage(string type, float damage)
+    public void TakeDamage(string type, float damage)
     {
         if (type == "Player")
         {
