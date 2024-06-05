@@ -48,7 +48,7 @@ public class NomalAttackTrigger : MonoBehaviour
     /// boss의 nomalAttack에 충돌된 위치에 HitEffect를 나타내는 코루틴을 실행합니다.
     /// 해당 코루틴은 CoHitEffect입니다.
     /// </summary>
-    /// <param name="hitPos">플레이어가 보스에게 맞은 곳</param>
+    /// <param name="hitPos">충돌된 개체가 맞은 곳</param>
     /// <param name="player">충돌된 개체 = Player</param>
     public void AppearHitEffect(Vector3 hitPos, GameObject player)
     {
@@ -63,6 +63,7 @@ public class NomalAttackTrigger : MonoBehaviour
             _hitEffect = Instantiate(_hitprefab);
             _hitEffect.transform.parent = player.transform;
         }
+
         _hitEffect.transform.position = hitPos;
         _hitEffect.SetActive(true);
         yield return new WaitForSeconds(1f);

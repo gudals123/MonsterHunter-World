@@ -13,18 +13,18 @@ public class CombatManager : MonoBehaviour
     public static float _currentBossHP { get; set; }
     public static float _currentPlayerHP;
 
-    public static float _attackRange = 3.5f;
     public static bool _isPlayerDead = false;
     public static bool _isBossDead { get; set; } = false;
+    public static bool _isBossSturned;
+    public static bool _isbossGetHit;
+    public static bool _isBossRecognizedPlayer;
 
     public static float distancePtoB;
     public static bool _bossAttackRange;
     public static bool _bossAttackBackRange;
     public static bool _bossVisualRange;
     public static bool _bossPerceptionRange;
-    public static bool _isbossRecognizedPlayer;
 
-    public static bool _bossGetHit;
 
     void Awake()
     {
@@ -69,14 +69,7 @@ public class CombatManager : MonoBehaviour
         if (_isForward > 0 && distancePtoB <= 9f)
         {
             _bossAttackRange = true;
-            _bossAttackBackRange = false;
-            _isbossRecognizedPlayer = true;
-        }
-        else if (_isForward < 0 && distancePtoB <= 9f)
-        {
-            _bossAttackRange = false;
-            _bossAttackBackRange = true;
-            _isbossRecognizedPlayer = true;
+            _isBossRecognizedPlayer = true;
         }
         else
         {
@@ -85,8 +78,16 @@ public class CombatManager : MonoBehaviour
         }
 
         // 시야 범위
-        if (_isForward > 0 && distancePtoB <= 18f) _bossVisualRange = true;
-        else _bossVisualRange = false;
+        if (_isForward > 0 && distancePtoB <= 18f)
+        {
+            _bossVisualRange = true;
+            _isBossRecognizedPlayer = true;
+        }
+        else 
+        {
+            _bossVisualRange = false;
+            _isBossRecognizedPlayer = false;
+        }
 
         //인식 범위
         if (distancePtoB <= 18f) _bossPerceptionRange = true;
@@ -103,12 +104,12 @@ public class CombatManager : MonoBehaviour
     {
         if (type == "Player")
             _currentBossHP -= damage;
-            _isbossRecognizedPlayer = true;
+            _isBossRecognizedPlayer = true;
         if (type == "Boss")
         {
             _currentPlayerHP -= damage;
-            _bossGetHit = true;
-            _bossGetHit = false;
+            _isbossGetHit = true;
+            _isbossGetHit = false;
         }
     }
 
