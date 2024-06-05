@@ -8,7 +8,8 @@ public class PlayerAnimationEvents : MonoBehaviour
     [SerializeField] private GameObject _handWeapon;
     [SerializeField] private GameObject _BackWeapon;
 
-    [SerializeField] private Transform _rangeOfAttack;
+    [SerializeField] private GameObject _attackRange;
+
 
     private PlayerController _playerController;
 
@@ -17,6 +18,7 @@ public class PlayerAnimationEvents : MonoBehaviour
         _playerController = GetComponentInParent<PlayerController>();   
         _handWeapon.SetActive(false);
         _BackWeapon.SetActive(true);
+        _attackRange.SetActive(false);
     }
 
     public void DrawWeapon()
@@ -36,22 +38,13 @@ public class PlayerAnimationEvents : MonoBehaviour
         GetComponent<Animator>().speed = 0.03f;
     }
 
-    private void AttackTrigger()
+    public void AttackRangeCollierTurnOn()
     {
-        Collider[] colliders = Physics.OverlapBox(_rangeOfAttack.position, new Vector3(1, 2, 1.5f));
-            //.OverlapSphere(_rangeOfAttack.position, 1f);
-            //OverlapCircleAll(player.attackCheck.position, player.attackCheckRadius);
-        
-        foreach (var hit in colliders)
-        {
-            if (hit.CompareTag("Boss"))
-            {
-                BattleManager.TakeDamage("Player", BattleManager._playerAttackDamege);
-                Debug.Log($"Attack Damege : {BattleManager._playerAttackDamege}");
-            }
-        }
-
+        _attackRange.SetActive(true);
     }
 
-
+    public void AttackRangeCollierTurnOff()
+    {
+        _attackRange.SetActive(false);
+    }
 }
