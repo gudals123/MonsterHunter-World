@@ -44,12 +44,11 @@ public class BossBT : MonoBehaviour
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => CombatManager._bossAttackRange)
                         .Selector()
-/*                            .Sequence()
+                            .Sequence()
                                 .Condition("canBreathAttack", () => _canBreathAttack = SetBreathChance())
-                                .StateAction("BreathAttack", () => 
-                                { 
-                                    _bossRb.velocity = Vector3.zero;
-                                    _rotationToPlayer = false;
+                                .StateAction("BreathAttack", () =>
+                                {
+                                    _trackingPlayer = false;
                                     _breathAtt.SetActive(true);
                                 })
                                 .Do(() =>
@@ -60,7 +59,7 @@ public class BossBT : MonoBehaviour
                                     _canBreathAttack = !_canBreathAttack;
                                     return TaskStatus.Success;
                                 })
-                            .End()*/
+                            .End()
                             .StateAction("NomalAttack", () =>
                             {
                                 _trackingPlayer = false;
@@ -181,7 +180,9 @@ public class BossBT : MonoBehaviour
 
             if (isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
             {
-                _animator.Play("Die");
+                BossBeingShot("Die");
+                Debug.Log($"{transform.GetChild(0).GetChild(0).name}");
+                transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 CombatManager._isBossDead = true;
             }
 
@@ -231,8 +232,16 @@ public class BossBT : MonoBehaviour
     public bool SetBreathChance()
     {
         float ran = Random.value;
-        if (ran <= 0.5) return _canBreathAttack = true;   // 추후 boss HP 가 30% 이하일 조건 추가 : CombatManager._currentBossHP <= 600 && 
-        else return _canBreathAttack = false;
+        if (ran <= 0.5)   // 추후 boss HP 가 30% 이하일 조건 추가 : CombatManager._currentBossHP <= 600 && 
+        {
+            Debug.Log($"{ran} <= 0.5 / Boss Breath Attack");
+            return _canBreathAttack = true;
+        }
+        else
+        {
+            Debug.Log($"{ran} >= 0.5 / Boss Nomal Attack");
+            return _canBreathAttack = false;
+        }
     }
 
     /// <summary>
@@ -242,8 +251,16 @@ public class BossBT : MonoBehaviour
     public bool SetNomalWalkingChance()
     {
         float ran = Random.value;
-        if (ran <= 0.5) return true;
-        else return false;
+        if (ran <= 0.5)
+        {
+            Debug.Log($"{ran} <= 0.5 / Boss Walk");
+            return true;
+        }
+        else
+        {
+            Debug.Log($"{ran} >= 0.5 / Boss IDLE");
+            return false;
+        }
     }
 
     /// <summary>
