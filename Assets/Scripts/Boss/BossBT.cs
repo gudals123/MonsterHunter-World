@@ -18,7 +18,6 @@ public class BossBT : MonoBehaviour
     private bool _rotationToPlayer = false;
     private bool _startTracking = false;
     private bool _canBreathAttack = false;
-    private Vector3 _wayToGoPlayer;
 
     public GameObject _nomalAtt;
     public GameObject _breathAtt;
@@ -31,6 +30,7 @@ public class BossBT : MonoBehaviour
     public float _perceptionTime = 0;
     public bool _canNomalWalking;
     public Vector3 _randomPosToWalk;
+    public bool _isBossSturned = false;
 
     private void Awake()
     {
@@ -43,10 +43,6 @@ public class BossBT : MonoBehaviour
                 // Left SubTree
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => CombatManager._bossAttackRange)
-                        .Do(() =>
-                        {
-                            return TaskStatus.Success;
-                        })
                         .Selector()
 /*                            .Sequence()
                                 .Condition("canBreathAttack", () => _canBreathAttack = SetBreathChance())
@@ -98,6 +94,7 @@ public class BossBT : MonoBehaviour
                         .Condition("ChanceForWalking", () => SetNomalWalkingChance())
                         .StateAction("NomalWalking", () => 
                         {
+                            _trackingPlayer = false;
                             _randomPosToWalk = RandomPosForWalking();
                             _canNomalWalking = true;
                         })
@@ -110,6 +107,7 @@ public class BossBT : MonoBehaviour
                     .End()
                     .StateAction("Idle", () =>
                     {
+                        _trackingPlayer = false;
                         Debug.Log("Idle");
                     })
                     .Do(() =>
@@ -124,14 +122,8 @@ public class BossBT : MonoBehaviour
     private void Update()
     {
         CombatManager.isPlayerInRange(_player, gameObject.transform);
-        _wayToGoPlayer.y = 0;
 
-        if (CombatManager._bossAttackBackRange && CombatManager._isbossRecognizedPlayer)
-        {
-            _detectedPlayer = true;
-        }
-
-        if (CombatManager._bossVisualRange)
+        if (CombatManager._bossVisualRange || CombatManager._isBossRecognizedPlayer)
         {
             _detectedPlayer = true;
         }
@@ -154,9 +146,8 @@ public class BossBT : MonoBehaviour
 
         if (_perceptionTime >= 3)
         {
-            _trackingPlayer = false;
             _detectedPlayer = false;
-            CombatManager._isbossRecognizedPlayer = false;
+            CombatManager._isBossRecognizedPlayer = false;
             _perceptionTime = 0;
         }
 
@@ -175,10 +166,17 @@ public class BossBT : MonoBehaviour
         {
             if (isBossGetHit)   // 추후 CombatManager._bossGetHit로 변경 예정
             {
-                _animator.Play("Hit");
-                CombatManager._bossGetHit = false;
-                CombatManager._isbossRecognizedPlayer = true;   // 임시로 넣어 둠. 추후 플레이어와의 상호작용에서 제거 예정
+                BossBeingShot("Hit");
+                CombatManager._isbossGetHit = false;
+                CombatManager._isBossRecognizedPlayer = true;   // 임시로 넣어 둠. 추후 플레이어와의 상호작용에서 제거 예정
                 _detectedPlayer = true;
+            }
+
+            if (_isBossSturned)   // 추후 CombatManager._isBossSturned로 변경 예정
+            {
+                BossBeingShot("Sturn");
+                _isBossSturned = false;
+                CombatManager._isBossSturned = false;
             }
 
             if (isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
@@ -196,6 +194,19 @@ public class BossBT : MonoBehaviour
         }
     }
 
+    private void BossBeingShot(string animationName)
+    {
+        _trackingPlayer = false;
+        _canNomalWalking = false;
+
+        _animator.Play(animationName);
+    }
+
+    /// <summary>
+    /// 보스가 타겟에게로 향합니다.
+    /// </summary>
+    /// <param name="targetPos"> 타겟 대상 </param>
+    /// <param name="speedRate"> 속도 비율 조정; Walk 일때는 0.7, Tracking 일때는 1 </param>
     private void MovingWalkOrTracking(Vector3 targetPos, float speedRate)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
@@ -203,6 +214,9 @@ public class BossBT : MonoBehaviour
         _bossRb.MovePosition(transform.position + _moveDirection * _moveSpeed * speedRate * Time.fixedDeltaTime);
     }
 
+    /// <summary>
+    /// 보스가 타겟에게로 몸을 회전합니다.
+    /// </summary>
     public void RotationToTarget()
     {
         Quaternion targetRotation = Quaternion.LookRotation(_moveDirection);
@@ -210,6 +224,10 @@ public class BossBT : MonoBehaviour
         _bossRb.MoveRotation(rotation);
     }
 
+    /// <summary>
+    /// 보스가 브레스 공격을 할 지 boss HP 가 30% 이하일 때 50% 확률로 정해줍니다.
+    /// </summary>
+    /// <returns> true이면 BreathAttack, false이면 NomalAttack </returns>
     public bool SetBreathChance()
     {
         float ran = Random.value;
@@ -217,6 +235,10 @@ public class BossBT : MonoBehaviour
         else return _canBreathAttack = false;
     }
 
+    /// <summary>
+    /// 보스가 Nomal 상황에서 걸을 지에 대하여 50% 확률로 정해줍니다.
+    /// </summary>
+    /// <returns> true이면 NomalWalking, false이면 IDLE </returns>
     public bool SetNomalWalkingChance()
     {
         float ran = Random.value;
@@ -224,6 +246,10 @@ public class BossBT : MonoBehaviour
         else return false;
     }
 
+    /// <summary>
+    /// 보스가 Nomal상태에서 움직인다면 랜덤 방향을 결정합니다.
+    /// </summary>
+    /// <returns>랜덤 방향</returns>
     public Vector3 RandomPosForWalking()
     {
         float targetX = Random.Range(transform.position.x - 100, transform.position.x + 100);
