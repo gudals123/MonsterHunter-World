@@ -85,7 +85,7 @@ public class CatBT : MonoBehaviour
     private void Update()
     {
         CatManager.IsBossInRange(boss, gameObject.transform);
-        CatManager.IsPlayerInRange(player, gameObject.transform);
+        CatManager.FollowPlayer(player, gameObject.transform);
 
         catTree.Tick();
     }

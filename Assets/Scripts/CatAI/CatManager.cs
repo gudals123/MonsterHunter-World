@@ -67,7 +67,7 @@ public class CatManager : MonoBehaviour
 
     }
 
-    public static void IsPlayerInRange(Transform player, Transform cat)
+    public static void FollowPlayer(Transform player, Transform cat)
     {
         distanceCatToPlayer = Vector3.Distance(player.position, cat.position);
 
