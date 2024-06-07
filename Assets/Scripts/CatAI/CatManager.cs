@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CatManager : MonoBehaviour
 {
-    public static CatManager instance { get; private set; }
+    private static CatManager instance = null;
 
     [SerializeField] private Rigidbody catRigidbody;
 
@@ -17,7 +17,7 @@ public class CatManager : MonoBehaviour
     public static Vector3 normalized { get; private set; }
     public static bool _isPlayerInAttackRange { get; set; }
     public static bool _isPlayerInCatView { get; set; }
-    public static bool isPlayerAlmostDie { get; set; }
+    public static bool _isPlayerAlmostDie { get; set; }
     [SerializeField] private Transform player;
 
     // [Header("Boss Detect")]
@@ -29,7 +29,7 @@ public class CatManager : MonoBehaviour
     private float rotationSpeed = 10;
     private float moveSpeed = 50;
 
-    public float playerHP = 100;
+    public float coolTime = 0;
 
     private void Awake()
     {
@@ -45,6 +45,16 @@ public class CatManager : MonoBehaviour
         }
     }
 
+    public static CatManager Instance
+    {
+        get
+        {
+            if (null == instance)
+                return null;
+            return instance;
+        }
+    }
+
     public void IsBossInRange(Transform boss, Transform cat)
     {
         distanceCatToBoss = Vector3.Distance(boss.position, cat.position);
@@ -54,7 +64,7 @@ public class CatManager : MonoBehaviour
         if (distanceCatToBoss <= distanceCanDetect && distanceCatToBoss >= distanceCanAttack)
         {
             _isBossInCatView = true;
-            Debug.Log($"CanDetectBoss : {_isBossInCatView}");
+            // Debug.Log($"CanDetectBoss : {_isBossInCatView}");
             cat.position += normalized / moveSpeed;
             LookAtTarget(boss);
         }
@@ -63,7 +73,7 @@ public class CatManager : MonoBehaviour
         if (distanceCatToBoss <= distanceCanAttack)
         {
             _isBossInAttackRange = true;
-            Debug.Log($"StartAttackToBoss: {_isBossInAttackRange}");
+            // Debug.Log($"StartAttackToBoss: {_isBossInAttackRange}");
         }
         else _isBossInAttackRange = false;
 
@@ -77,20 +87,20 @@ public class CatManager : MonoBehaviour
 
         if (!_isBossInCatView && !_isBossInAttackRange && distanceCatToPlayer >= distanceCanAttack)
         {
-            _isPlayerInAttackRange = true;
-            Debug.Log($"StartFollowPlayer : {_isPlayerInAttackRange}");
+            _isPlayerInAttackRange = false;
+            // Debug.Log($"StartFollowPlayer : {_isPlayerInAttackRange}");
             cat.position += normalized / moveSpeed;
             LookAtTarget(player);
         }
-        else _isPlayerInAttackRange = false;
+        else _isPlayerInAttackRange = true;
 
         if (distanceCatToPlayer <= distanceCanAttack)
         {
-            _isPlayerInCatView = true;
-            Debug.Log($"CanDetectPlayer : {_isPlayerInCatView}");
-            Debug.Log($"FollowPlayer : {_isPlayerInCatView}");
+            _isPlayerInCatView = false;
+            // Debug.Log($"CanDetectPlayer : {_isPlayerInCatView}");
+            // Debug.Log($"FollowPlayer : {_isPlayerInCatView}");
         }
-        else _isPlayerInCatView = false;
+        else _isPlayerInCatView = true;
     }
 
     private void OnDrawGizmos()
@@ -119,19 +129,47 @@ public class CatManager : MonoBehaviour
         catRigidbody.transform.rotation = Quaternion.Lerp(catRigidbody.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotationSpeed);
     }
 
-    public void PlayerHP()
-    {
-        if (playerHP <= 30)
-        {
-            playerHP += 30;
-        }
-    }
+    // public static bool PlayerHPCheck()
+    // {
+    //     Debug.Log($"playerHP : {CombatManager.Instance._currentPlayerHP}");
+    //     if (CombatManager.Instance._currentPlayerHP <= 30)
+    //     {
+    //         _isPlayerAlmostDie = true;
+    //         return true;
+    //     }
+    //     else
+    //     {
+    //         return false;
+    //     }
+    // }
 
-    private void Update()
-    {
-        if (playerHP <= 30)
-        {
-            isPlayerAlmostDie = true;
-        }
-    }
+    // public static void Heal()
+    // {
+    //     Debug.Log("Heal");
+    //     CombatManager.Instance._currentPlayerHP += 30;
+    // }
+
+    // public static bool PlayerHPCheck()
+    // {
+    //     Debug.Log($"playerHP : {Instance._currentPlayerHP}");
+    //     if (Instance._currentPlayerHP <= 30)
+    //     {
+    //         CatManager._isPlayerAlmostDie = true;
+    //         return true;
+    //     }
+    //     else
+    //     {
+    //         return false;
+    //     }
+    // }
+
+    // public static void Heal()
+    // {
+    //     if(coolTime >= 5)
+    //     {
+    //         Debug.Log("Heal");
+    //         CombatManager.Instance._currentPlayerHP += 30;
+    //     }
+    //     coolTime = 0;
+    // }
 }
