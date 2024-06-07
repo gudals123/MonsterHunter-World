@@ -19,10 +19,9 @@ public class BossBT : MonoBehaviour
     private bool _startTracking = false;
     private bool _canBreathAttack = false;
 
-    public GameObject _nomalAtt;
     public GameObject _breathAtt;
 
-    // ?”„ë¡œí† ????… ì§„í–‰?„ ?œ„?•œ ?„?‹œ ë³??ˆ˜
+    // í”„ë¡œí† íƒ€ì… ì§„í–‰ì„ ìœ„í•œ ì„ì‹œ ë³€ìˆ˜
     public bool isBossGetHit = false;
     public bool isBossDead = false;
     public bool _detectedPlayer = false;
@@ -163,22 +162,22 @@ public class BossBT : MonoBehaviour
     {
         while (true)
         {
-            if (isBossGetHit)   // ì¶”í›„ CombatManager._bossGetHitë¡? ë³?ê²? ?˜ˆ? •
+            if (isBossGetHit)   // ì¶”í›„ CombatManager._bossGetHitë¡œ ë³€ê²½ ì˜ˆì •
             {
                 BossBeingShot("Hit");
                 //CombatManager.Instance._isbossGetHit = false;
-                CombatManager.Instance._isBossRecognizedPlayer = true;   // ?„?‹œë¡? ?„£?–´ ?‘ . ì¶”í›„ ?”Œ? ˆ?´?–´????˜ ?ƒ?˜¸?‘?š©?—?„œ ? œê±? ?˜ˆ? •
+                CombatManager.Instance._isBossRecognizedPlayer = true;   // ì„ì‹œë¡œ ë„£ì–´ ë‘ . ì¶”í›„ í”Œë ˆì´ì–´ì™€ì˜ ìƒí˜¸ì‘ìš©ì—ì„œ ì œê±° ì˜ˆì •
                 _detectedPlayer = true;
             }
 
-            if (_isBossSturned)   // ì¶”í›„ CombatManager._isBossSturnedë¡? ë³?ê²? ?˜ˆ? •
+            if (_isBossSturned)   // ì¶”í›„ CombatManager._isBossSturnedë¡œ ë³€ê²½ ì˜ˆì •
             {
                 BossBeingShot("Sturn");
                 _isBossSturned = false;
                 //CombatManager.Instance._isBossSturned = false;
             }
 
-            if (isBossDead)   // ì¶”í›„ !CombatManager._isBossDeadë¡? ë³?ê²? ?˜ˆ? •
+            if (isBossDead)   // ì¶”í›„ !CombatManager._isBossDeadë¡œ ë³€ê²½ ì˜ˆì •
             {
                 BossBeingShot("Die");
                 Debug.Log($"{transform.GetChild(0).GetChild(0).name}");
@@ -204,19 +203,19 @@ public class BossBT : MonoBehaviour
     }
 
     /// <summary>
-    /// ë³´ìŠ¤ê°? ???ê²Ÿì—ê²Œë¡œ ?–¥?•©?‹ˆ?‹¤.
+    /// ë³´ìŠ¤ê°€ íƒ€ê²Ÿì—ê²Œë¡œ í–¥í•©ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="targetPos"> ???ê²? ????ƒ </param>
-    /// <param name="speedRate"> ?†?„ ë¹„ìœ¨ ì¡°ì •; Walk ?¼?•Œ?Š” 0.7, Tracking ?¼?•Œ?Š” 1 </param>
+    /// <param name="targetPos"> íƒ€ê²Ÿ ëŒ€ìƒ </param>
+    /// <param name="speedRate"> ì†ë„ ë¹„ìœ¨ ì¡°ì •; Walk ì¼ë•ŒëŠ” 0.7, Tracking ì¼ë•ŒëŠ” 1 </param>
     private void MovingWalkOrTracking(Vector3 targetPos, float speedRate)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
-        _moveDirection = new Vector3(direction.x, 0, direction.z); // yì¶? ë°©í–¥??? ë¬´ì‹œ
+        _moveDirection = new Vector3(direction.x, 0, direction.z); // yì¶• ë°©í–¥ì€ ë¬´ì‹œ
         _bossRb.MovePosition(transform.position + _moveDirection * _moveSpeed * speedRate * Time.fixedDeltaTime);
     }
 
     /// <summary>
-    /// ë³´ìŠ¤ê°? ???ê²Ÿì—ê²Œë¡œ ëª¸ì„ ?šŒ? „?•©?‹ˆ?‹¤.
+    /// ë³´ìŠ¤ê°€ íƒ€ê²Ÿì—ê²Œë¡œ ëª¸ì„ íšŒì „í•©ë‹ˆë‹¤.
     /// </summary>
     public void RotationToTarget()
     {
@@ -226,13 +225,13 @@ public class BossBT : MonoBehaviour
     }
 
     /// <summary>
-    /// ë³´ìŠ¤ê°? ë¸Œë ˆ?Š¤ ê³µê²©?„ ?•  ì§? boss HP ê°? 30% ?´?•˜?¼ ?•Œ 50% ?™•ë¥ ë¡œ ? •?•´ì¤ë‹ˆ?‹¤.
+    /// ë³´ìŠ¤ê°€ ë¸Œë ˆìŠ¤ ê³µê²©ì„ í•  ì§€ boss HP ê°€ 30% ì´í•˜ì¼ ë•Œ 50% í™•ë¥ ë¡œ ì •í•´ì¤ë‹ˆë‹¤.
     /// </summary>
-    /// <returns> true?´ë©? BreathAttack, false?´ë©? NomalAttack </returns>
+    /// <returns> trueì´ë©´ BreathAttack, falseì´ë©´ NomalAttack </returns>
     public bool SetBreathChance()
     {
         float ran = Random.value;
-        if (ran <= 0.5)   // ì¶”í›„ boss HP ê°? 30% ?´?•˜?¼ ì¡°ê±´ ì¶”ê?? : CombatManager._currentBossHP <= 600 && 
+        if (ran <= 0.5)   // ì¶”í›„ boss HP ê°€ 30% ì´í•˜ì¼ ì¡°ê±´ ì¶”ê°€ : CombatManager._currentBossHP <= 600 && 
         {
             Debug.Log($"{ran} <= 0.5 / Boss Breath Attack");
             return _canBreathAttack = true;
@@ -245,9 +244,9 @@ public class BossBT : MonoBehaviour
     }
 
     /// <summary>
-    /// ë³´ìŠ¤ê°? Nomal ?ƒ?™©?—?„œ ê±¸ì„ ì§??— ????•˜?—¬ 50% ?™•ë¥ ë¡œ ? •?•´ì¤ë‹ˆ?‹¤.
+    /// ë³´ìŠ¤ê°€ Nomal ìƒí™©ì—ì„œ ê±¸ì„ ì§€ì— ëŒ€í•˜ì—¬ 50% í™•ë¥ ë¡œ ì •í•´ì¤ë‹ˆë‹¤.
     /// </summary>
-    /// <returns> true?´ë©? NomalWalking, false?´ë©? IDLE </returns>
+    /// <returns> trueì´ë©´ NomalWalking, falseì´ë©´ IDLE </returns>
     public bool SetNomalWalkingChance()
     {
         float ran = Random.value;
@@ -264,9 +263,9 @@ public class BossBT : MonoBehaviour
     }
 
     /// <summary>
-    /// ë³´ìŠ¤ê°? Nomal?ƒ?ƒœ?—?„œ ???ì§ì¸?‹¤ë©? ?œ?¤ ë°©í–¥?„ ê²°ì •?•©?‹ˆ?‹¤.
+    /// ë³´ìŠ¤ê°€ Nomalìƒíƒœì—ì„œ ì›€ì§ì¸ë‹¤ë©´ ëœë¤ ë°©í–¥ì„ ê²°ì •í•©ë‹ˆë‹¤.
     /// </summary>
-    /// <returns>?œ?¤ ë°©í–¥</returns>
+    /// <returns>ëœë¤ ë°©í–¥</returns>
     public Vector3 RandomPosForWalking()
     {
         float targetX = Random.Range(transform.position.x - 100, transform.position.x + 100);
@@ -288,29 +287,27 @@ public class BossBT : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        //CombatManager.Instance null¶ß´Â ¹®Á¦ÀÖÀ½
-        if(CombatManager.Instance != null)
+        if (CombatManager.Instance != null)
         {
-            // ?”Œ? ˆ?´?–´ê°? ë²”ìœ„ ?‚´?— ?ˆ?„ ?•Œ ë¹¨ê°„?ƒ‰?œ¼ë¡?, ?•„?‹ˆë©? ?…¹?ƒ‰?œ¼ë¡? ë²”ìœ„ë¥? ?‘œ?‹œ
+            // í”Œë ˆì´ì–´ê°€ ë²”ìœ„ ë‚´ì— ìˆì„ ë•Œ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ, ì•„ë‹ˆë©´ ë…¹ìƒ‰ìœ¼ë¡œ ë²”ìœ„ë¥¼ í‘œì‹œ
             Gizmos.color = CombatManager.Instance._bossAttackRange ? Color.red : Color.green;
             Gizmos.DrawWireSphere(gameObject.transform.position, 9f);
 
-            // ë³´ìŠ¤?˜ ?‹œ?•¼ ë²”ìœ„ë¥? ?ŒŒ????ƒ‰?œ¼ë¡? ?‘œ?‹œ
+            // ë³´ìŠ¤ì˜ ì‹œì•¼ ë²”ìœ„ë¥¼ íŒŒë€ìƒ‰ìœ¼ë¡œ í‘œì‹œ
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(gameObject.transform.position, 18f);
 
-            // ë³´ìŠ¤?˜ ? „ë°? ë°©í–¥ ?‘œ?‹œ
+            // ë³´ìŠ¤ì˜ ì „ë°© ë°©í–¥ í‘œì‹œ
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(gameObject.transform.position, gameObject.transform.position + gameObject.transform.forward * 18f);
         }
-
     }
 
     /// <summary>
-    /// ?–´?– ?•œ ?• ?‹ˆë©”ì´?…˜ ?›„?— ?š¸ë¶?ì§–ëŠ” ?• ?‹ˆë©”ì´?…˜?„ ì¶œë ¥?•  ?ˆ˜ ?ˆ?Š” ì½”ë£¨?‹´ ?‹¤?–‰ ?•¨?ˆ˜?…?‹ˆ?‹¤.
-    /// Hit?˜ ê²½ìš° 0.8ì´ˆê?? ?•Œë§ìŠµ?‹ˆ?‹¤.
+    /// ì–´ë– í•œ ì• ë‹ˆë©”ì´ì…˜ í›„ì— ìš¸ë¶€ì§–ëŠ” ì• ë‹ˆë©”ì´ì…˜ì„ ì¶œë ¥í•  ìˆ˜ ìˆëŠ” ì½”ë£¨í‹´ ì‹¤í–‰ í•¨ìˆ˜ì…ë‹ˆë‹¤.
+    /// Hitì˜ ê²½ìš° 0.8ì´ˆê°€ ì•Œë§ìŠµë‹ˆë‹¤.
     /// </summary>
-    /// <param name="time">?´? „ ?• ?‹ˆë©”ì´?…˜?´ ?‹¤?–‰?˜ê³? ?ˆ?Š” ?‹œê°?</param>
+    /// <param name="time">ì´ì „ ì• ë‹ˆë©”ì´ì…˜ì´ ì‹¤í–‰ë˜ê³  ìˆëŠ” ì‹œê°„</param>
     private void Roaring(float time)
     {
         StartCoroutine(CoRoar(time));

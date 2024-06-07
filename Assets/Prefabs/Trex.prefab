@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 3103622398804924886}
   m_Layer: 6
   m_Name: NomalAttackCollider
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -481,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c2d6f98e193d64690dc84673ebaf84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nomalAttack: 10
+  _nomalAttackValue: 10
   _hitprefab: {fileID: 0}
   _hitEffect: {fileID: 0}
 --- !u!1 &2950329293331711003
@@ -660,7 +660,7 @@ Transform:
   - {fileID: 2441098818059538643}
   m_Father: {fileID: 142045191254297616}
   m_LocalEulerAnglesHint: {x: 83.33602, y: 179.99945, z: -90.000534}
---- !u!1 &3563143149603190167
+--- !u!1 &3616873851421258582
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -668,119 +668,30 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7764201257419764958}
-  - component: {fileID: 2228943687183816830}
-  - component: {fileID: 5657656323443328761}
-  - component: {fileID: 3814694049581865422}
-  - component: {fileID: 483806206429769679}
+  - component: {fileID: 3400587708295431859}
   m_Layer: 6
-  m_Name: BreathAttack
+  m_Name: BreathAttackPos
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7764201257419764958
+--- !u!4 &3400587708295431859
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3563143149603190167}
+  m_GameObject: {fileID: 3616873851421258582}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000001201519, y: 0.000000014191979, z: -0.12352505, w: 0.99234146}
-  m_LocalPosition: {x: 0.55, y: 4.49, z: -0}
-  m_LocalScale: {x: 1, y: 2.97, z: 1}
+  m_LocalRotation: {x: -0.4723205, y: 0.52622557, z: 0.47232056, w: 0.52622557}
+  m_LocalPosition: {x: -0.185, y: 1.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5104503647243318962}
   m_Father: {fileID: 1381617344614925454}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -14.191}
---- !u!33 &2228943687183816830
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3563143149603190167}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5657656323443328761
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3563143149603190167}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3814694049581865422
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3563143149603190167}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &483806206429769679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3563143149603190167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27bd8dfb2c9a51044b5f910d0f205299, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _breathAttack: 0
+  m_LocalEulerAnglesHint: {x: -83.82, y: 90, z: 0}
 --- !u!1 &3818249928515855094
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,6 +1010,131 @@ Transform:
   - {fileID: 1381617344614925454}
   m_Father: {fileID: 1857356080511780103}
   m_LocalEulerAnglesHint: {x: -1.3985982, y: 3.3397884, z: 8.330672}
+--- !u!1 &5994486674892402349
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5104503647243318962}
+  - component: {fileID: 7959934487789745691}
+  - component: {fileID: 5514693355602654566}
+  - component: {fileID: 6716288482426937113}
+  - component: {fileID: 6421120149614507137}
+  m_Layer: 6
+  m_Name: BreathAttack
+  m_TagString: Boss
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5104503647243318962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994486674892402349}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0, y: -0, z: 0.53}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3400587708295431859}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!33 &7959934487789745691
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994486674892402349}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &5514693355602654566
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994486674892402349}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &6716288482426937113
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994486674892402349}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5000001
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6421120149614507137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994486674892402349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bd8dfb2c9a51044b5f910d0f205299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _breathAttackValue: 5
+  _breathObject: {fileID: 0}
+  _hitprefab: {fileID: 0}
+  _hitBreathEffect: {fileID: 0}
+  countTime: 0
 --- !u!1 &6179559274813268322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1531,7 +1567,7 @@ GameObject:
   - component: {fileID: 1717352528331757747}
   m_Layer: 6
   m_Name: Trex
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1568,8 +1604,7 @@ MonoBehaviour:
   _moveSpeed: 7
   _rotationSpeed: 200
   _player: {fileID: 0}
-  _nomalAtt: {fileID: 2717294989959313186}
-  _breathAtt: {fileID: 3563143149603190167}
+  _breathAtt: {fileID: 3616873851421258582}
   isBossGetHit: 0
   isBossDead: 0
   _detectedPlayer: 0
@@ -2018,7 +2053,7 @@ Transform:
   - {fileID: 1271441805145828251}
   - {fileID: 8684713418679688960}
   - {fileID: 4578358827111341722}
-  - {fileID: 7764201257419764958}
+  - {fileID: 3400587708295431859}
   - {fileID: 630109306597795489}
   m_Father: {fileID: 3486036272547172009}
   m_LocalEulerAnglesHint: {x: 8.385146, y: 5.3761463, z: 34.136234}
