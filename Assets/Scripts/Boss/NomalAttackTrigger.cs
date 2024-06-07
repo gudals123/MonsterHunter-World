@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NomalAttackTrigger : MonoBehaviour
 {
-    [SerializeField] private int _nomalAttack;
+    [SerializeField] private int _nomalAttackValue;
     private bool _isNomalAttacking;
 
     public GameObject _hitprefab;
@@ -12,7 +12,7 @@ public class NomalAttackTrigger : MonoBehaviour
 
     private void Start()
     {
-        _nomalAttack = 10;
+        _nomalAttackValue = 10;
         _isNomalAttacking = false;
     }
 
@@ -24,7 +24,7 @@ public class NomalAttackTrigger : MonoBehaviour
             NowNomalAttacking();
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
-            CombatManager.Instance.TakeDamage("Boss", _nomalAttack);
+            CombatManager.Instance.TakeDamage("Boss", _nomalAttackValue);
         }
     }
 

@@ -19,7 +19,6 @@ public class BossBT : MonoBehaviour
     private bool _startTracking = false;
     private bool _canBreathAttack = false;
 
-    public GameObject _nomalAtt;
     public GameObject _breathAtt;
 
     // 프로토타입 진행을 위한 임시 변수
@@ -288,7 +287,7 @@ public class BossBT : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (gameObject.transform != null)
+        if (CombatManager.Instance != null)
         {
             // 플레이어가 범위 내에 있을 때 빨간색으로, 아니면 녹색으로 범위를 표시
             Gizmos.color = CombatManager.Instance._bossAttackRange ? Color.red : Color.green;
