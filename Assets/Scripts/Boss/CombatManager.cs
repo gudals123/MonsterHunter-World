@@ -31,22 +31,39 @@ public class CombatManager : MonoBehaviour
     {
         get
         {
+            // 인스턴스가 null이면 새로 생성
             if (instance == null)
             {
-                GameObject singletonObject = new GameObject();
-                instance = singletonObject.AddComponent<CombatManager>();
+                instance = FindObjectOfType<CombatManager>();
+
+                // 씬에 존재하지 않는 경우 새로운 게임 오브젝트를 생성하여 추가
+                if (instance == null)
+                {
+                    GameObject singletonObject = new GameObject("CombatManagerSingleton");
+                    instance = singletonObject.AddComponent<CombatManager>();
+                    DontDestroyOnLoad(singletonObject);
+                }
             }
             return instance;
         }
     }
 
-    void Awake()
+    private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-        Initialize();
+        // 인스턴스가 null이면 현재 인스턴스를 할당
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 씬이 바뀌어도 파괴되지 않도록 설정
+            Initialize();
+        }
+        // 인스턴스가 이미 존재하고, 현재 인스턴스가 그 인스턴스와 다르면 자신을 파괴
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
-
-
+    
     private void Initialize()
     {
         _currentBossHP = _bossMaxHP;
@@ -104,10 +121,10 @@ public class CombatManager : MonoBehaviour
 
 
     /// <summary>
-    /// Player �Ǵ� Monster�� �޴� �������? ü�¿� �ݿ��ϴ� �޼ҵ��Դϴ�.
+    /// Player �Ǵ� Monster�� �޴� �������? ü�¿� �ݿ��ϴ� �޼ҵ��Դϴ�.
     /// </summary>
-    /// <param name="type">�������? �ִ� ��ü�� �ǹ��մϴ�.</param>
-    /// <param name="damage">�޴� ���������? �ǹ��մϴ�.</param>
+    /// <param name="type">�������? �ִ� ��ü�� �ǹ��մϴ�.</param>
+    /// <param name="damage">�޴� ���������? �ǹ��մϴ�.</param>
     public void TakeDamage(string type, float damage)
     {
         if (type == "Player")
