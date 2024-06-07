@@ -5,48 +5,26 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    private static CombatManager instance;
+    private static CombatManager instance = null;
 
     [SerializeField] public int _bossMaxHP = 2000;
     [SerializeField] public int _playerMaxHP = 100;
 
-    public float _currentBossHP { get; set; }
-    public float _currentPlayerHP;
+    public float _currentBossHP { get; private set; }
+    public float _currentPlayerHP{ get; private set; }
 
-    public bool _isPlayerDead = false;
-    public bool _isBossDead { get; set; } = false;
-    public bool _isBossRecognizedPlayer;
-    public bool _isCharging = false;
+    public bool _isPlayerDead{ get; private set; }
+    public bool _isBossDead { get; private set; }
+    public bool _isBossRecognizedPlayer{ get; set; }
+    public bool _isCharging{ get; set; }
 
-    public float distancePtoB;
-    public bool _bossAttackRange;
-    public bool _bossAttackBackRange;
-    public bool _bossVisualRange;
-    public bool _bossPerceptionRange;
+    public float distancePtoB{ get; private set; }
+    public bool _bossAttackRange{ get; private set; }
+    public bool _bossAttackBackRange{ get; private set; }
+    public bool _bossVisualRange{ get; private set; }
+    public bool _bossPerceptionRange{ get; private set; }
 
-    public float _playerAttackDamege;
-
-
-    public static CombatManager Instance
-    {
-        get
-        {
-            // 인스턴스가 null이면 새로 생성
-            if (instance == null)
-            {
-                instance = FindObjectOfType<CombatManager>();
-
-                // 씬에 존재하지 않는 경우 새로운 게임 오브젝트를 생성하여 추가
-                if (instance == null)
-                {
-                    GameObject singletonObject = new GameObject("CombatManagerSingleton");
-                    instance = singletonObject.AddComponent<CombatManager>();
-                    DontDestroyOnLoad(singletonObject);
-                }
-            }
-            return instance;
-        }
-    }
+    public float _playerAttackDamege{ get; private set; }
 
     private void Awake()
     {
@@ -63,6 +41,17 @@ public class CombatManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public static CombatManager Instance
+    {
+        get
+        {
+            if (null == instance)
+                return null;
+            return instance;
+        }
+    }
+
     
     private void Initialize()
     {
@@ -71,6 +60,7 @@ public class CombatManager : MonoBehaviour
 
         _isBossDead = false;
         _isPlayerDead = false;
+        _isCharging = false;
     }
 
 
