@@ -42,7 +42,7 @@ public class BossBT : MonoBehaviour
             .Selector()
                 // Left SubTree
                 .Sequence()
-                    .Condition("isPlayerInAttackRange", () => CombatManager._bossAttackRange)
+                    .Condition("isPlayerInAttackRange", () => CombatManager.Instance._bossAttackRange)
                         .Selector()
                             .Sequence()
                                 .Condition("canBreathAttack", () => _canBreathAttack = SetBreathChance())
@@ -53,7 +53,7 @@ public class BossBT : MonoBehaviour
                                 })
                                 .Do(() =>
                                 {
-                                    CombatManager._instance.StartBreathAttack();
+                                    //CombatManager.Instance.StartBreathAttack();
                                     _breathAtt.SetActive(false);
                                     Debug.Log("Breath Attack");
                                     _canBreathAttack = !_canBreathAttack;
@@ -120,9 +120,9 @@ public class BossBT : MonoBehaviour
 
     private void Update()
     {
-        CombatManager.isPlayerInRange(_player, gameObject.transform);
+        CombatManager.Instance.isPlayerInRange(_player, gameObject.transform);
 
-        if (CombatManager._bossVisualRange || CombatManager._isBossRecognizedPlayer)
+        if (CombatManager.Instance._bossVisualRange || CombatManager.Instance._isBossRecognizedPlayer)
         {
             _detectedPlayer = true;
         }
@@ -132,7 +132,7 @@ public class BossBT : MonoBehaviour
             RotationToTarget();
             MovingWalkOrTracking(_player.position, 1f);
 
-            if (!CombatManager._bossVisualRange || !CombatManager._bossPerceptionRange)
+            if (!CombatManager.Instance._bossVisualRange || !CombatManager.Instance._bossPerceptionRange)
             {
                 _perceptionTime += Time.deltaTime;
             }
@@ -146,7 +146,7 @@ public class BossBT : MonoBehaviour
         if (_perceptionTime >= 3)
         {
             _detectedPlayer = false;
-            CombatManager._isBossRecognizedPlayer = false;
+            CombatManager.Instance._isBossRecognizedPlayer = false;
             _perceptionTime = 0;
         }
 
@@ -166,8 +166,8 @@ public class BossBT : MonoBehaviour
             if (isBossGetHit)   // 추후 CombatManager._bossGetHit로 변경 예정
             {
                 BossBeingShot("Hit");
-                CombatManager._isbossGetHit = false;
-                CombatManager._isBossRecognizedPlayer = true;   // 임시로 넣어 둠. 추후 플레이어와의 상호작용에서 제거 예정
+                //CombatManager.Instance._isbossGetHit = false;
+                CombatManager.Instance._isBossRecognizedPlayer = true;   // 임시로 넣어 둠. 추후 플레이어와의 상호작용에서 제거 예정
                 _detectedPlayer = true;
             }
 
@@ -175,7 +175,7 @@ public class BossBT : MonoBehaviour
             {
                 BossBeingShot("Sturn");
                 _isBossSturned = false;
-                CombatManager._isBossSturned = false;
+                //CombatManager.Instance._isBossSturned = false;
             }
 
             if (isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
@@ -183,7 +183,7 @@ public class BossBT : MonoBehaviour
                 BossBeingShot("Die");
                 Debug.Log($"{transform.GetChild(0).GetChild(0).name}");
                 transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                CombatManager._isBossDead = true;
+                //CombatManager.Instance._isBossDead = true;
             }
 
             else
@@ -291,7 +291,7 @@ public class BossBT : MonoBehaviour
         if (gameObject.transform != null)
         {
             // 플레이어가 범위 내에 있을 때 빨간색으로, 아니면 녹색으로 범위를 표시
-            Gizmos.color = CombatManager._bossAttackRange ? Color.red : Color.green;
+            Gizmos.color = CombatManager.Instance._bossAttackRange ? Color.red : Color.green;
             Gizmos.DrawWireSphere(gameObject.transform.position, 9f);
 
             // 보스의 시야 범위를 파란색으로 표시

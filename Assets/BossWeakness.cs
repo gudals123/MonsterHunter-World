@@ -17,7 +17,7 @@ public class BossWeakness : MonoBehaviour
     {
         if (_countHitByWeapon == 5)
         {
-            CombatManager._isBossSturned = true;
+            //CombatManager._isBossSturned = true;
             _countHitByWeapon = 0;
         }
     }
