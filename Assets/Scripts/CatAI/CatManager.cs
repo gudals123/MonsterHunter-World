@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class CatManager : MonoBehaviour
 {
-    public static CatManager instance;
-    
+    public static CatManager instance { get; private set; }
+
     [SerializeField] private Rigidbody catRigidbody;
 
-    [Header("Distance")]
-    public static float distanceCanDetect = 4f; // ���� ����
-    public static float distanceCanAttack = 1.5f; // ���� ����
+    // [Header("Distance")]
+    public static float distanceCanDetect { get; private set; } = 4f; // ���� ����
+    public static float distanceCanAttack { get; private set; } = 1.5f; // ���� ����
 
-    [Header("Player Detect")]
-    public static float distanceCatToPlayer;
-    public static Vector3 normalized;
-    public static bool _isPlayerInAttackRange;
-    public static bool _isPlayerInCatView;
+    // [Header("Player Detect")]
+    public static float distanceCatToPlayer { get; private set; }
+    public static Vector3 normalized { get; private set; }
+    public static bool _isPlayerInAttackRange { get; set; }
+    public static bool _isPlayerInCatView { get; set; }
+    public static bool isPlayerAlmostDie { get; set; }
     [SerializeField] private Transform player;
-    
-    [Header("Boss Detect")]
-    public static float distanceCatToBoss; // �Ÿ�
-    public static bool _isBossInAttackRange; // ����
-    public static bool _isBossInCatView; // ����
+
+    // [Header("Boss Detect")]
+    public static float distanceCatToBoss { get; private set; } // �Ÿ�
+    public static bool _isBossInAttackRange { get; set; } // ����
+    public static bool _isBossInCatView { get; set; } // ����
     [SerializeField] private Transform boss;
 
     private float rotationSpeed = 10;
     private float moveSpeed = 50;
+
+    public float playerHP = 100;
 
     private void Awake()
     {
@@ -112,7 +115,23 @@ public class CatManager : MonoBehaviour
 
     public void LookAtTarget(Transform target)
     {
-        Vector3 dir = new Vector3 (target.transform.position.x, 0, target.transform.position.z) - new Vector3 (catRigidbody.transform.position.x, 0, catRigidbody.transform.position.z);
+        Vector3 dir = new Vector3(target.transform.position.x, 0, target.transform.position.z) - new Vector3(catRigidbody.transform.position.x, 0, catRigidbody.transform.position.z);
         catRigidbody.transform.rotation = Quaternion.Lerp(catRigidbody.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotationSpeed);
+    }
+
+    public void PlayerHP()
+    {
+        if (playerHP <= 30)
+        {
+            playerHP += 30;
+        }
+    }
+
+    private void Update()
+    {
+        if (playerHP <= 30)
+        {
+            isPlayerAlmostDie = true;
+        }
     }
 }

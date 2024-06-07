@@ -9,14 +9,11 @@ using UnityEngine.EventSystems;
 public class CatBT : MonoBehaviour
 {
     [SerializeField] private BehaviorTree catTree;
-
     [SerializeField] private Transform player;
     [SerializeField] private Transform boss;
     //[SerializeField] private SphereCollider Detectcollider;
     //[SerializeField] private SphereCollider Attackcollider;
-
     [SerializeField] private Animator animator;
-
     //private Vector3 moveDirection;
     //[SerializeField] private Rigidbody catRigidbody;
     //[SerializeField] private float rotationSpeed;
@@ -79,15 +76,18 @@ public class CatBT : MonoBehaviour
                             animator.Play("Run");
                             Debug.Log("Player Near");
                             CatManager._isPlayerInAttackRange = false;
-
                             return TaskStatus.Success;
                         })
 
+                        // 플레이어 힐 트리
                         .Sequence()
-                            .Condition("isPlayerAlmostDie", () => isPlayerAlmostDie)
+                            .Condition("isPlayerAlmostDie", () => CatManager.isPlayerAlmostDie)
                             .Do(() =>
                             {
                                 Debug.Log("Heal To Player");
+                                animator.Play("Attack");
+                                CatManager.instance.PlayerHP();
+                                CatManager.isPlayerAlmostDie = false;
                                 return TaskStatus.Success;
                             })
                         .End()
@@ -105,4 +105,4 @@ public class CatBT : MonoBehaviour
         catTree.Tick();
     }
 
-}   
+}
