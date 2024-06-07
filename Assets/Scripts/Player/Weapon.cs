@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
             Debug.Log("Attack");
             if (collision.gameObject.CompareTag("Boss"))
             {
-                //ÃßÈÄ Å¸°Ý ÁöÁ¡¿¡ Å¸°Ý ÀÌÆåÆ® »ý¼º ¶§ »ç¿ë ¿¹Á¤
+                //ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 //Vector3 pointOfContact = collision.contacts[0].point;
 
                 BattleManager.TakeDamage("Player", BattleManager._playerAttackDamege);
@@ -30,7 +30,7 @@ public class Weapon : MonoBehaviour
         Debug.Log("Attack");
         if (other.CompareTag("Boss"))
         {
-            //Å¸°Ý ÁöÁ¡ °è»ê
+            //Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
 
