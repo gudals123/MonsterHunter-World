@@ -14,6 +14,6 @@ public class BreathAttackTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        CombatManager.TakeDamage("Boss", _breathAttack);
+        CombatManager.Instance.TakeDamage("Boss", _breathAttack);
     }
 }

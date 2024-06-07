@@ -5,67 +5,82 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    public static CombatManager _instance;
+    private static CombatManager instance = null;
 
-    [SerializeField] public static int _bossMaxHP = 2000;
-    [SerializeField] public static int _playerMaxHP = 100;
+    [SerializeField] public int _bossMaxHP = 2000;
+    [SerializeField] public int _playerMaxHP = 100;
 
-    public static float _currentBossHP { get; set; }
-    public static float _currentPlayerHP;
+    public float _currentBossHP { get; private set; }
+    public float _currentPlayerHP{ get; private set; }
 
-    public static bool _isPlayerDead = false;
-    public static bool _isBossDead { get; set; } = false;
-    public static bool _isBossSturned;
-    public static bool _isbossGetHit;
-    public static bool _isBossRecognizedPlayer;
+    public bool _isPlayerDead{ get; private set; }
+    public bool _isBossDead { get; private set; }
+    public bool _isBossRecognizedPlayer{ get; set; }
+    public bool _isCharging{ get; set; }
 
-    public static float distancePtoB;
-    public static bool _bossAttackRange;
-    public static bool _bossAttackBackRange;
-    public static bool _bossVisualRange;
-    public static bool _bossPerceptionRange;
+    public float distancePtoB{ get; private set; }
+    public bool _bossAttackRange{ get; private set; }
+    public bool _bossAttackBackRange{ get; private set; }
+    public bool _bossVisualRange{ get; private set; }
+    public bool _bossPerceptionRange{ get; private set; }
 
+    public float _playerAttackDamege{ get; private set; }
 
-    void Awake()
+    private void Awake()
     {
-        if (_instance == null)
+        // ì¸ìŠ¤í„´ìŠ¤ê°€ nullì´ë©´ í˜„ì¬ ì¸ìŠ¤í„´ìŠ¤ë¥¼ í• ë‹¹
+        if (instance == null)
         {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
+            instance = this;
+            DontDestroyOnLoad(gameObject); // ì”¬ì´ ë°”ë€Œì–´ë„ íŒŒê´´ë˜ì§€ ì•Šë„ë¡ ì„¤ì •
             Initialize();
         }
-        else if (_instance != this)
+        // ì¸ìŠ¤í„´ìŠ¤ê°€ ì´ë¯¸ ì¡´ì¬í•˜ê³ , í˜„ì¬ ì¸ìŠ¤í„´ìŠ¤ê°€ ê·¸ ì¸ìŠ¤í„´ìŠ¤ì™€ ë‹¤ë¥´ë©´ ìì‹ ì„ íŒŒê´´
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
     }
 
+    public static CombatManager Instance
+    {
+        get
+        {
+            if (null == instance)
+                return null;
+            return instance;
+        }
+    }
 
-    public void Initialize()
+    
+    private void Initialize()
     {
         _currentBossHP = _bossMaxHP;
         _currentPlayerHP = _playerMaxHP;
 
         _isBossDead = false;
         _isPlayerDead = false;
+        _isCharging = false;
     }
 
 
+
+
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ BossÀÇ ¹üÀ§ ¾È¿¡ ÀÖ´Â Áö È®ÀÎÇÏ´Â ¸Ş¼Òµå ÀÔ´Ï´Ù.
-    /// 1. boss.positionÀÌ player º¸´Ù ¾ÕÀÌ°í, Distance°¡ 9 ÀÌÇÏÀÏ ¶§ °ø°İ ¹üÀ§ ¿©ºÎ Ã¼Å©
-    /// 2. boss.positionÀÌ player º¸´Ù ¾ÕÀÌ°í, Distance°¡ 18 ÀÌÇÏÀÏ ¶§ ½Ã¾ß ¹üÀ§ ¿©ºÎ Ã¼Å©
+    /// ï¿½Ã·ï¿½ï¿½Ì¾î°¡ Bossï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ş¼Òµï¿½ ï¿½Ô´Ï´ï¿½.
+    /// 1. boss.positionï¿½ï¿½ player ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½, Distanceï¿½ï¿½ 9 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
+    /// 2. boss.positionï¿½ï¿½ player ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½, Distanceï¿½ï¿½ 18 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
     /// </summary>
-    /// <param name="player">ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡</param>
-    /// <param name="boss">º¸½ºÀÇ À§Ä¡</param>
-    public static void isPlayerInRange(Transform player, Transform boss)
+    /// <param name="player">ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡</param>
+    /// <param name="boss">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡</param>
+    public void isPlayerInRange(Transform player, Transform boss)
     {
         distancePtoB = Vector3.Distance(player.position, boss.position);
 
         Vector3 normalized = (player.position - boss.position).normalized;
         float _isForward = Vector3.Dot(normalized, boss.forward);
 
-        // °ø°İ ¹üÀ§
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (_isForward > 0 && distancePtoB <= 9f)
         {
             _bossAttackRange = true;
@@ -77,7 +92,7 @@ public class CombatManager : MonoBehaviour
             _bossAttackBackRange = false;
         }
 
-        // ½Ã¾ß ¹üÀ§
+        // ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (_isForward > 0 && distancePtoB <= 18f)
         {
             _bossVisualRange = true;
@@ -89,18 +104,18 @@ public class CombatManager : MonoBehaviour
             _isBossRecognizedPlayer = false;
         }
 
-        //ÀÎ½Ä ¹üÀ§
+        //ï¿½Î½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (distancePtoB <= 18f) _bossPerceptionRange = true;
         else _bossPerceptionRange = false;
     }
 
 
     /// <summary>
-    /// Player ¶Ç´Â Monster°¡ ¹Ş´Â ´ë¹ÌÁö¸¦ Ã¼·Â¿¡ ¹İ¿µÇÏ´Â ¸Ş¼ÒµåÀÔ´Ï´Ù.
+    /// Player ï¿½Ç´ï¿½ Monsterï¿½ï¿½ ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? Ã¼ï¿½Â¿ï¿½ ï¿½İ¿ï¿½ï¿½Ï´ï¿½ ï¿½Ş¼Òµï¿½ï¿½Ô´Ï´ï¿½.
     /// </summary>
-    /// <param name="type">´ë¹ÌÁö¸¦ ÁÖ´Â ÁÖÃ¼¸¦ ÀÇ¹ÌÇÕ´Ï´Ù.</param>
-    /// <param name="damage">¹Ş´Â ´ë¹ÌÁö·®À» ÀÇ¹ÌÇÕ´Ï´Ù.</param>
-    public static void TakeDamage(string type, float damage)
+    /// <param name="type">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½Ö´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
+    /// <param name="damage">ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
+    public void TakeDamage(string type, float damage)
     {
         if (type == "Player")
             _currentBossHP -= damage;
@@ -108,25 +123,7 @@ public class CombatManager : MonoBehaviour
         if (type == "Boss")
         {
             _currentPlayerHP -= damage;
-            _isbossGetHit = true;
-            _isbossGetHit = false;
         }
     }
 
-
-    //////////////////////////////////////////////////////////////////////////
-    public void StartBreathAttack()
-    {
-        StartCoroutine(BreathAttack()); 
-    }
-
-    public static IEnumerator BreathAttack()
-    {
-        Debug.Log("Start Breath Attacking~~~~~~");
-        // Á÷¼± ºê·¹½º ¿ÀºêÁ§Æ® ÄÔ
-        // CollisionEnter ½Ã TakeDamage
-        yield return new WaitForSeconds(2f);
-        // Á÷¼± ºê·¹½º ¿ÀºêÁ§Æ® ²û
-        Debug.Log("Quit Breath Attack~~~~~~");
-    }
 }
