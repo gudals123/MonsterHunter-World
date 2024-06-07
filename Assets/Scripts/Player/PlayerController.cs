@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
     private void DeadCheck()
     {
-        if (BattleManager.Instance._currentPlayerHP <= 0f)
+        if (CombatManager.Instance._currentPlayerHP <= 0f)
         {
             isDead = true;
         }
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
             }
             if (!Input.GetMouseButton(0))
             {
-                BattleManager.Instance._isCharging = false;
+                CombatManager.Instance._isCharging = false;
             }
             if (Input.GetMouseButtonDown(1))
             {

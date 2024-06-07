@@ -16,12 +16,15 @@ public class CombatManager : MonoBehaviour
     public bool _isPlayerDead = false;
     public bool _isBossDead { get; set; } = false;
     public bool _isBossRecognizedPlayer;
+    public bool _isCharging = false;
 
     public float distancePtoB;
     public bool _bossAttackRange;
     public bool _bossAttackBackRange;
     public bool _bossVisualRange;
     public bool _bossPerceptionRange;
+
+    public float _playerAttackDamege;
 
 
     public static CombatManager Instance
@@ -101,10 +104,10 @@ public class CombatManager : MonoBehaviour
 
 
     /// <summary>
-    /// Player �Ǵ� Monster�� �޴� ������� ü�¿� �ݿ��ϴ� �޼ҵ��Դϴ�.
+    /// Player �Ǵ� Monster�� �޴� �������? ü�¿� �ݿ��ϴ� �޼ҵ��Դϴ�.
     /// </summary>
-    /// <param name="type">������� �ִ� ��ü�� �ǹ��մϴ�.</param>
-    /// <param name="damage">�޴� ��������� �ǹ��մϴ�.</param>
+    /// <param name="type">�������? �ִ� ��ü�� �ǹ��մϴ�.</param>
+    /// <param name="damage">�޴� ���������? �ǹ��մϴ�.</param>
     public void TakeDamage(string type, float damage)
     {
         if (type == "Player")

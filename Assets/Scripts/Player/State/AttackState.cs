@@ -17,7 +17,7 @@ public class AttackState : StateMachineBehaviour
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Debug.Log("Update");
-        if (BattleManager.Instance._isCharging == false)
+        if (CombatManager.Instance._isCharging == false)
         {
             _animator.speed = 0.5f;
             Debug.Log("Update_");

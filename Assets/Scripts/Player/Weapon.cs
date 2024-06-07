@@ -34,8 +34,8 @@ public class Weapon : MonoBehaviour
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
 
-            BattleManager.Instance.TakeDamage("Player", BattleManager.Instance._playerAttackDamege);
-            Debug.Log(BattleManager.Instance._playerAttackDamege);
+            CombatManager.Instance.TakeDamage("Player", CombatManager.Instance._playerAttackDamege);
+            Debug.Log(CombatManager.Instance._playerAttackDamege);
 
         }
     }
