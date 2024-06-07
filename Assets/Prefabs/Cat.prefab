@@ -1444,7 +1444,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7046378746065552649}
   - component: {fileID: 2445530091006869069}
-  - component: {fileID: 448397902124219271}
+  - component: {fileID: 9211896661076606677}
   m_Layer: 3
   m_Name: 2Handed
   m_TagString: Untagged
@@ -1491,7 +1491,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &448397902124219271
+--- !u!114 &9211896661076606677
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1500,7 +1500,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5981419491094128802}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c39a0f918ce523344a209600d8f9ec40, type: 3}
+  m_Script: {fileID: 11500000, guid: 36301702a2780744eaeda4fbb6b8219f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _handWeapon: {fileID: 2148554831304576971}

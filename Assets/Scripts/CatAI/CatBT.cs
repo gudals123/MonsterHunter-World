@@ -59,14 +59,26 @@ public class CatBT : MonoBehaviour
                         })
                     .End()
 
+                    // 플레이어 트래킹 트리
+                    .Sequence()
+                        .Condition("isPlayerInView", () => CatManager._isPlayerInCatView)
+                        .Do(() =>
+                        {
+                            animator.Play("Idle");
+                            Debug.Log("Move To Player");
+                            CatManager._isPlayerInCatView = false;
+                            return TaskStatus.Success;
+                        })
+                    .End()
+
                     // 플레이어 감지 트리
                     .Sequence()
                         .Condition("isPlayerInRange", () => CatManager._isPlayerInAttackRange)
                         .Do(() =>
                         {
-                            CatManager._isPlayerInAttackRange = false;
                             animator.Play("Run");
-                            Debug.Log("Move To Player");
+                            Debug.Log("Player Near");
+                            CatManager._isPlayerInAttackRange = false;
 
                             return TaskStatus.Success;
                         })
