@@ -12,22 +12,21 @@ public class CatManager : MonoBehaviour
     public static float distanceCanDetect = 4f; // ���� ����
     public static float distanceCanAttack = 1.5f; // ���� ����
 
+    [Header("Player Detect")]
+    public static float distanceCatToPlayer;
+    public static Vector3 normalized;
+    public static bool _isPlayerInAttackRange;
+    public static bool _isPlayerInCatView;
+    [SerializeField] private Transform player;
+    
     [Header("Boss Detect")]
     public static float distanceCatToBoss; // �Ÿ�
     public static bool _isBossInAttackRange; // ����
     public static bool _isBossInCatView; // ����
     [SerializeField] private Transform boss;
 
-    [Header("Player Detect")]
-    public static float distanceCatToPlayer;
-    public static Vector3 normalized;
-    public static bool _isPlayerInAttackRange;
-    public static bool _isPlayerInCatView;
-
-    [SerializeField] private Transform player;
-
     private float rotationSpeed = 10;
-    private float moveSpeed = 20;
+    private float moveSpeed = 50;
 
     private void Awake()
     {
