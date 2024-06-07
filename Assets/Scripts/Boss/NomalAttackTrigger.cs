@@ -24,7 +24,7 @@ public class NomalAttackTrigger : MonoBehaviour
             NowNomalAttacking();
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
-            CombatManager.TakeDamage("Boss", _nomalAttack);
+            CombatManager.Instance.TakeDamage("Boss", _nomalAttack);
         }
     }
 

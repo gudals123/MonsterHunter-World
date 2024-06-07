@@ -7,19 +7,6 @@ public class CombatManager : MonoBehaviour
 {
     private static CombatManager instance;
 
-    public static CombatManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                GameObject singletonObject = new GameObject();
-                instance = singletonObject.AddComponent<CombatManager>();
-            }
-            return instance;
-        }
-    }
-
     [SerializeField] public int _bossMaxHP = 2000;
     [SerializeField] public int _playerMaxHP = 100;
 
@@ -37,18 +24,23 @@ public class CombatManager : MonoBehaviour
     public bool _bossPerceptionRange;
 
 
+    public static CombatManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                GameObject singletonObject = new GameObject();
+                instance = singletonObject.AddComponent<CombatManager>();
+            }
+            return instance;
+        }
+    }
+
     void Awake()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-            Initialize();
-        }
-        else if (_instance != this)
-        {
-            Destroy(gameObject);
-        }
+        DontDestroyOnLoad(gameObject);
+        Initialize();
     }
 
 
