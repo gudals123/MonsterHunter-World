@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool isArmed = false;
     private bool isRoll = false;
     private bool isAttacking = false;
-    private bool isRightAttak = false;
+
     //private bool isGetHit = false;
 
     [Header("Object")]
@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                isRightAttak = false;
+                CombatManager.Instance._isRightAttak = false;
                 isAttacking = true;
             }
             if (Input.GetMouseButtonUp(0))
@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(1))
             {
-                isRightAttak = true;
+                CombatManager.Instance._isRightAttak = true;
                 isAttacking = true;
             }
             if (Input.GetMouseButtonUp(1))
@@ -208,7 +208,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
         _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
         _animator.SetBool(PlayerAnimatorParamiter.IsAttacking, isAttacking);
-        _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, isRightAttak);
+        _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, CombatManager.Instance._isRightAttak);
         
     }
 
@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour
     {
         if(other.CompareTag("Boss"))
         {
-            Debug.Log("GetHit");
+            //Debug.Log("GetHit");
         }
     }
 

@@ -5,42 +5,25 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-
-    /*    private void OnCollisionEnter(Collision collision)
-        {
-            Debug.Log("Attack");
-            if (collision.gameObject.CompareTag("Boss"))
-            {
-                //추후 타격 지점에 타격 이펙트 생성 때 사용 예정
-                //Vector3 pointOfContact = collision.contacts[0].point;
-
-                BattleManager.TakeDamage("Player", BattleManager._playerAttackDamege);
-                Debug.Log(BattleManager._playerAttackDamege);
-
-            }
-
-        }*/
-
     public GameObject _hitprefab;
     public GameObject _hitEffect;
 
+    private float attackDamege;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Attack");
         if (other.CompareTag("Boss"))
         {
             //타격 지점 계산
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
 
-            CombatManager.Instance.TakeDamage("Player", CombatManager.Instance._playerAttackDamege);
-            Debug.Log(CombatManager.Instance._playerAttackDamege);
+            attackDamege = CombatManager.Instance.PlayerAttackDamegeCalculation();
+            CombatManager.Instance.TakeDamage("Player", attackDamege);
+            //Debug.Log(attackDamege);
 
         }
     }
-
-
 
     public void AppearHitEffect(Vector3 hitPos, GameObject player)
     {

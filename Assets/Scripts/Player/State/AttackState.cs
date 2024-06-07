@@ -6,28 +6,28 @@ public class AttackState : StateMachineBehaviour
 {
     private int comboCount;
     private Animator _animator;
+    private float _maxChargingTime = 2.5f;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _animator = animator.GetComponent<Animator>();
         _animator.speed = 0.5f;
-        Debug.Log("Enter");
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log("Update");
+        if(Time.time - CombatManager.Instance._chargingStartTime > _maxChargingTime)
+        {
+            CombatManager.Instance._isCharging = false;
+        }
         if (CombatManager.Instance._isCharging == false)
         {
             _animator.speed = 0.5f;
-            Debug.Log("Update_");
         }
-
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log("Exit");
         _animator.speed = 1f;
         comboCount++;
         if (comboCount >= 2)

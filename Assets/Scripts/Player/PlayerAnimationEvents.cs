@@ -35,7 +35,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void AnimationPause()
     {
-        GetComponent<Animator>().speed = 0.03f;
+        GetComponent<Animator>().speed = 0.01f;
         CombatManager.Instance._isCharging = true;
     }
 
