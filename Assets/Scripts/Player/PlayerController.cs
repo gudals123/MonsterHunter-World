@@ -60,13 +60,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        DeadCheck();
-        HandleInput();
-        GroundCheck();
+        if(!isDead)
+        {
+            HandleInput();
+            GroundCheck();
+        }
         AnimatorControll();
         LookAround();
-
-        
     }
 
     private void GroundCheck()
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
     private void DeadCheck()
     {
-        if (CombatManager.Instance._currentPlayerHP <= 0f)
+        if (CombatManager.Instance._isPlayerDead)
         {
             isDead = true;
         }
@@ -215,13 +215,17 @@ public class PlayerController : MonoBehaviour
         
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("BossAttack"))
         {
-            knockback(transform.position, other.transform.position);
-            StartCoroutine(GetHit());
+            DeadCheck();
+            if(!isDead)
+            {
+                knockback(transform.position, other.transform.position);
+                StartCoroutine(GetHit());
+            }
+            
         }
     }
 

@@ -51,14 +51,14 @@ public class CombatManager : MonoBehaviour
 
     private void Awake()
     {
-        // ì¸ìŠ¤í„´ìŠ¤ê°€ nullì´ë©´ í˜„ì¬ ì¸ìŠ¤í„´ìŠ¤ë¥¼ í• ë‹¹
+        // ?¸?Š¤?„´?Š¤ê°? null?´ë©? ?˜„?¬ ?¸?Š¤?„´?Š¤ë¥? ?• ?‹¹
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // ì”¬ì´ ë°”ë€Œì–´ë„ íŒŒê´´ë˜ì§€ ì•Šë„ë¡ ì„¤ì •
+            DontDestroyOnLoad(gameObject); // ?”¬?´ ë°”ë?Œì–´?„ ?ŒŒê´´ë˜ì§? ?•Š?„ë¡? ?„¤? •
             Initialize();
         }
-        // ì¸ìŠ¤í„´ìŠ¤ê°€ ì´ë¯¸ ì¡´ì¬í•˜ê³ , í˜„ì¬ ì¸ìŠ¤í„´ìŠ¤ê°€ ê·¸ ì¸ìŠ¤í„´ìŠ¤ì™€ ë‹¤ë¥´ë©´ ìì‹ ì„ íŒŒê´´
+        // ?¸?Š¤?„´?Š¤ê°? ?´ë¯? ì¡´ì¬?•˜ê³?, ?˜„?¬ ?¸?Š¤?„´?Š¤ê°? ê·? ?¸?Š¤?„´?Š¤??? ?‹¤ë¥´ë©´ ??‹ ?„ ?ŒŒê´?
         else if (instance != this)
         {
             Destroy(gameObject);
@@ -164,10 +164,10 @@ public class CombatManager : MonoBehaviour
 
 
     /// <summary>
-    /// Player ï¿½Ç´ï¿½ Monsterï¿½ï¿½ ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? Ã¼ï¿½Â¿ï¿½ ï¿½İ¿ï¿½ï¿½Ï´ï¿½ ï¿½Ş¼Òµï¿½ï¿½Ô´Ï´ï¿½.
+    /// Player ï¿½Ç´ï¿½ Monsterï¿½ï¿½ ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?? Ã¼ï¿½Â¿ï¿½ ï¿½İ¿ï¿½ï¿½Ï´ï¿½ ï¿½Ş¼Òµï¿½ï¿½Ô´Ï´ï¿½.
     /// </summary>
-    /// <param name="type">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½Ö´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
-    /// <param name="damage">ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
+    /// <param name="type">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?? ï¿½Ö´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
+    /// <param name="damage">ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?? ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
     public void TakeDamage(string type, float damage)
     {
         if (type == "Player")
@@ -182,6 +182,10 @@ public class CombatManager : MonoBehaviour
         if (type == "Boss")
         {
             _currentPlayerHP -= damage;
+            if (_currentPlayerHP <= 0)
+            {
+                _isPlayerDead = true;
+            }
         }
     }
 
