@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     {
         if (other.CompareTag("Boss"))
         {
-            //Å¸°Ý ÁöÁ¡ °è»ê
+            //Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
 
