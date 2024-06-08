@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6875113101906521121}
   - component: {fileID: 238081471091434091}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossLegL02
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 231549581897461892}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000029515448, y: -0.000000087175295, z: -0.7004092, w: 0.71374154}
-  m_LocalPosition: {x: -0.956, y: -0.062, z: 0.013}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7076619, w: 0.70655125}
+  m_LocalPosition: {x: -0.868, y: -0.062, z: 0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9206415539037951206}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.09}
 --- !u!136 &238081471091434091
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -162,8 +162,8 @@ GameObject:
   - component: {fileID: 3841758069883419610}
   - component: {fileID: 3495088447599224625}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossTailCollider01
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -248,8 +248,8 @@ GameObject:
   - component: {fileID: 8628331358849626059}
   - component: {fileID: 634151258151593731}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossLegL01
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -466,8 +466,8 @@ GameObject:
   - component: {fileID: 8034092854430593358}
   - component: {fileID: 3379390278693797838}
   m_Layer: 6
-  m_Name: GameObject (1)
-  m_TagString: Untagged
+  m_Name: BossLegR01
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -585,8 +585,8 @@ GameObject:
   - component: {fileID: 1410383701511064357}
   - component: {fileID: 3158209929781580366}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossFootL
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -625,8 +625,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 1.6, z: 0.79}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.18, y: 1.2, z: 0.76}
+  m_Center: {x: 0, y: 0.23, z: 0}
 --- !u!1 &1930651620925322455
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,8 +638,8 @@ GameObject:
   - component: {fileID: 7988075089233695661}
   - component: {fileID: 6235572396183346564}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossTailCollider03
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 3103622398804924886}
   m_Layer: 6
   m_Name: NomalAttackCollider
-  m_TagString: Boss
+  m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -827,8 +827,8 @@ GameObject:
   - component: {fileID: 8526707104264371748}
   - component: {fileID: 8059802552481440344}
   m_Layer: 6
-  m_Name: GameObject (1)
-  m_TagString: Untagged
+  m_Name: BossLegR02
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -842,7 +842,7 @@ Transform:
   m_GameObject: {fileID: 2860829435737697295}
   serializedVersion: 2
   m_LocalRotation: {x: 0.16375718, y: 0.043945793, z: -0.6902683, w: 0.7034075}
-  m_LocalPosition: {x: -0.963, y: -0.06, z: -0.105}
+  m_LocalPosition: {x: -0.844, y: -0.061, z: -0.084}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1036,7 +1036,7 @@ GameObject:
   m_Layer: 6
   m_Name: BreathAttackPos
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1196,8 +1196,8 @@ GameObject:
   - component: {fileID: 4399695348837941782}
   - component: {fileID: 4490867764855773894}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossNeckCollider
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1211,7 +1211,7 @@ Transform:
   m_GameObject: {fileID: 4084390616692758515}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.225, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1283,8 +1283,8 @@ GameObject:
   - component: {fileID: 7811219049619203874}
   - component: {fileID: 6886688049259926035}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossTailCollider04
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1370,8 +1370,8 @@ GameObject:
   - component: {fileID: 5204087921670161330}
   - component: {fileID: 275178731149995178}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossLegL03
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1552,8 +1552,8 @@ GameObject:
   - component: {fileID: 7232969392995731525}
   - component: {fileID: 8525692300768066397}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossTailCollider02
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1611,7 +1611,7 @@ GameObject:
   - component: {fileID: 6421120149614507137}
   m_Layer: 6
   m_Name: BreathAttack
-  m_TagString: Boss
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1647,7 +1647,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5994486674892402349}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1732,8 +1732,8 @@ GameObject:
   - component: {fileID: 8058560808109018715}
   - component: {fileID: 3227848775841241964}
   m_Layer: 6
-  m_Name: GameObject (1)
-  m_TagString: Untagged
+  m_Name: BossLegR03
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1746,13 +1746,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6152809565083444261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12195028, y: 0.11779544, z: 0.000000059236037, w: 0.9855214}
-  m_LocalPosition: {x: -0.189, y: -0.053, z: -0.146}
+  m_LocalRotation: {x: -0.00339665, y: 0.042262528, z: -0.08003989, w: 0.99588954}
+  m_LocalPosition: {x: -0.19, y: -0.038, z: -0.061}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1666318213039376700}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 4.86, z: -9.19}
 --- !u!136 &3227848775841241964
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1850,8 +1850,8 @@ GameObject:
   - component: {fileID: 114370757331849724}
   - component: {fileID: 8544965615454459557}
   m_Layer: 6
-  m_Name: GameObject (1)
-  m_TagString: Untagged
+  m_Name: BossFootR
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1865,7 +1865,7 @@ Transform:
   m_GameObject: {fileID: 6463937857690469248}
   serializedVersion: 2
   m_LocalRotation: {x: 0.11327033, y: -0.0006591042, z: -0.000085967804, w: 0.99356395}
-  m_LocalPosition: {x: -0.23, y: 0.255, z: 0.055}
+  m_LocalPosition: {x: -0.23, y: 0.254, z: 0.055}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1890,8 +1890,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 1.6, z: 0.79}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.18, y: 1.2, z: 0.76}
+  m_Center: {x: 0, y: 0.23, z: 0}
 --- !u!1 &6578965519610358425
 GameObject:
   m_ObjectHideFlags: 0
@@ -2300,12 +2300,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 668cdace8166210438a529efa22b6874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 7
+  _moveSpeed: 5
   _rotationSpeed: 200
   _player: {fileID: 0}
   _breathAtt: {fileID: 3616873851421258582}
   _isBossGetHit: 0
-  isBossDead: 0
   _detectedPlayer: 0
   _trackingPlayer: 0
   _perceptionTime: 0
@@ -2321,7 +2320,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7800857922649941904}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 80
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2414,8 +2413,8 @@ GameObject:
   - component: {fileID: 4420182072945441246}
   - component: {fileID: 7382946483433631232}
   m_Layer: 6
-  m_Name: GameObject
-  m_TagString: Untagged
+  m_Name: BossTailCollider05
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2835,8 +2834,8 @@ GameObject:
   - component: {fileID: 1352008255979259426}
   - component: {fileID: 6651913978383513556}
   m_Layer: 6
-  m_Name: GameObjectCollider
-  m_TagString: Untagged
+  m_Name: BossBodyCollider
+  m_TagString: Boss
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
