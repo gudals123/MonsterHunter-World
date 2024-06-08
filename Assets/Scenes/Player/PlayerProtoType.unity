@@ -849,8 +849,9 @@ GameObject:
   - component: {fileID: 1416441422}
   - component: {fileID: 1416441421}
   - component: {fileID: 1416441420}
+  - component: {fileID: 1416441424}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: BossAttack
   m_TagString: BossAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -871,7 +872,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -936,12 +937,25 @@ Transform:
   m_GameObject: {fileID: 1416441419}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.4, z: 3.5}
+  m_LocalPosition: {x: 0.78, y: 1.4, z: 4.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1416441424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416441419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dbec4ac706ade645a0f8d1496a53ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 50
 --- !u!4 &1868060611 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7424718759419919658, guid: 2c50569d6f59a0a40b46eb47c5ea7343,
