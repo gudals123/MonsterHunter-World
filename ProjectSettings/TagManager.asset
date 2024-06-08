@@ -9,6 +9,8 @@ TagManager:
   - Monster
   - Weakness
   - Weapon
+  - Collide
+  - BossAttack
   layers:
   - Default
   - TransparentFX
