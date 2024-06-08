@@ -7,8 +7,11 @@ public class CombatManager : MonoBehaviour
 {
     private static CombatManager instance = null;
 
-    [SerializeField] public int _bossMaxHP = 2000;
-    [SerializeField] public int _playerMaxHP = 100;
+    [SerializeField] public float _bossMaxHP = 2000;
+    [SerializeField] public float _playerMaxHP = 100;
+    public float _chargingStartTime{ get; private set; } = 0f;
+    private float _chargingEndTime = 0f;
+    
 
     public float _currentBossHP { get; private set; }
     public float _currentPlayerHP{ get; private set; }
@@ -16,15 +19,35 @@ public class CombatManager : MonoBehaviour
     public bool _isPlayerDead{ get; private set; }
     public bool _isBossDead { get; private set; }
     public bool _isBossRecognizedPlayer{ get; set; }
-    public bool _isCharging{ get; set; }
+    public bool _isRightAttak { get; set; }
+    private bool _isChargingField;
+    public bool _isCharging
+    { 
+        get
+        {
+            return _isChargingField;
+        }
+        set 
+        {
+            if(value == true)
+            {
+                _chargingStartTime = Time.time;
+            }
+            else
+            {
+                _chargingEndTime = Time.time;
+            }
+            _isChargingField = value;
+        }
+    }
 
     public float distancePtoB{ get; private set; }
     public bool _bossAttackRange{ get; private set; }
     public bool _bossAttackBackRange{ get; private set; }
     public bool _bossVisualRange{ get; private set; }
     public bool _bossPerceptionRange{ get; private set; }
+    public float _playerAttackDamege{get; private set;}
 
-    public float _playerAttackDamege{ get; private set; }
 
     private void Awake()
     {
@@ -63,8 +86,38 @@ public class CombatManager : MonoBehaviour
         _isCharging = false;
     }
 
+    private float ChargingTimeCalculation()
+    {
+        return _chargingEndTime - _chargingStartTime;
+    }
 
+    public float PlayerAttackDamegeCalculation()
+    {
+        float chargingTime = ChargingTimeCalculation();
+        
+        //Debug.Log(chargingTime);
 
+        if(_isRightAttak)
+        {
+            _playerAttackDamege = 20f;
+        }
+        else
+        {
+            if(chargingTime < 0.5)
+            {
+                _playerAttackDamege = 15f;
+            }
+            else if(chargingTime < 1.5)
+            {
+                _playerAttackDamege = 30f;
+            }
+            else
+            {
+                _playerAttackDamege = 60f;
+            }
+        }
+        return _playerAttackDamege;
+    }
 
     /// <summary>
     /// �÷��̾ Boss�� ���� �ȿ� �ִ� �� Ȯ���ϴ� �޼ҵ� �Դϴ�.
