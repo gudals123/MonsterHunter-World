@@ -9,12 +9,12 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] public float _bossMaxHP = 2000;
     [SerializeField] public float _playerMaxHP = 100;
+    [SerializeField] public float _currentPlayerHP{ get; set; }
     public float _chargingStartTime{ get; private set; } = 0f;
     private float _chargingEndTime = 0f;
     
 
     public float _currentBossHP { get; private set; }
-    public float _currentPlayerHP{ get; private set; }
 
     public bool _isPlayerDead{ get; private set; }
     public bool _isBossDead { get; private set; }
@@ -179,10 +179,14 @@ public class CombatManager : MonoBehaviour
                 _isBossDead = true;
             }
         }
+
         if (type == "Boss")
         {
             _currentPlayerHP -= damage;
+            if (_currentPlayerHP <= 0)
+            {
+                _isPlayerDead = true;
+            }
         }
     }
-
 }

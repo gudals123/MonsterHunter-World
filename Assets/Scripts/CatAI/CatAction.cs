@@ -90,7 +90,7 @@ public class CatAction : MonoBehaviour
 
     public bool PlayerHPCheck()
     {
-        // Debug.Log($"playerHP : {CombatManager.Instance._currentPlayerHP}");
+        Debug.Log($"playerHP : {CombatManager.Instance._currentPlayerHP}");
         // Debug.Log($"coolTime : {coolTime}");
         if (CombatManager.Instance._currentPlayerHP <= 40)
         {
@@ -106,9 +106,9 @@ public class CatAction : MonoBehaviour
 
     public void Heal()
     {
-        if (coolTime >= 5)
+        if (coolTime >= 5 && !CombatManager.Instance._isPlayerDead)
         {
-            // Debug.Log("Heal");
+            Debug.Log("Heal");
             CombatManager.Instance._currentPlayerHP += 20;
             coolTime = 0;
         }
