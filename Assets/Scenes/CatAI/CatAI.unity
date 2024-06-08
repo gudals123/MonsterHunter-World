@@ -432,8 +432,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ace163a92c90b94480c61f9c5953f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1083054402}
-  boss: {fileID: 2110852264}
+  catTransform: {fileID: 0}
+  playerTransform: {fileID: 0}
+  bossTransform: {fileID: 0}
   animator: {fileID: 0}
 --- !u!1001 &498578880
 PrefabInstance:
@@ -579,8 +580,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   catRigidbody: {fileID: 0}
-  player: {fileID: 0}
-  boss: {fileID: 0}
+  playerTransform: {fileID: 0}
+  bossTransform: {fileID: 0}
+  coolTime: 0
 --- !u!1 &1083054397
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,6 +741,16 @@ PrefabInstance:
       propertyPath: playerHP
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 709087072548218683, guid: d01d8c04389269c4cb29628758ee35e3,
+        type: 3}
+      propertyPath: bossTransform
+      value: 
+      objectReference: {fileID: 2110852268}
+    - target: {fileID: 709087072548218683, guid: d01d8c04389269c4cb29628758ee35e3,
+        type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1083054402}
     - target: {fileID: 2291671120546458638, guid: d01d8c04389269c4cb29628758ee35e3,
         type: 3}
       propertyPath: boss
@@ -747,6 +759,21 @@ PrefabInstance:
     - target: {fileID: 2291671120546458638, guid: d01d8c04389269c4cb29628758ee35e3,
         type: 3}
       propertyPath: player
+      value: 
+      objectReference: {fileID: 1083054402}
+    - target: {fileID: 2291671120546458638, guid: d01d8c04389269c4cb29628758ee35e3,
+        type: 3}
+      propertyPath: catTransform
+      value: 
+      objectReference: {fileID: 1756171590}
+    - target: {fileID: 2291671120546458638, guid: d01d8c04389269c4cb29628758ee35e3,
+        type: 3}
+      propertyPath: bossTransform
+      value: 
+      objectReference: {fileID: 2110852268}
+    - target: {fileID: 2291671120546458638, guid: d01d8c04389269c4cb29628758ee35e3,
+        type: 3}
+      propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1083054402}
     - target: {fileID: 4194808209308843435, guid: d01d8c04389269c4cb29628758ee35e3,
@@ -943,6 +970,12 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!4 &1756171590 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4609498034922007123, guid: d01d8c04389269c4cb29628758ee35e3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1172365093}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2104762956
 GameObject:
   m_ObjectHideFlags: 0
