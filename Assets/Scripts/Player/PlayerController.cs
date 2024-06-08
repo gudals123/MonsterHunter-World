@@ -5,10 +5,11 @@ using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Speed")]
+    [Header("Speed / Fower")]
     private float moveSpeed;
     [SerializeField] private float walkSpeed = 4f;
-    [SerializeField] private float RunSpeed = 7f;
+    [SerializeField] private float runSpeed = 7f;
+    private float knockbackPower = 2.5f;
 
     [Header("Component")]
     private Rigidbody _rigidbody;
@@ -25,7 +26,8 @@ public class PlayerController : MonoBehaviour
     private bool isRoll = false;
     private bool isAttacking = false;
 
-    //private bool isGetHit = false;
+    private bool isGetHit = false;
+
 
     [Header("Object")]
     [SerializeField] private Transform _characterBody;
@@ -139,7 +141,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleInput()
     {
-        //±¸¸£±â °¨Áö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
             isRoll = true;
@@ -149,17 +151,17 @@ public class PlayerController : MonoBehaviour
             isRoll = false;
         }
 
-        //¹«±â ½ºÀ§Äª °¨Áö
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½
         if ((isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
             (!isArmed && Input.GetMouseButtonDown(0)))
         {
             isArmed = !isArmed;
         }
 
-        //´Þ¸®±â °¨Áö
+        //ï¿½Þ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (!isArmed && Input.GetKeyDown(KeyCode.LeftShift))
         {
-            moveSpeed = RunSpeed;
+            moveSpeed = runSpeed;
             isRun = true;
         }
         else if (!isArmed && Input.GetKeyUp(KeyCode.LeftShift))
@@ -168,7 +170,7 @@ public class PlayerController : MonoBehaviour
             isRun = false;
         }
 
-        //°ø°Ý °¨Áö
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (isArmed)
         {
             if (Input.GetMouseButtonDown(0))
@@ -206,6 +208,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
         _animator.SetBool(PlayerAnimatorParamiter.IsRoll, isRoll);
         _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
+        _animator.SetBool(PlayerAnimatorParamiter.IsGetHit, isGetHit);
         _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
         _animator.SetBool(PlayerAnimatorParamiter.IsAttacking, isAttacking);
         _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, CombatManager.Instance._isRightAttak);
@@ -215,13 +218,27 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Boss"))
+        if(other.CompareTag("BossAttack"))
         {
-            //Debug.Log("GetHit");
+            knockback(transform.position, other.transform.position);
+            StartCoroutine(GetHit());
         }
     }
 
+    private void knockback(Vector3 playerPos, Vector3 attackColliderPos)
+    {
+        Vector3 direction = playerPos - attackColliderPos;
+        direction = new Vector3(direction.x, 0 , direction.z);
+        direction.Normalize();
+        _rigidbody.AddForce(direction * knockbackPower, ForceMode.Impulse);
+    }
 
+    private IEnumerator GetHit()
+    {
+        isGetHit = true;
+        yield return new WaitForSeconds( 0.2f); 
+        isGetHit = false;
+    }
 
 
 }
