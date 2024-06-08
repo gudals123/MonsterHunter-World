@@ -1,8 +1,10 @@
+using System;
 using CleverCrow.Fluid.BTs.Trees;
 using CleverCrow.Fluid.BTs.Tasks;
 using System.Collections;
 using UnityEngine;
 using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
 public class BossBT : MonoBehaviour
 {
@@ -22,7 +24,7 @@ public class BossBT : MonoBehaviour
     public GameObject _breathAtt;
 
     // 프로토타입 진행을 위한 임시 변수
-    public bool isBossGetHit = false;
+    public bool _isBossGetHit = false;
     public bool isBossDead = false;
     public bool _detectedPlayer = false;
     public bool _trackingPlayer = false;
@@ -30,6 +32,7 @@ public class BossBT : MonoBehaviour
     public bool _canNomalWalking;
     public Vector3 _randomPosToWalk;
     public bool _isBossSturned = false;
+    public int _sturnStack = 0;
 
     private void Awake()
     {
@@ -76,7 +79,7 @@ public class BossBT : MonoBehaviour
                     .Condition("TrackingPlayer", () => _detectedPlayer)
                         .StateAction("BattleTracking", () =>
                         {
-                            isBossGetHit = false;
+                            _isBossGetHit = false;
                             _trackingPlayer = true;
                         })
                         .Do("TrackingPlayer", () =>
@@ -162,10 +165,11 @@ public class BossBT : MonoBehaviour
     {
         while (true)
         {
-            if (isBossGetHit)   // 추후 CombatManager._bossGetHit로 변경 예정
+            if (_isBossGetHit)   // 추후 CombatManager._bossGetHit로 변경 예정
             {
+                _isBossGetHit = false;
                 BossBeingShot("Hit");
-                //CombatManager.Instance._isbossGetHit = false;
+                //CombatManager.Instance._isBossGetHit = false;
                 CombatManager.Instance._isBossRecognizedPlayer = true;   // 임시로 넣어 둠. 추후 플레이어와의 상호작용에서 제거 예정
                 _detectedPlayer = true;
             }
@@ -174,10 +178,11 @@ public class BossBT : MonoBehaviour
             {
                 BossBeingShot("Sturn");
                 _isBossSturned = false;
+                _sturnStack = 0;
                 //CombatManager.Instance._isBossSturned = false;
             }
 
-            if (isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
+            if (CombatManager.Instance._isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
             {
                 BossBeingShot("Die");
                 Debug.Log($"{transform.GetChild(0).GetChild(0).name}");
@@ -318,6 +323,22 @@ public class BossBT : MonoBehaviour
         yield return new WaitForSeconds(time);
         _animator.Play("Roar");
     }
+
+    /*
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Weapon"))
+        {
+            _isBossGetHit = true;
+            _sturnStack++;
+            if (_sturnStack == 5)
+            {
+                _isBossSturned = true;
+            }
+        }
+
+    }
+    */
 
     /*    public void BossSound(string name)
         {

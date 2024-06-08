@@ -118,8 +118,14 @@ public class CombatManager : MonoBehaviour
     public void TakeDamage(string type, float damage)
     {
         if (type == "Player")
+        {
             _currentBossHP -= damage;
             _isBossRecognizedPlayer = true;
+            if (_currentBossHP <= 0)
+            {
+                _isBossDead = true;
+            }
+        }
         if (type == "Boss")
         {
             _currentPlayerHP -= damage;
