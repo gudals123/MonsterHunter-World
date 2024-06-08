@@ -13,7 +13,7 @@ public class CombatManager : MonoBehaviour
     private float _chargingEndTime = 0f;
     
 
-    public float _currentBossHP { get; private set; }
+    [SerializeField] public float _currentBossHP { get; private set; }
     public float _currentPlayerHP{ get; private set; }
 
     public bool _isPlayerDead{ get; private set; }
@@ -43,7 +43,6 @@ public class CombatManager : MonoBehaviour
 
     public float distancePtoB{ get; private set; }
     public bool _bossAttackRange{ get; private set; }
-    public bool _bossAttackBackRange{ get; private set; }
     public bool _bossVisualRange{ get; private set; }
     public bool _bossPerceptionRange{ get; private set; }
     public float _playerAttackDamege{get; private set;}
@@ -134,7 +133,7 @@ public class CombatManager : MonoBehaviour
         float _isForward = Vector3.Dot(normalized, boss.forward);
 
         // ���� ����
-        if (_isForward > 0 && distancePtoB <= 9f)
+        if (_isForward > 0 && distancePtoB <= 7f)
         {
             _bossAttackRange = true;
             _isBossRecognizedPlayer = true;
@@ -142,7 +141,6 @@ public class CombatManager : MonoBehaviour
         else
         {
             _bossAttackRange = false;
-            _bossAttackBackRange = false;
         }
 
         // �þ� ����

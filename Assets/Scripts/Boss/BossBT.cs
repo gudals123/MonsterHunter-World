@@ -25,7 +25,6 @@ public class BossBT : MonoBehaviour
 
     // 프로토타입 진행을 위한 임시 변수
     public bool _isBossGetHit = false;
-    public bool isBossDead = false;
     public bool _detectedPlayer = false;
     public bool _trackingPlayer = false;
     public float _perceptionTime = 0;
@@ -57,7 +56,6 @@ public class BossBT : MonoBehaviour
                                 {
                                     //CombatManager.Instance.StartBreathAttack();
                                     _breathAtt.SetActive(false);
-                                    Debug.Log("Breath Attack");
                                     _canBreathAttack = !_canBreathAttack;
                                     return TaskStatus.Success;
                                 })
@@ -68,7 +66,6 @@ public class BossBT : MonoBehaviour
                             })
                             .Do(() =>
                             {
-                                Debug.Log("Nomal Attack");
                                 return TaskStatus.Success;
                             })
                         .End()
@@ -84,7 +81,6 @@ public class BossBT : MonoBehaviour
                         })
                         .Do("TrackingPlayer", () =>
                         {
-                            Debug.Log("TrackingPlayer");
                             return TaskStatus.Success;
                         })
                 .End()
@@ -101,7 +97,6 @@ public class BossBT : MonoBehaviour
                         })
                         .Do("NomalWalking", () =>
                         {
-                            Debug.Log("NomalWalking");
                             _canNomalWalking = false;
                             return TaskStatus.Success;
                         })
@@ -109,7 +104,6 @@ public class BossBT : MonoBehaviour
                     .StateAction("Idle", () =>
                     {
                         _trackingPlayer = false;
-                        Debug.Log("Idle");
                     })
                     .Do(() =>
                     {
@@ -167,17 +161,17 @@ public class BossBT : MonoBehaviour
         {
             if (_isBossGetHit)   // 추후 CombatManager._bossGetHit로 변경 예정
             {
-                _isBossGetHit = false;
                 BossBeingShot("Hit");
-                //CombatManager.Instance._isBossGetHit = false;
                 CombatManager.Instance._isBossRecognizedPlayer = true;   // 임시로 넣어 둠. 추후 플레이어와의 상호작용에서 제거 예정
                 _detectedPlayer = true;
+                _isBossGetHit = false;
+                yield return new WaitForSeconds(0.8f);
             }
 
             if (_isBossSturned)   // 추후 CombatManager._isBossSturned로 변경 예정
             {
                 BossBeingShot("Sturn");
-                _isBossSturned = false;
+                
                 _sturnStack = 0;
                 //CombatManager.Instance._isBossSturned = false;
             }
@@ -185,13 +179,13 @@ public class BossBT : MonoBehaviour
             if (CombatManager.Instance._isBossDead)   // 추후 !CombatManager._isBossDead로 변경 예정
             {
                 BossBeingShot("Die");
-                Debug.Log($"{transform.GetChild(0).GetChild(0).name}");
-                transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                //CombatManager.Instance._isBossDead = true;
+                transform.GetChild(0).GetChild(0).gameObject.SetActive(false);  // 메쉬를 제외한 자식 오브젝트 모두 끔
+                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             }
 
             else
             {
+                _isBossSturned = false;
                 _tree.Tick();
             }
 
@@ -257,12 +251,10 @@ public class BossBT : MonoBehaviour
         float ran = Random.value;
         if (ran <= 0.5)
         {
-            Debug.Log($"{ran} <= 0.5 / Boss Walk");
             return true;
         }
         else
         {
-            Debug.Log($"{ran} >= 0.5 / Boss IDLE");
             return false;
         }
     }
@@ -296,7 +288,7 @@ public class BossBT : MonoBehaviour
         {
             // 플레이어가 범위 내에 있을 때 빨간색으로, 아니면 녹색으로 범위를 표시
             Gizmos.color = CombatManager.Instance._bossAttackRange ? Color.red : Color.green;
-            Gizmos.DrawWireSphere(gameObject.transform.position, 9f);
+            Gizmos.DrawWireSphere(gameObject.transform.position, 7f);
 
             // 보스의 시야 범위를 파란색으로 표시
             Gizmos.color = Color.blue;
@@ -324,11 +316,11 @@ public class BossBT : MonoBehaviour
         _animator.Play("Roar");
     }
 
-    /*
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Weapon"))
         {
+            StopCoroutine(ActivateAiCo());
             _isBossGetHit = true;
             _sturnStack++;
             if (_sturnStack == 5)
@@ -338,7 +330,6 @@ public class BossBT : MonoBehaviour
         }
 
     }
-    */
 
     /*    public void BossSound(string name)
         {
