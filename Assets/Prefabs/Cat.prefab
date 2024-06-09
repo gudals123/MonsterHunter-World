@@ -1239,8 +1239,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   catRigidbody: {fileID: 2458691640809384041}
-  boss: {fileID: 0}
   player: {fileID: 0}
+  boss: {fileID: 0}
+  coolTime: 0
 --- !u!1 &4867621118930992609
 GameObject:
   m_ObjectHideFlags: 0

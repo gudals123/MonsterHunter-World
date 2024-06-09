@@ -232,12 +232,12 @@ public class BossBT : MonoBehaviour
         float ran = Random.value;
         if (ran <= 0.5)   // 추후 boss HP 가 30% 이하일 조건 추가 : CombatManager._currentBossHP <= 600 && 
         {
-            Debug.Log($"{ran} <= 0.5 / Boss Breath Attack");
+            //Debug.Log($"{ran} <= 0.5 / Boss Breath Attack");
             return _canBreathAttack = true;
         }
         else
         {
-            Debug.Log($"{ran} >= 0.5 / Boss Nomal Attack");
+            //Debug.Log($"{ran} >= 0.5 / Boss Nomal Attack");
             return _canBreathAttack = false;
         }
     }
