@@ -50,14 +50,14 @@ public class CombatManager : MonoBehaviour
 
     private void Awake()
     {
-        // ?²╦?┼╓?└╢?┼╓Й╟? null?²╢К╘? ?≤└?·╛ ?²╦?┼╓?└╢?┼╓К╔? ?∙═?▀╧
+        // юн╫╨ео╫╨╟║ nullюл╦И ╩У╥н ╩Щ╪╨
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // ?■╛?²╢ К╟■К?▄Л√╢?▐└ ?▄▄Й╢╢К░≤Л╖? ?∙┼?▐└К║? ?└╓?═∙
+            DontDestroyOnLoad(gameObject); // ╬ююл ╧ы╡Н╬Н╣╣ фд╠╚╣гаЖ ╬й╣╣╥о ╪Ёа╓
             Initialize();
         }
-        // ?²╦?┼╓?└╢?┼╓Й╟? ?²╢К╞? Л║╢Л·╛?∙≤ЙЁ?, ?≤└?·╛ ?²╦?┼╓?└╢?┼╓Й╟? Й╥? ?²╦?┼╓?└╢?┼╓??? ?▀╓К╔╢К╘╢ ?·░?▀═?²└ ?▄▄Й╢?
+        // юн╫╨ео╫╨╟║ юл╧л а╦юГго╟М, гЖюГ юн╫╨ео╫╨╟║ ╠в юн╫╨ео╫╨©м ╢ы╦ё╦И юз╫ею╩ фд╠╚
         else if (instance != this)
         {
             Destroy(gameObject);
@@ -119,21 +119,22 @@ public class CombatManager : MonoBehaviour
     }
 
     /// <summary>
-    /// О©╫ц╥О©╫О©╫л╬Н╟║ BossО©╫О©╫ О©╫О©╫О©╫О©╫ О©╫х©О©╫ О©╫ж╢О©╫ О©╫О©╫ х╝О©╫О©╫О©╫о╢О©╫ О©╫ч╪р╣О©╫ О©╫т╢о╢О©╫.
-    /// 1. boss.positionО©╫О©╫ player О©╫О©╫О©╫О©╫ О©╫О©╫О©╫л╟О©╫, DistanceО©╫О©╫ 9 О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ ц╪е╘
-    /// 2. boss.positionО©╫О©╫ player О©╫О©╫О©╫О©╫ О©╫О©╫О©╫л╟О©╫, DistanceО©╫О©╫ 18 О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫ц╬О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ ц╪е╘
+    /// гц╥╧юл╬Н╟║ Bossюг ╧Эю╖ ╬х©║ юж╢б аЖ х╝юнго╢б ╦ч╪р╣Е ют╢о╢ы.
+    /// 1. player.positionюл boss ╨╦╢ы ╬уюл╟М, Distance╟║ 9 юлгоюо ╤╖ ╟Ь╟щ ╧Эю╖ ©╘╨н ц╪е╘
+    /// 2. player.positionюл boss ╨╦╢ы ╬уюл╟М, Distance╟║ 18 юлгоюо ╤╖ ╫ц╬ъ ╧Эю╖ ©╘╨н ц╪е╘
     /// </summary>
-    /// <param name="player">О©╫ц╥О©╫О©╫л╬О©╫О©╫О©╫ О©╫О©╫д║</param>
-    /// <param name="boss">О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫д║</param>
+    /// <param name="player">гц╥╧юл╬Нюг ю╖д║</param>
+    /// <param name="boss">╨╦╫╨юг ю╖д║</param>
     public void isPlayerInRange(Transform player, Transform boss)
     {
         distancePtoB = Vector3.Distance(player.position, boss.position);
 
-        Vector3 normalized = (player.position - boss.position).normalized;
-        float _isForward = Vector3.Dot(normalized, boss.forward);
+        Vector3 directionToPlayer = (player.position - boss.position).normalized;
+        float _isForward = Vector3.Dot(directionToPlayer, boss.forward);
+        float angleToPlayer = Vector3.Angle(boss.forward, directionToPlayer);
 
-        // О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
-        if (_isForward > 0 && distancePtoB <= 7f)
+        // ╟Ь╟щ ╧Эю╖
+        if (_isForward > 0 && distancePtoB <= 7f && angleToPlayer <= 30f)
         {
             _bossAttackRange = true;
             _isBossRecognizedPlayer = true;
@@ -143,7 +144,7 @@ public class CombatManager : MonoBehaviour
             _bossAttackRange = false;
         }
 
-        // О©╫ц╬О©╫ О©╫О©╫О©╫О©╫
+        // ╫ц╬ъ ╧Эю╖
         if (_isForward > 0 && distancePtoB <= 18f)
         {
             _bossVisualRange = true;
@@ -155,17 +156,17 @@ public class CombatManager : MonoBehaviour
             _isBossRecognizedPlayer = false;
         }
 
-        //О©╫н╫О©╫ О©╫О©╫О©╫О©╫
+        // юнаЖ ╧Эю╖
         if (distancePtoB <= 18f) _bossPerceptionRange = true;
         else _bossPerceptionRange = false;
     }
 
 
     /// <summary>
-    /// Player О©╫г╢О©╫ MonsterО©╫О©╫ О©╫ч╢О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©?? ц╪О©╫б©О©╫ О©╫щ©О©╫О©╫о╢О©╫ О©╫ч╪р╣О©╫О©╫т╢о╢О©╫.
+    /// Player ╤г╢б Monster╟║ ╧ч╢б ╢К╧лаЖ╦╕ ц╪╥б©║ ╧щ©╣го╢б ╦ч╪р╣Еют╢о╢ы.
     /// </summary>
-    /// <param name="type">О©╫О©╫О©╫О©╫О©╫О©╫О©?? О©╫ж╢О©╫ О©╫О©╫ц╪О©╫О©╫ О©╫г╧О©╫О©╫у╢о╢О©╫.</param>
-    /// <param name="damage">О©╫ч╢О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©?? О©╫г╧О©╫О©╫у╢о╢О©╫.</param>
+    /// <param name="type">╢К╧лаЖ╦╕ аж╢б ажц╪╦╕ юг╧лгу╢о╢ы.</param>
+    /// <param name="damage">╧ч╢б ╢К╧лаЖ╥╝ю╩ юг╧лгу╢о╢ы.</param>
     public void TakeDamage(string type, float damage)
     {
         if (type == "Player")

@@ -14,7 +14,7 @@ public class BossBT : MonoBehaviour
     public Transform _player;
     private Vector3 _moveDirection;
 
-    private Animator _animator;
+    public Animator _animator;
     private Rigidbody _bossRb;
 
     private bool _rotationToPlayer = false;
@@ -35,7 +35,6 @@ public class BossBT : MonoBehaviour
 
     private void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
         _bossRb = GetComponent<Rigidbody>();
         _bossRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
@@ -128,7 +127,7 @@ public class BossBT : MonoBehaviour
             RotationToTarget();
             MovingWalkOrTracking(_player.position, 1f);
 
-            if (!CombatManager.Instance._bossVisualRange || !CombatManager.Instance._bossPerceptionRange)
+            if (!CombatManager.Instance._bossPerceptionRange && !CombatManager.Instance._bossVisualRange && !CombatManager.Instance._bossAttackRange)
             {
                 _perceptionTime += Time.deltaTime;
             }
@@ -211,6 +210,7 @@ public class BossBT : MonoBehaviour
         Vector3 direction = (targetPos - transform.position).normalized;
         _moveDirection = new Vector3(direction.x, 0, direction.z); // y축 방향은 무시
         _bossRb.MovePosition(transform.position + _moveDirection * _moveSpeed * speedRate * Time.fixedDeltaTime);
+        
     }
 
     /// <summary>
@@ -289,6 +289,10 @@ public class BossBT : MonoBehaviour
             // 플레이어가 범위 내에 있을 때 빨간색으로, 아니면 녹색으로 범위를 표시
             Gizmos.color = CombatManager.Instance._bossAttackRange ? Color.red : Color.green;
             Gizmos.DrawWireSphere(gameObject.transform.position, 7f);
+            Vector3 leftBoundary = Quaternion.Euler(0, -60 / 2, 0) * transform.forward * 7;
+            Vector3 rightBoundary = Quaternion.Euler(0, 60 / 2, 0) * transform.forward * 7;
+            Gizmos.DrawLine(transform.position, transform.position + leftBoundary);
+            Gizmos.DrawLine(transform.position, transform.position + rightBoundary);
 
             // 보스의 시야 범위를 파란색으로 표시
             Gizmos.color = Color.blue;
