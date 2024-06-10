@@ -50,14 +50,14 @@ public class CombatManager : MonoBehaviour
 
     private void Awake()
     {
-        // ?��?��?��?���? null?���? ?��?�� ?��?��?��?���? ?��?��
+        // 인스턴스가 null이면 새로 생성
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // ?��?�� 바�?�어?�� ?��괴되�? ?��?���? ?��?��
+            DontDestroyOnLoad(gameObject); // 씬이 바뀌어도 파괴되지 않도록 설정
             Initialize();
         }
-        // ?��?��?��?���? ?���? 존재?���?, ?��?�� ?��?��?��?���? �? ?��?��?��?��??? ?��르면 ?��?��?�� ?���?
+        // 인스턴스가 이미 존재하고, 현재 인스턴스가 그 인스턴스와 다르면 자신을 파괴
         else if (instance != this)
         {
             Destroy(gameObject);
@@ -119,12 +119,12 @@ public class CombatManager : MonoBehaviour
     }
 
     /// <summary>
-    /// �÷��̾ Boss�� ���� �ȿ� �ִ� �� Ȯ���ϴ� �޼ҵ� �Դϴ�.
-    /// 1. boss.position�� player ���� ���̰�, Distance�� 9 ������ �� ���� ���� ���� üũ
-    /// 2. boss.position�� player ���� ���̰�, Distance�� 18 ������ �� �þ� ���� ���� üũ
+    /// 플레이어가 Boss의 범위 안에 있는 지 확인하는 메소드 입니다.
+    /// 1. player.position이 boss 보다 앞이고, Distance가 9 이하일 때 공격 범위 여부 체크
+    /// 2. player.position이 boss 보다 앞이고, Distance가 18 이하일 때 시야 범위 여부 체크
     /// </summary>
-    /// <param name="player">�÷��̾��� ��ġ</param>
-    /// <param name="boss">������ ��ġ</param>
+    /// <param name="player">플레이어의 위치</param>
+    /// <param name="boss">보스의 위치</param>
     public void isPlayerInRange(Transform player, Transform boss)
     {
         distancePtoB = Vector3.Distance(player.position, boss.position);
@@ -132,7 +132,7 @@ public class CombatManager : MonoBehaviour
         Vector3 normalized = (player.position - boss.position).normalized;
         float _isForward = Vector3.Dot(normalized, boss.forward);
 
-        // ���� ����
+        // 공격 범위
         if (_isForward > 0 && distancePtoB <= 7f)
         {
             _bossAttackRange = true;
@@ -143,7 +143,7 @@ public class CombatManager : MonoBehaviour
             _bossAttackRange = false;
         }
 
-        // �þ� ����
+        // 시야 범위
         if (_isForward > 0 && distancePtoB <= 18f)
         {
             _bossVisualRange = true;
@@ -155,17 +155,17 @@ public class CombatManager : MonoBehaviour
             _isBossRecognizedPlayer = false;
         }
 
-        //�ν� ����
+        // 인지 범위
         if (distancePtoB <= 18f) _bossPerceptionRange = true;
         else _bossPerceptionRange = false;
     }
 
 
     /// <summary>
-    /// Player �Ǵ� Monster�� �޴� �������?? ü�¿� �ݿ��ϴ� �޼ҵ��Դϴ�.
+    /// Player 또는 Monster가 받는 대미지를 체력에 반영하는 메소드입니다.
     /// </summary>
-    /// <param name="type">�������?? �ִ� ��ü�� �ǹ��մϴ�.</param>
-    /// <param name="damage">�޴� ���������?? �ǹ��մϴ�.</param>
+    /// <param name="type">대미지를 주는 주체를 의미합니다.</param>
+    /// <param name="damage">받는 대미지량을 의미합니다.</param>
     public void TakeDamage(string type, float damage)
     {
         if (type == "Player")

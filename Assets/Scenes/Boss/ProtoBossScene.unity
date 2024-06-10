@@ -2132,11 +2132,6 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 2032744760}
-    - target: {fileID: 983852566087758812, guid: 2c50569d6f59a0a40b46eb47c5ea7343,
-        type: 3}
-      propertyPath: _isBossGetHit
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7424718759419919658, guid: 2c50569d6f59a0a40b46eb47c5ea7343,
         type: 3}
       propertyPath: m_LocalPosition.x

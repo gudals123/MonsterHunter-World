@@ -36,7 +36,7 @@ public class BreathAttackTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Breath Attacking~~~~~~");
+            //Debug.Log("Breath Attacking~~~~~~");
             AppearHitEffect(other.gameObject);
             CombatManager.Instance.TakeDamage("Boss", _breathAttackValue);
         }

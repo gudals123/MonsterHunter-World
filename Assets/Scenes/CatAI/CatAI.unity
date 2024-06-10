@@ -581,6 +581,7 @@ MonoBehaviour:
   catRigidbody: {fileID: 0}
   player: {fileID: 0}
   boss: {fileID: 0}
+  coolTime: 0
 --- !u!1 &1083054397
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,11 +735,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1083054402}
-    - target: {fileID: 709087072548218683, guid: d01d8c04389269c4cb29628758ee35e3,
-        type: 3}
-      propertyPath: playerHP
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 2291671120546458638, guid: d01d8c04389269c4cb29628758ee35e3,
         type: 3}
       propertyPath: boss
@@ -749,11 +745,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1083054402}
-    - target: {fileID: 4194808209308843435, guid: d01d8c04389269c4cb29628758ee35e3,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
     - target: {fileID: 4609498034922007123, guid: d01d8c04389269c4cb29628758ee35e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -808,11 +799,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Cat
-      objectReference: {fileID: 0}
-    - target: {fileID: 5981419491094128802, guid: d01d8c04389269c4cb29628758ee35e3,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
