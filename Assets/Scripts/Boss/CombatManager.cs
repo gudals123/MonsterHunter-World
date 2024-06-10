@@ -9,12 +9,12 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] public float _bossMaxHP = 2000;
     [SerializeField] public float _playerMaxHP = 100;
-    [SerializeField] public float _currentPlayerHP{ get; set; }
     public float _chargingStartTime{ get; private set; } = 0f;
     private float _chargingEndTime = 0f;
     
 
-    public float _currentBossHP { get; private set; }
+    [SerializeField] public float _currentBossHP { get; private set; }
+    public float _currentPlayerHP{ get; private set; }
 
     public bool _isPlayerDead{ get; private set; }
     public bool _isBossDead { get; private set; }
@@ -43,7 +43,6 @@ public class CombatManager : MonoBehaviour
 
     public float distancePtoB{ get; private set; }
     public bool _bossAttackRange{ get; private set; }
-    public bool _bossAttackBackRange{ get; private set; }
     public bool _bossVisualRange{ get; private set; }
     public bool _bossPerceptionRange{ get; private set; }
     public float _playerAttackDamege{get; private set;}
@@ -51,14 +50,14 @@ public class CombatManager : MonoBehaviour
 
     private void Awake()
     {
-        // ì¸ìŠ¤í„´ìŠ¤ê°€ nullì´ë©´ í˜„ìž¬ ì¸ìŠ¤í„´ìŠ¤ë¥¼ í• ë‹¹
+        // ?¸?Š¤?„´?Š¤ê°? null?´ë©? ?˜„?ž¬ ?¸?Š¤?„´?Š¤ë¥? ?• ?‹¹
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // ì”¬ì´ ë°”ë€Œì–´ë„ íŒŒê´´ë˜ì§€ ì•Šë„ë¡ ì„¤ì •
+            DontDestroyOnLoad(gameObject); // ?”¬?´ ë°”ë?Œì–´?„ ?ŒŒê´´ë˜ì§? ?•Š?„ë¡? ?„¤? •
             Initialize();
         }
-        // ì¸ìŠ¤í„´ìŠ¤ê°€ ì´ë¯¸ ì¡´ìž¬í•˜ê³ , í˜„ìž¬ ì¸ìŠ¤í„´ìŠ¤ê°€ ê·¸ ì¸ìŠ¤í„´ìŠ¤ì™€ ë‹¤ë¥´ë©´ ìžì‹ ì„ íŒŒê´´
+        // ?¸?Š¤?„´?Š¤ê°? ?´ë¯? ì¡´ìž¬?•˜ê³?, ?˜„?ž¬ ?¸?Š¤?„´?Š¤ê°? ê·? ?¸?Š¤?„´?Š¤??? ?‹¤ë¥´ë©´ ?ž?‹ ?„ ?ŒŒê´?
         else if (instance != this)
         {
             Destroy(gameObject);
@@ -134,7 +133,7 @@ public class CombatManager : MonoBehaviour
         float _isForward = Vector3.Dot(normalized, boss.forward);
 
         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-        if (_isForward > 0 && distancePtoB <= 9f)
+        if (_isForward > 0 && distancePtoB <= 7f)
         {
             _bossAttackRange = true;
             _isBossRecognizedPlayer = true;
@@ -142,7 +141,6 @@ public class CombatManager : MonoBehaviour
         else
         {
             _bossAttackRange = false;
-            _bossAttackBackRange = false;
         }
 
         // ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½
@@ -164,10 +162,10 @@ public class CombatManager : MonoBehaviour
 
 
     /// <summary>
-    /// Player ï¿½Ç´ï¿½ Monsterï¿½ï¿½ ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? Ã¼ï¿½Â¿ï¿½ ï¿½Ý¿ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼Òµï¿½ï¿½Ô´Ï´ï¿½.
+    /// Player ï¿½Ç´ï¿½ Monsterï¿½ï¿½ ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?? Ã¼ï¿½Â¿ï¿½ ï¿½Ý¿ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼Òµï¿½ï¿½Ô´Ï´ï¿½.
     /// </summary>
-    /// <param name="type">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½Ö´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
-    /// <param name="damage">ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
+    /// <param name="type">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?? ï¿½Ö´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
+    /// <param name="damage">ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?? ï¿½Ç¹ï¿½ï¿½Õ´Ï´ï¿½.</param>
     public void TakeDamage(string type, float damage)
     {
         if (type == "Player")
@@ -179,7 +177,6 @@ public class CombatManager : MonoBehaviour
                 _isBossDead = true;
             }
         }
-
         if (type == "Boss")
         {
             _currentPlayerHP -= damage;
@@ -189,4 +186,5 @@ public class CombatManager : MonoBehaviour
             }
         }
     }
+
 }
