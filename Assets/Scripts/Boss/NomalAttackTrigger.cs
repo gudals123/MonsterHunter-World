@@ -20,7 +20,7 @@ public class NomalAttackTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && !_isNomalAttacking)
         {
-            Debug.Log("Start Nomal Attacking~~~~~~");
+            //Debug.Log("Start Nomal Attacking~~~~~~");
             NowNomalAttacking();
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
@@ -41,7 +41,7 @@ public class NomalAttackTrigger : MonoBehaviour
     {
         _isNomalAttacking = true;
         yield return new WaitForSeconds(2f);
-        Debug.Log("Quit Nomal Attack~~~~~~");
+        //Debug.Log("Quit Nomal Attack~~~~~~");
         _isNomalAttacking = false;
     }
 

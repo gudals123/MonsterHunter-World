@@ -754,10 +754,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3282319
+  m_Radius: 0.51424694
   m_Height: 2.5262237
   m_Direction: 1
-  m_Center: {x: -0.004404515, y: 1.2368882, z: -0.0040535927}
+  m_Center: {x: 0.025873527, y: 1.2368882, z: 0.01992786}
 --- !u!114 &1955419867365339950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -771,7 +771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 4
-  RunSpeed: 7
+  runSpeed: 7
   _characterBody: {fileID: 2917617824821667798}
   _cameraArm: {fileID: 6906201647623708226}
   groundcheckDistance: 0.5
