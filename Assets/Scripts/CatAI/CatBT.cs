@@ -9,8 +9,9 @@ using UnityEngine.EventSystems;
 public class CatBT : MonoBehaviour
 {
     [SerializeField] private BehaviorTree catTree;
-    [SerializeField] private Transform player;
-    [SerializeField] private Transform boss;
+    [SerializeField] private Transform catTransform;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Transform bossTransform;
     //[SerializeField] private SphereCollider Detectcollider;
     //[SerializeField] private SphereCollider Attackcollider;
     [SerializeField] private Animator animator;
@@ -18,27 +19,31 @@ public class CatBT : MonoBehaviour
     //[SerializeField] private Rigidbody catRigidbody;
     //[SerializeField] private float rotationSpeed;
 
-    private bool isBossInRange;
-    private bool isBossAttackInRange;
-    private bool isPlayerInRange;
-    private bool isPlayerInDetectRange;
-    private bool isPlayerAlmostDie;
-    private bool isAttack;
-    private bool isMove;
-    private Collider[] DetectCollider;
+    // private bool isBossInRange;
+    // private bool isBossAttackInRange;
+    // private bool isPlayerInRange;
+    // private bool isPlayerInDetectRange;
+    // private bool isPlayerAlmostDie;
+    // private bool isAttack;
+    // private bool isMove;
+    // private Collider[] DetectCollider;
+
+    private CatAction catAction;
 
     private void Awake()
     {
+        catAction = GetComponent<CatAction>();
+
         catTree = new BehaviorTreeBuilder(gameObject)
             // 공격 트리
             .Selector()
                 .Sequence()
-                    .Condition("isBossAttackInRange", () => CatManager._isBossInAttackRange)
+                    .Condition("isBossAttackInRange", () => catAction._isBossInAttackRange)
                     .Do(() =>
                     {
                         // Debug.Log("Attack!");
                         animator.PlayInFixedTime("Attack");
-                        CatManager._isBossInAttackRange = false;
+                        catAction._isBossInAttackRange = false;
                         return TaskStatus.Success;
                     })
                 .End()
@@ -46,49 +51,44 @@ public class CatBT : MonoBehaviour
                 .Selector()
                     // 보스 감지 트리
                     .Sequence()
-                        .Condition("isBossInRange", () => CatManager._isBossInCatView)
+                        .Condition("isBossInRange", () => catAction._isBossInCatView)
                         .Do(() =>
                         {
                             // Debug.Log("Move To Boss");
                             animator.Play("Run");
-                            CatManager._isBossInCatView = false;
+                            catAction._isBossInCatView = false;
                             return TaskStatus.Success;
                         })
                     .End()
 
                     // 플레이어 트래킹 트리
                     .Sequence()
-                        .Condition("isPlayerInView", () => CatManager._isPlayerInCatView)
+                        .Condition("isPlayerInView", () => catAction._isPlayerInCatView)
                         .Do(() =>
                         {
                             // Debug.Log("Move To Player");
                             animator.Play("Run");
-                            CatManager._isPlayerInCatView = false;
+                            catAction._isPlayerInCatView = false;
                             return TaskStatus.Success;
                         })
                     .End()
 
                     // 플레이어 감지 트리
                     .Sequence()
-                        .Condition("isPlayerInRange", () => CatManager._isPlayerInAttackRange)
+                        .Condition("isPlayerInRange", () => catAction._isPlayerInAttackRange)
                         .Do(() =>
                         {
                             // Debug.Log("Player Near");
                             animator.Play("Idle");
-                            CatManager._isPlayerInAttackRange = false;
+                            catAction._isPlayerInAttackRange = false;
                             return TaskStatus.Success;
                         })
-
-                        // 플레이어 힐 트리
-                        .Sequence()
-                            .Condition("isPlayerAlmostDie", () => /*CombatManager.PlayerHPCheck()*/true)
+                        .Sequence()// 플레이어 힐 트리
+                            .Condition("isPlayerAlmostDie", () => catAction._isPlayerAlmostDie)
                             .Do(() =>
                             {
                                 // Debug.Log("Heal To Player");
-                                animator.Play("Attack");
-                                // CombatManager.Heal();
-                                // CatManager.Instance.coolTime += Time.deltaTime;
-
+                                catAction.Heal();
                                 return TaskStatus.Success;
                             })
                         .End()
@@ -100,8 +100,13 @@ public class CatBT : MonoBehaviour
 
     private void Update()
     {
-        CatManager.Instance.IsBossInRange(boss, gameObject.transform);
-        CatManager.Instance.FollowPlayer(player, gameObject.transform);
+        catAction.IsBossInRange(bossTransform, catTransform);
+        catAction.FollowPlayer(playerTransform, catTransform);
+
+        if (catAction.PlayerHPCheck())
+        {
+            catAction._isPlayerAlmostDie = true;
+        }
 
         catTree.Tick();
     }

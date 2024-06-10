@@ -1136,8 +1136,8 @@ GameObject:
   - component: {fileID: 4609498034922007123}
   - component: {fileID: 2458691640809384041}
   - component: {fileID: 4106195289712404002}
-  - component: {fileID: 2291671120546458638}
   - component: {fileID: 709087072548218683}
+  - component: {fileID: 2291671120546458638}
   m_Layer: 3
   m_Name: Cat
   m_TagString: Untagged
@@ -1211,21 +1211,6 @@ CapsuleCollider:
   m_Height: 2.5262237
   m_Direction: 1
   m_Center: {x: -0.004404515, y: 1.2368882, z: -0.0040535927}
---- !u!114 &2291671120546458638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4764970317103825413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ace163a92c90b94480c61f9c5953f37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  boss: {fileID: 0}
-  animator: {fileID: 2445530091006869069}
 --- !u!114 &709087072548218683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1239,9 +1224,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   catRigidbody: {fileID: 2458691640809384041}
-  player: {fileID: 0}
-  boss: {fileID: 0}
+  playerTransform: {fileID: 0}
+  bossTransform: {fileID: 0}
   coolTime: 0
+--- !u!114 &2291671120546458638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4764970317103825413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ace163a92c90b94480c61f9c5953f37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  catTransform: {fileID: 0}
+  playerTransform: {fileID: 0}
+  bossTransform: {fileID: 0}
+  animator: {fileID: 2445530091006869069}
 --- !u!1 &4867621118930992609
 GameObject:
   m_ObjectHideFlags: 0
