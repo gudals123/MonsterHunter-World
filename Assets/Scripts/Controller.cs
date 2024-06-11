@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-    protected BehaviorTree _tree;
-    protected Animator _animator;
+    protected BehaviorTree tree;
     protected float moveSpeed;
 }
