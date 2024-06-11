@@ -4,35 +4,22 @@ using UnityEngine;
 
 abstract public class Entity : MonoBehaviour
 {
-    enum State
-    {
-        Idle,
-        Move,
-        SetDamage,
-        Dead,
-        Attack,
-        Roll,
-        Fall,
-        Walk,
-        Run,
-        WeaponSheath,
-        Tracking,
-        Sturn,
-        Roar
-    }
-
-    protected int HP;
-    //private State state;
+    protected int maxHp;
+    protected int currentHp;
+    protected int attackDamage;
     protected Vector3 startPosition;
+    protected Rigidbody rigidbody;
 
-    abstract public void Move();
+    abstract public void Move(float moveSpeed);
 
-    abstract public void Attack();
+    abstract public int Attack();
 
-    abstract public void SetDamage();
+    abstract public void SetDamage(int damage);
 
-    virtual public void Detect()
+    virtual public Vector3 Detect(Vector3 targetPos)
     {
+        Vector3 direction = (targetPos - transform.position).normalized;
 
+        return direction;
     }
 }
