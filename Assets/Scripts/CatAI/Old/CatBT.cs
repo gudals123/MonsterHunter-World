@@ -100,7 +100,7 @@ public class CatBT : MonoBehaviour
 
     private void Update()
     {
-        catAction.IsBossInRange(bossTransform, catTransform);
+/*        catAction.IsBossInRange(bossTransform, catTransform);
         catAction.FollowPlayer(playerTransform, catTransform);
 
         if (catAction.PlayerHPCheck())
@@ -109,5 +109,5 @@ public class CatBT : MonoBehaviour
         }
 
         catTree.Tick();
-    }
+*/    }
 }
