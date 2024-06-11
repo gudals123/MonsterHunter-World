@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    public float damage = 50f;
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            CombatManager.Instance.TakeDamage("Boss", damage);
-        }
-    }
+    public int damage = 10;
 
-    
+
+    public int Attack()
+    {
+        return damage;
+    }
+   
 }
