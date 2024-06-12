@@ -6,8 +6,6 @@ abstract public class Entity : MonoBehaviour
 {
     public int maxHp { get; protected set; }
     public int currentHp { get; protected set; }
-    //public int attackDamage { get; protected set; }
-    //public Vector3 startPosition { get; protected set; }
     public Rigidbody rigidbody { get; protected set; }
     public Animator animator { get; protected set; }
 
