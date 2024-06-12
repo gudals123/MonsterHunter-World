@@ -110,7 +110,7 @@ public class PlayerController : Controller
                 if (chargeTime > maxChargeTime)
                 {
                     isCharging = false;
-                    playerState = PlayerState.Idle;
+                    //playerState = PlayerState.Idle;
                     player.ApplyState();
                     greatSword.AttackDamageSet(isRightAttack, chargeTime);
                     chargeTime =0;
@@ -119,7 +119,7 @@ public class PlayerController : Controller
             if (Input.GetMouseButtonUp(0))
             {
                 isCharging = false;
-                playerState = PlayerState.Idle;
+                //playerState = PlayerState.Idle;
                 player.ApplyState();
                 greatSword.AttackDamageSet(isRightAttack, chargeTime);
                 chargeTime = 0;
@@ -133,7 +133,7 @@ public class PlayerController : Controller
             }
             if (Input.GetMouseButtonUp(1))
             {
-                playerState = PlayerState.Idle;
+                //playerState = PlayerState.Idle;
                 player.ApplyState();
             }
 
