@@ -9,8 +9,6 @@ public enum State
     Walk,
     Tracking,
     Attack,
-    NormalAttack,
-    BreathAttack,
     Roar,
     SetDamage,
     Sturn,
@@ -22,7 +20,9 @@ public class AnjanathBTController : Controller
     private bool checkTarget;
     public GameObject Target;    // 고양이 또는 플레이어
     private Anjanath anjanath;
-    private int getOtherAttackDamage;
+    public int getOtherAttackDamage;
+
+    public bool SetDamage;
 
     private void Awake()
     {
@@ -74,12 +74,14 @@ public class AnjanathBTController : Controller
                                 return TaskStatus.Success;
                             })
                     .End()
-                    .Condition("ChanceForWalking", () => anjanath.AnjanathState == State.Idle)
-                    .Do(() =>
-                    {
-                        anjanath.Idle();
-                        return TaskStatus.Success;
-                    })
+                    .Sequence()
+                        .Condition("ChanceForWalking", () => anjanath.AnjanathState == State.Idle)
+                            .Do(() =>
+                            {
+                                anjanath.Idle();
+                                return TaskStatus.Success;
+                            })
+                    .End()
                 .End()
             .End()
             .Build();
@@ -89,7 +91,7 @@ public class AnjanathBTController : Controller
     {
         anjanath.isPlayerInRange(Target.transform, transform);
 
-        if (anjanath.AnjanathState == State.SetDamage)
+        if (SetDamage)   // anjanath.AnjanathState == State.SetDamage
         {
             anjanath.SetDamage(getOtherAttackDamage);
         }

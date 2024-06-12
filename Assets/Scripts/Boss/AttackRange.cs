@@ -15,7 +15,7 @@ public class AttackRange : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            anjanath.AnjanathState = State.Attack;
+            //anjanath.AnjanathState = State.Attack;
             anjanath.SetAttackState();
             int sum = anjanath.Attack();
         }
