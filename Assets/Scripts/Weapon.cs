@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected GameObject _hitEffect;
     protected GameObject hit;
     protected float duration;
-    protected float attackDamage;
+    protected int attackDamage;
 
     protected virtual void Awake()
     {

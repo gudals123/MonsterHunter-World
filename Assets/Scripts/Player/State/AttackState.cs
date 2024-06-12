@@ -6,21 +6,24 @@ public class AttackState : StateMachineBehaviour
 {
     private int comboCount;
     private Animator _animator;
-    private float _maxChargingTime = 2.5f;
+    private PlayerController _playerController;
+    
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _animator = animator.GetComponent<Animator>();
+        _playerController = _animator.GetComponentInParent<PlayerController>();
         _animator.speed = 0.5f;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(Time.time - CombatManager.Instance._chargingStartTime > _maxChargingTime)
+        /*if(Time.time - CombatManager.Instance._chargingStartTime > _maxChargingTime)
         {
             CombatManager.Instance._isCharging = false;
         }
-        if (CombatManager.Instance._isCharging == false)
+        */
+        if (_playerController.isCharging == false)
         {
             _animator.speed = 0.5f;
         }
