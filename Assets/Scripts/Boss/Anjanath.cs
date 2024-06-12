@@ -113,21 +113,34 @@ public class Anjanath : Monster
         Vector3 normalized = (player.position - boss.position).normalized;
         float _isForward = Vector3.Dot(normalized, boss.forward);
 
-/*        // 인지 범위
-        if (distancePtoB <= 18f) _bossPerceptionRange = true;
-        else _bossPerceptionRange = false;
-*/
-        // 시야 범위
-        if (_isForward > 0 && distancePtoB <= 18f && distancePtoB >= 4f)
-        {
-            AnjanathState = State.Tracking;
-        }
-
         // 공격 범위
         if (_isForward > 0 && distancePtoB <= 7f)
         {
-            isPlayerInAttackRange = true;
+            Debug.Log("공격 범위");
+            AnjanathState = State.Attack;
+            SetAttackState();
         }
+
+        // 시야 범위
+        else if (_isForward > 0 && distancePtoB <= 20f)
+        {
+            Debug.Log("시야 범위");
+            AnjanathState = State.Tracking;
+        }
+
+        // 인지 범위
+        else if (distancePtoB <= 18f)
+        {
+            Debug.Log("인지 범위");
+            AnjanathState = State.Walk;
+        }
+
+        else
+        {
+            Debug.Log("아무것도");
+            AnjanathState = State.Idle;
+        }
+
     }
 
 }
