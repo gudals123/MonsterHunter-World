@@ -4,16 +4,18 @@ using UnityEngine;
 
 abstract public class Entity : MonoBehaviour
 {
-    public int maxHp { get; protected set; }
-    public int currentHp { get; protected set; }
-    public Rigidbody rigidbody { get; protected set; }
-    public Animator animator { get; protected set; }
-
+    protected int maxHp;
+    protected int currentHp;
+    //protected int attackDamage;
+    //protected Vector3 startPosition;
+    protected Rigidbody rigidbody;
+    protected Animator animator;
 
     virtual public void Move(float moveSpeed, Vector2 moveInput)
     {
 
     }
+
     virtual public void Move(float moveSpeed, Vector3 targetPos)
     {
 
@@ -21,6 +23,4 @@ abstract public class Entity : MonoBehaviour
     abstract public int Attack();
 
     abstract public void Hit(int damage);
-
-
 }
