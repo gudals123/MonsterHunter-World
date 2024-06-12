@@ -25,10 +25,9 @@ public class Player : Entity
 
     private Entity Taget;
 
-    
-
     public int damage {  get; private set; }
     public bool isArmed {  get; private set; }
+    
 
     void Start()
     {
@@ -46,12 +45,9 @@ public class Player : Entity
         {
             return;
         }
-        if (moveInput == Vector2.zero)
-        {
-            return;
-        }
         else
         {
+            AnimatorControll(playerController.playerState);
             Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
             Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
             Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
@@ -61,6 +57,13 @@ public class Player : Entity
             rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
         }
     }
+
+    public void ApplyState()
+    {
+        AnimatorControll(playerController.playerState);
+    }
+
+
 
     public void GroundCheck()
     {
@@ -89,20 +92,22 @@ public class Player : Entity
         animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
         
     }
-
-
     public void Roll()
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("DoNotDisturb"))
         {
             return;
         }
+        AnimatorControll(playerController.playerState);
+
         Vector3 rollDirection = new Vector3(animator.transform.localRotation.x, 0, animator.transform.localRotation.z);
         rigidbody.velocity = rollDirection + animator.transform.forward * rollPower;
     }
 
+
     public void WeaponSwitch()
     {
+        AnimatorControll(playerController.playerState);
         isArmed = !isArmed;
     }
 
@@ -114,8 +119,7 @@ public class Player : Entity
         return value;
     }
 
-
-    public override void SetDamage(int damage)
+    public override void Hit(int damage)
     {
         if (currentHp <= 0)
         {
@@ -125,20 +129,9 @@ public class Player : Entity
         currentHp -= damage;
 
     }
-    private void knockback(Vector3 playerPos, Vector3 attackColliderPos)
-    {
-        Vector3 direction = playerPos - attackColliderPos;
-        direction = new Vector3(direction.x, 0, direction.z);
-        direction.Normalize();
-        rigidbody.AddForce(direction * knockbackPower, ForceMode.Impulse);
-    }
 
-    private IEnumerator GetHit()
-    {
-        animator.SetBool(PlayerAnimatorParamiter.IsGetHit, true);
-        yield return new WaitForSeconds(0.2f);
-        animator.SetBool(PlayerAnimatorParamiter.IsGetHit, false);
-    }
+
+
 
 
     private void OnTriggerEnter(Collider other)
@@ -157,6 +150,20 @@ public class Player : Entity
             //            Taget = other.GetComponent<Bresssssssss>();
             //            SetDamage(Taget.attackValie);
         }   
+    }
+    private void knockback(Vector3 playerPos, Vector3 attackColliderPos)
+    {
+        Vector3 direction = playerPos - attackColliderPos;
+        direction = new Vector3(direction.x, 0, direction.z);
+        direction.Normalize();
+        rigidbody.AddForce(direction * knockbackPower, ForceMode.Impulse);
+    }
+
+    private IEnumerator GetHit()
+    {
+        animator.SetBool(PlayerAnimatorParamiter.IsGetHit, true);
+        yield return new WaitForSeconds(0.2f);
+        animator.SetBool(PlayerAnimatorParamiter.IsGetHit, false);
     }
 
 }

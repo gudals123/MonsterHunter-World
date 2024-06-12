@@ -137,6 +137,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1955419867365339950, guid: f140e689e2a78d54e828536c733f1d4e,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1994513090600075941, guid: f140e689e2a78d54e828536c733f1d4e,
         type: 3}
       propertyPath: m_Name
@@ -208,7 +213,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
+    - {fileID: 0}
     - {fileID: 1955419867365339950, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
+    - {fileID: 9137739776715067023, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -220,7 +227,31 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2032744764}
+    - targetCorrespondingSourceObject: {fileID: 6737051817905813825, guid: f140e689e2a78d54e828536c733f1d4e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 156762431}
   m_SourcePrefab: {fileID: 100100000, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
+--- !u!1 &156762430 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6737051817905813825, guid: f140e689e2a78d54e828536c733f1d4e,
+    type: 3}
+  m_PrefabInstance: {fileID: 156762429}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &156762431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156762430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d041ffee3b58cbe458c0508ae91ba954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitEffect: {fileID: 3129132353051845892, guid: 49b9e164749f5ab4c81feb376c562ce8,
+    type: 3}
 --- !u!1 &203844586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,6 +1130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraArm: {fileID: 98368798}
+  weaponObj: {fileID: 156762430}
 --- !u!114 &2032744765
 MonoBehaviour:
   m_ObjectHideFlags: 0
