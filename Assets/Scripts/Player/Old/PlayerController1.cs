@@ -176,7 +176,7 @@ public class PlayerController1 : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                CombatManager.Instance._isRightAttak = false;
+                //CombatManager.Instance._isRightAttak = false;
                 isAttacking = true;
             }
             if (Input.GetMouseButtonUp(0))
@@ -185,7 +185,7 @@ public class PlayerController1 : MonoBehaviour
             }
             if (!Input.GetMouseButton(0))
             {
-                CombatManager.Instance._isCharging = false;
+                //CombatManager.Instance._isCharging = false;
             }
             if (Input.GetMouseButtonDown(1))
             {

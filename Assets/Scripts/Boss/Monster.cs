@@ -67,10 +67,23 @@ public class Monster : Entity
     }
     
     public void TrackingPlayer(Transform targetTr)
-    {
-        animator.Play("BattleTracking");
-        // GroundCheck 필요함
-        Move(5, targetTr.position);
+    { 
+        // 현재 애니메이션 상태를 가져옴
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // 공격 애니메이션이 끝났는지 확인
+        if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime < 1.0f)
+        {
+            // 공격 애니메이션이 아직 끝나지 않음
+            return;
+        }
+
+        // 공격 애니메이션이 끝났거나 공격 애니메이션이 아닐 경우 트래킹 시작
+        else
+        {
+            animator.Play("BattleTracking");
+            Move(5, targetTr.position);
+        }
     }
 
 

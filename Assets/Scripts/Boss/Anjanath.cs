@@ -79,12 +79,20 @@ public class Anjanath : Monster
     }
 
     public void StartTracking()
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+    { 
+        // 현재 애니메이션 상태를 가져옴
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // 공격 애니메이션이 끝났는지 확인
+        if (stateInfo.IsName("AttackAnimation") && stateInfo.normalizedTime < 1.0f)
         {
-            TrackingPlayer(playerTr);
+            // 공격 애니메이션이 아직 끝나지 않음
+            return;
         }
-    }
+
+        else
+            TrackingPlayer(playerTr);
+   }
 
 
     public bool SetChance()
