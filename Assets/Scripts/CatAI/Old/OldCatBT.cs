@@ -6,9 +6,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CatBT : MonoBehaviour
+public class OldCatBT : MonoBehaviour
 {
-    [SerializeField] private BehaviorTree catTree;
+    [SerializeField] private CleverCrow.Fluid.BTs.Trees.BehaviorTree catTree;
     [SerializeField] private Transform catTransform;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform bossTransform;

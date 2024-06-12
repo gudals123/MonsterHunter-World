@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class BehaviourTreeBuildersExtension1
+public static class BehaviourTreeBuildersExtension
 {
 
-    public static BehaviorTreeBuilder AgentDestination1(this BehaviorTreeBuilder builder, string name, Transform target)
+    public static BehaviorTreeBuilder AgentDestination(this BehaviorTreeBuilder builder, string name, Transform target)
     {
         return builder.AddNode(new AgentDestination
         {

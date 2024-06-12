@@ -6,20 +6,22 @@ abstract public class Entity : MonoBehaviour
 {
     protected int maxHp;
     protected int currentHp;
-    protected int attackDamage;
-    protected Vector3 startPosition;
+    //protected int attackDamage;
+    //protected Vector3 startPosition;
     protected Rigidbody rigidbody;
+    protected Animator animator;
 
-    abstract public void Move(float moveSpeed);
+    virtual public void Move(float moveSpeed, Vector2 moveInput)
+    {
+
+    }
+
+    virtual public void Move(float moveSpeed, Vector3 targetPos)
+    {
+
+    }
 
     abstract public int Attack();
 
-    abstract public void SetDamage(int damage);
-
-    virtual public Vector3 Detect(Vector3 targetPos)
-    {
-        Vector3 direction = (targetPos - transform.position).normalized;
-
-        return direction;
-    }
+    abstract public void Hit(int damage);
 }

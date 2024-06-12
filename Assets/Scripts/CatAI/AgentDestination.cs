@@ -3,7 +3,7 @@ using CleverCrow.Fluid.BTs.Tasks.Actions;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AgentDestination1 : ActionBase
+public class AgentDestination : ActionBase
 {
     private Animator _catAnimator;
     public Transform target;

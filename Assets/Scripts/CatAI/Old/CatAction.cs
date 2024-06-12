@@ -35,6 +35,7 @@ public class CatAction : MonoBehaviour
 
         Vector3 normalized = (boss.position - cat.position).normalized;
 
+        // 보스가 감지범위에 들어오고 어택범위엔 들어오지 않았을 때
         if (distanceCatToBoss <= distanceCanDetect && distanceCatToBoss >= distanceCanAttack)
         {
             _isBossInCatView = true;
@@ -44,6 +45,7 @@ public class CatAction : MonoBehaviour
         }
         else _isBossInCatView = false;
 
+        // 보스가 어택범위 안에 들어왔을 때
         if (distanceCatToBoss <= distanceCanAttack)
         {
             _isBossInAttackRange = true;
@@ -54,10 +56,11 @@ public class CatAction : MonoBehaviour
 
     public void FollowPlayer(Transform player, Transform cat)
     {
-        distanceCatToPlayer = Vector3.Distance(player.position, cat.position);
+        //distanceCatToPlayer = Vector3.Distance(player.position, cat.position);
 
         normalized = (player.position - cat.position).normalized;
 
+        // 보스가 감지범위와 어택범위 내에 없고, 플레이어가 감지범위에 들어왔을 때
         if (!_isBossInCatView && !_isBossInAttackRange && distanceCatToPlayer >= distanceCanAttack)
         {
             _isPlayerInAttackRange = false;
@@ -67,6 +70,7 @@ public class CatAction : MonoBehaviour
         }
         else _isPlayerInAttackRange = true;
 
+        // 플레이어가 어택범위에 들어왔을 때
         if (distanceCatToPlayer <= distanceCanAttack)
         {
             _isPlayerInCatView = false;
