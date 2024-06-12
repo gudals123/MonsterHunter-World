@@ -11,7 +11,7 @@ public class Anjanath : Monster
     private float distancePtoB;
 
     protected bool checkTarget;
-    protected Transform targetTr;    // °í¾çÀÌ ¶Ç´Â ÇÃ·¹ÀÌ¾î
+    protected Transform targetTr;    // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½
     public int getOtherAttackDamage;
 
     public bool startNormalAttaking;
@@ -51,7 +51,7 @@ public class Anjanath : Monster
     public override void Hit(int damage)
     {
         base.Hit(damage);
-        // targetTr = ¶§¸° »ó´ë·Î ¼³Á¤
+        // targetTr = ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         if(currentHp <= 0)
         {
@@ -131,14 +131,14 @@ public class Anjanath : Monster
         Vector3 normalized = (playerTr.position - transform.position).normalized;
         float _isForward = Vector3.Dot(normalized, transform.forward);
 
-        // °ø°Ý ¹üÀ§
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (_isForward > 0 && distancePtoB <= 15f)
         {
             anjanathBT.anjanathState = State.Attack;
             SetAttackState();
         }
 
-        // ½Ã¾ß ¹üÀ§
+        // ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½
         else if (_isForward > 0 && distancePtoB <= 40f)
         {
             DetectPlayer();
@@ -176,11 +176,11 @@ public class Anjanath : Monster
     {
         if (gameObject != null)
         {
-            // °ø°Ý ¹üÀ§ (15f)
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (15f)
             Gizmos.color = anjanathBT.anjanathState == State.Attack ? Color.red : Color.green;
             Gizmos.DrawWireSphere(transform.position, 15f);
 
-            // ½Ã¾ß ¹üÀ§ / ÀÎÁö ¹üÀ§ (40f)
+            // ï¿½Ã¾ï¿½ ï¿½ï¿½ï¿½ï¿½ / ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (40f)
             Gizmos.color = anjanathBT.anjanathState == State.Tracking? Color.yellow : Color.blue; ;
             Gizmos.DrawWireSphere(transform.position, 40f);
         }

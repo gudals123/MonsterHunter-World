@@ -49,7 +49,7 @@ public class Monster : Entity
 
     public void Dead()
     {
-        transform.GetChild(0).GetChild(0).gameObject.SetActive(false);  // ¸Þ½¬¸¦ Á¦¿ÜÇÑ ÀÚ½Ä ¿ÀºêÁ§Æ® ¸ðµÎ ²û
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(false);  // ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ ï¿½ï¿½
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
 
@@ -62,23 +62,23 @@ public class Monster : Entity
     virtual public void NormalMoving(float moveSpeed)
     {
         animator.Play("NormalWalking");
-        // GroundCheck ÇÊ¿ä
+        // GroundCheck ï¿½Ê¿ï¿½
         Move(moveSpeed, targetPos);
     }
     
     public void TrackingPlayer(Transform targetTr)
     { 
-        // ÇöÀç ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂ¸¦ °¡Á®¿È
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // °ø°Ý ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³¡³µ´ÂÁö È®ÀÎ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime < 1.0f)
         {
-            // °ø°Ý ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾ÆÁ÷ ³¡³ªÁö ¾ÊÀ½
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             return;
         }
 
-        // °ø°Ý ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³¡³µ°Å³ª °ø°Ý ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾Æ´Ò °æ¿ì Æ®·¡Å· ½ÃÀÛ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½Å· ï¿½ï¿½ï¿½ï¿½
         else
         {
             animator.Play("BattleTracking");
