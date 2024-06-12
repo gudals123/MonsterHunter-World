@@ -1,128 +1,150 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.Playables;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Controller
 {
-    [Header("Speed / Fower")]
-    private float moveSpeed;
-    [SerializeField] private float walkSpeed = 4f;
-    [SerializeField] private float runSpeed = 7f;
-    private float knockbackPower = 2.5f;
-
-    [Header("Component")]
-    private Rigidbody _rigidbody;
-    private Animator _animator;
-    
-
-    [Header("State bool")]
-    private bool isMoveing = false;
-    private bool isWalk = false;
-    private bool isRun = false;
-    private bool isDead = false;
-    private bool isGrounded = false;
-    private bool isArmed = false;
-    private bool isRoll = false;
-    private bool isAttacking = false;
-
-    private bool isGetHit = false;
-
-
-    [Header("Object")]
-    [SerializeField] private Transform _characterBody;
-    [SerializeField] private Transform _cameraArm;
-
-    [Header("GroundCheck")]
-    [SerializeField] private float groundcheckDistance;
-    [SerializeField] protected LayerMask whatIsGround;
-
-
-
-
-    private void Awake()
+    public enum PlayerState
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        Idle,
+        GetHit,
+        Dead,
+        Attack,
+        Roll,
+        Fall,
+        Walk,
+        Run,
+        WeaponSheath
+    }
+
+    private Player player;
+    private GreatSword greatSword;
+    private float walkSpeed = 4f;
+    private float runSpeed = 7f;
+
+    [SerializeField] private Transform cameraArm;
+    [SerializeField] private GameObject weaponObj;
+
+    //Pet pet
+    public bool isRightAttack { get; private set; }
+    public bool isRoll { get; private set; }
+    public bool isCharging { get; set; }
+
+
+    private float chargeTime = 0f;
+    private float maxChargeTime = 3f;
+
+    public PlayerState playerState { get; private set; }
+
+    public void Start()
+    {
+        player = GetComponent<Player>();
+        greatSword = weaponObj.GetComponent<GreatSword>();
+        playerState = PlayerState.Idle;
         moveSpeed = walkSpeed;
-        _animator = _characterBody.GetComponent<Animator>();
+        isRoll = false;
     }
 
 
-    private void FixedUpdate()
+    public void Update()
     {
-        if(isDead)
-        {
-            return;
-        }
-
-        Move();
-    }
-
-    void Update()
-    {
-        if(!isDead)
-        {
-            HandleInput();
-            GroundCheck();
-        }
-        AnimatorControll();
+        InputSend();
+        player.GroundCheck();
         LookAround();
     }
 
-    private void GroundCheck()
+    public void InputSend()
     {
-        if (Physics.Raycast(transform.position, Vector2.down, groundcheckDistance, whatIsGround))
-        {
-            isGrounded = true;
-        }
-        else
-        {
-            isGrounded = false;
-        }
-    }
 
-    private void DeadCheck()
-    {
-        if (CombatManager.Instance._isPlayerDead)
-        {
-            isDead = true;
-        }
-    }
-
-    private void Move()
-    {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Don'tMove"))
-        {
-            return;
-        }
 
-        if (moveInput == Vector2.zero)
+        //±¸¸£±â
+        if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
-            isMoveing = false;
-            isWalk = false;
-            return;
+            isRoll = true;
+            playerState = PlayerState.Roll;
+            player.Roll();
         }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            isRoll = false;
+        }
+        //¹«±â ½ºÀ§Ä¡
+        else if ((player.isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
+            (!player.isArmed && Input.GetMouseButtonDown(0)))
+        {
+            playerState = PlayerState.WeaponSheath;
+            player.WeaponSwitch();
+        }
+        //´Þ¸®±â
+        else if (moveInput != Vector2.zero && Input.GetKey(KeyCode.LeftShift) && !player.isArmed
+            && player.animator.GetBool(PlayerAnimatorParamiter.IsSwitchDone))
+        {
+            playerState = PlayerState.Run;
+            moveSpeed = runSpeed;
+            player.Move(moveSpeed, moveInput);
+        }
+        //°È±â
+        else if (moveInput != Vector2.zero)
+        {
+            playerState = PlayerState.Walk;
+            moveSpeed = walkSpeed;
+            player.Move(moveSpeed, moveInput);
+        }
+        //Á¤Áö
         else
         {
-            isMoveing = true;
-            isWalk = true;
-
-            Vector3 lookForward = new Vector3(_cameraArm.forward.x, 0f, _cameraArm.forward.z).normalized;
-            Vector3 lookRight = new Vector3(_cameraArm.right.x, 0f, _cameraArm.right.z).normalized;
-            Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
-
-            _characterBody.forward = moveDir;
-
-            _rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
+            playerState = PlayerState.Idle;
+            player.ApplyState();
         }
+        if (player.isArmed)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                playerState = PlayerState.Attack;
+                isRightAttack = false;
+                player.ApplyState();
+                chargeTime += Time.deltaTime;
+                if (chargeTime > maxChargeTime)
+                {
+                    isCharging = false;
+                    //playerState = PlayerState.Idle;
+                    player.ApplyState();
+                    greatSword.AttackDamageSet(isRightAttack, chargeTime);
+                    chargeTime =0;
+                }
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                isCharging = false;
+                //playerState = PlayerState.Idle;
+                player.ApplyState();
+                greatSword.AttackDamageSet(isRightAttack, chargeTime);
+                chargeTime = 0;
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                isRightAttack = true;
+                playerState = PlayerState.Attack;
+                player.ApplyState();
+                greatSword.AttackDamageSet(isRightAttack, chargeTime);
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                //playerState = PlayerState.Idle;
+                player.ApplyState();
+            }
+
+        }
+
     }
 
     private void LookAround()
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        Vector3 camAngle = _cameraArm.rotation.eulerAngles;
+        Vector3 camAngle = cameraArm.rotation.eulerAngles;
 
         float x = camAngle.x - mouseDelta.y;
 
@@ -135,114 +157,6 @@ public class PlayerController : MonoBehaviour
             x = Mathf.Clamp(x, 335, 361);
         }
 
-        _cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
     }
-   
-
-    private void HandleInput()
-    {
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-        if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
-        {
-            isRoll = true;
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            isRoll = false;
-        }
-
-        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½
-        if ((isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
-            (!isArmed && Input.GetMouseButtonDown(0)))
-        {
-            isArmed = !isArmed;
-        }
-
-        //ï¿½Þ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-        if (!isArmed && Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            moveSpeed = runSpeed;
-            isRun = true;
-        }
-        else if (!isArmed && Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            moveSpeed = walkSpeed;
-            isRun = false;
-        }
-
-        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-        if (isArmed)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                CombatManager.Instance._isRightAttak = false;
-                isAttacking = true;
-            }
-            if (Input.GetMouseButtonUp(0))
-            {
-                isAttacking = false;
-            }
-            if (!Input.GetMouseButton(0))
-            {
-                CombatManager.Instance._isCharging = false;
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                CombatManager.Instance._isRightAttak = true;
-                isAttacking = true;
-            }
-            if (Input.GetMouseButtonUp(1))
-            {
-                isAttacking = false;
-            }
-        }
-
-    }
-
-    private void AnimatorControll()
-    {
-        _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
-        _animator.SetBool(PlayerAnimatorParamiter.IsMoveing, isMoveing);
-        _animator.SetBool(PlayerAnimatorParamiter.IsWalk, isWalk);
-        _animator.SetBool(PlayerAnimatorParamiter.IsDead, isDead);
-        _animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
-        _animator.SetBool(PlayerAnimatorParamiter.IsRoll, isRoll);
-        _animator.SetBool(PlayerAnimatorParamiter.IsRun, isRun);
-        _animator.SetBool(PlayerAnimatorParamiter.IsGetHit, isGetHit);
-        _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
-        _animator.SetBool(PlayerAnimatorParamiter.IsAttacking, isAttacking);
-        _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, CombatManager.Instance._isRightAttak);
-        
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("BossAttack"))
-        {
-            DeadCheck();
-            if(!isDead)
-            {
-                knockback(transform.position, other.transform.position);
-                StartCoroutine(GetHit());
-            }
-            
-        }
-    }
-
-    private void knockback(Vector3 playerPos, Vector3 attackColliderPos)
-    {
-        Vector3 direction = playerPos - attackColliderPos;
-        direction = new Vector3(direction.x, 0 , direction.z);
-        direction.Normalize();
-        _rigidbody.AddForce(direction * knockbackPower, ForceMode.Impulse);
-    }
-
-    private IEnumerator GetHit()
-    {
-        isGetHit = true;
-        yield return new WaitForSeconds( 0.2f); 
-        isGetHit = false;
-    }
-
-
 }

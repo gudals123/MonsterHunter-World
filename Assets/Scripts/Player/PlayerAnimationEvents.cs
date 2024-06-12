@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerController;
 
 public class PlayerAnimationEvents : MonoBehaviour
 {
@@ -35,8 +36,11 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void AnimationPause()
     {
-        GetComponent<Animator>().speed = 0.01f;
-        CombatManager.Instance._isCharging = true;
+        if(_playerController.playerState == PlayerState.Attack)
+        {
+            GetComponent<Animator>().speed = 0.01f;
+        }
+        _playerController.isCharging = true;
     }
 
     public void AttackRangeCollierTurnOn()
