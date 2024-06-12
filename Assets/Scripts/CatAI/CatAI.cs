@@ -11,17 +11,12 @@ public class CatAI : Entity
         throw new System.NotImplementedException();
     }
 
-    public override Vector3 Detect(Vector3 targetPos)
-    {
-        return base.Detect(targetPos);
-    }
-
     public override void Move(float moveSpeed, Vector3 targetPos)
     {
         base.Move(moveSpeed, targetPos);
     }
 
-    public override void SetDamage(int damage)
+    public override void Hit(int damage)
     {
         throw new System.NotImplementedException();
     }

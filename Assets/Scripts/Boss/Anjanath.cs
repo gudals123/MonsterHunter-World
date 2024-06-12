@@ -4,69 +4,54 @@ using UnityEngine;
 
 public class Anjanath : Monster
 {
-    public State AnjanathState;
-    public Vector3 targetObjectPos;
+    public AnjanathBT anjanathBT;
+
     public int DamageStack;
+    public Transform playerTr;
+    private float distancePtoB;
+
+    protected bool checkTarget;
+    protected Transform targetTr;    // 고양이 또는 플레이어
+    public int getOtherAttackDamage;
 
     public bool startNormalAttaking;
     public bool startBreathAttaking;
 
-    public bool isPlayerInAttackRange;
-    public bool isPlayerInVisualRange;
-
-    public float distancePtoB { get; private set; }
-    public bool _bossAttackRange { get; private set; }
-    public bool _bossVisualRange { get; private set; }
-    public bool _bossPerceptionRange { get; private set; }
-    public float _playerAttackDamege { get; private set; }
-
+    public float perceptionTime = 0;
+    public bool isBossRecognized;
 
 
     private void Awake()
     {
+        anjanathBT.anjanathState = State.Idle;
+
+        anjanathBT = GetComponent<AnjanathBT>();
         grade = 1;
         maxHp = 2000;
         currentHp = maxHp;
         rigidbody = GetComponent<Rigidbody>();
-        startPosition = rigidbody.position;
         rotationSpeed = 100;
         setHit = false;
         animator = GetComponentInChildren<Animator>();
-    }
-
-    public void SetAttackState()
-    {
-        if (currentHp <= 600 && SetChance())
-        {
-            Debug.Log("Breath@@@@@@@@@@@");
-            startBreathAttaking = true;
-            startNormalAttaking = false;
-        }
-        else
-        {
-            Debug.Log("Normal###########");
-            startBreathAttaking = false;
-            startNormalAttaking = true;
-        }
+        Idle();
     }
 
     public void BreathAttacking()
     {
-        attackDamage = 5;
+        //attackDamage = 5;
         animator.Play("BreathAttack");
     }
 
     public void NormalAttacking()
     {
-        attackDamage = 10;
+        //attackDamage = 10;
         animator.Play("NormalAttack");
     }
 
-    public override void SetDamage(int damage)
+    public override void Hit(int damage)
     {
-        AnjanathState = State.SetDamage;
-
-        base.SetDamage(damage);
+        base.Hit(damage);
+        // targetTr = 때린 상대로 설정
 
         if(currentHp <= 0)
         {
@@ -93,54 +78,115 @@ public class Anjanath : Monster
         canAttack = true;
     }
 
+    public void StartTracking()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        {
+            TrackingPlayer(playerTr);
+        }
+    }
+
+
     public bool SetChance()
     {
-        return Random.Range(0f, 1.0f) <= 0.5f? true: false;
+        return Random.Range(0f, 1.0f) <= 0.5f ? true : false;
     }
 
-
-    public void TrackingPlayer()
+    public void SetAttackState()
     {
-        animator.Play("BattleTracking");
-        // GroundCheck 필요함
-        Move(5, targetObjectPos);
+        isBossRecognized = true;
+
+        if (currentHp <= 600 && SetChance())
+        {
+            startBreathAttaking = true;
+            startNormalAttaking = false;
+        }
+        else
+        {
+            startBreathAttaking = false;
+            startNormalAttaking = true;
+        }
     }
 
-    public void isPlayerInRange(Transform player, Transform boss)
+    public void DetectPlayer()
     {
-        distancePtoB = Vector3.Distance(player.position, boss.position);
+        if (isBossRecognized)
+        {
+            anjanathBT.anjanathState = State.Tracking;
+        }
 
-        Vector3 normalized = (player.position - boss.position).normalized;
-        float _isForward = Vector3.Dot(normalized, boss.forward);
+        else if (!isBossRecognized)
+        {
+            perceptionTime += Time.deltaTime;
+            if(perceptionTime >= 2f)
+            {
+                perceptionTime = 0;
+                isBossRecognized = true;
+                targetTr = playerTr;
+            }
+        }
+    }
+
+    public void IsPlayerInRange(Transform target)
+    {
+        distancePtoB = Vector3.Distance(playerTr.position, transform.position);
+
+        Vector3 normalized = (playerTr.position - transform.position).normalized;
+        float _isForward = Vector3.Dot(normalized, transform.forward);
 
         // 공격 범위
-        if (_isForward > 0 && distancePtoB <= 7f)
+        if (_isForward > 0 && distancePtoB <= 15f)
         {
-            Debug.Log("공격 범위");
-            AnjanathState = State.Attack;
+            anjanathBT.anjanathState = State.Attack;
             SetAttackState();
         }
 
         // 시야 범위
-        else if (_isForward > 0 && distancePtoB <= 20f)
+        else if (_isForward > 0 && distancePtoB <= 40f)
         {
-            Debug.Log("시야 범위");
-            AnjanathState = State.Tracking;
+            DetectPlayer();
         }
 
-        // 인지 범위
-        else if (distancePtoB <= 18f)
+        else if (isBossRecognized && distancePtoB <= 40f)
         {
-            Debug.Log("인지 범위");
-            AnjanathState = State.Walk;
+            anjanathBT.anjanathState = State.Tracking;
         }
 
         else
         {
-            Debug.Log("아무것도");
-            AnjanathState = State.Idle;
-        }
+            if (isBossRecognized)
+            {
+                perceptionTime += Time.deltaTime;
+                if (perceptionTime >= 2f)
+                {
+                    perceptionTime = 0;
+                    isBossRecognized = false;
+                }
+            }
 
+            else
+            {
+                Debug.Log("!@#$%^&*%$#@!#$%^");
+                if (SetChance())
+                    anjanathBT.anjanathState = State.Walk;
+                else
+                    anjanathBT.anjanathState = State.Idle;
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (gameObject != null)
+        {
+            // 공격 범위 (15f)
+            Gizmos.color = anjanathBT.anjanathState == State.Attack ? Color.red : Color.green;
+            Gizmos.DrawWireSphere(transform.position, 15f);
+
+            // 시야 범위 / 인지 범위 (40f)
+            Gizmos.color = anjanathBT.anjanathState == State.Tracking? Color.yellow : Color.blue; ;
+            Gizmos.DrawWireSphere(transform.position, 40f);
+        }
     }
 
 }

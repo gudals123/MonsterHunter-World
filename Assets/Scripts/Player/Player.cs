@@ -115,7 +115,7 @@ public class Player : Entity
     }
 
 
-    public override void SetDamage(int damage)
+    public override void Hit(int damage)
     {
         if (currentHp <= 0)
         {

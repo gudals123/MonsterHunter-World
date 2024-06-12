@@ -211,7 +211,7 @@ public class PlayerController1 : MonoBehaviour
         _animator.SetBool(PlayerAnimatorParamiter.IsGetHit, isGetHit);
         _animator.SetBool(PlayerAnimatorParamiter.IsGrounded, isGrounded);
         _animator.SetBool(PlayerAnimatorParamiter.IsAttacking, isAttacking);
-        _animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, CombatManager.Instance._isRightAttak);
+        //_animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, CombatManager.Instance._isRightAttak);
         
     }
 

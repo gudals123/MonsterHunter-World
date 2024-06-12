@@ -24,8 +24,7 @@ public class AttackRange : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            anjanath.isPlayerInAttackRange = false;
-            anjanath.AnjanathState = State.Tracking;
+            //anjanath.AnjanathState = State.Tracking;
         }
     }
 

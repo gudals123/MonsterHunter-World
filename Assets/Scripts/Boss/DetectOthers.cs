@@ -15,8 +15,8 @@ public class DetectOthers : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            anjanath.AnjanathState = State.Tracking;
-            anjanath.targetObjectPos = other.transform.position;
+            //anjanath.AnjanathState = State.Tracking;
+            //anjanath.targetObjectTr = other.transform;
         }
     }
 
@@ -24,7 +24,7 @@ public class DetectOthers : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            anjanath.AnjanathState = State.Walk;
+            //anjanath.AnjanathState = State.Walk;
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class Monster : Entity
 {
-    protected int grade;
+    public int grade { get; set; }
     protected Vector3 targetPos;
     protected int rotationSpeed;
     protected bool canAttack;
@@ -15,15 +15,16 @@ public class Monster : Entity
     {
         setHit = true;
         setHit = false;
-        return attackDamage;
+        return 1;
     }
 
     public override void Move(float moveSpeed, Vector3 targetPos)
     {
-        Quaternion targetRotation = Quaternion.LookRotation(targetPos);
+        Vector3 direction = (targetPos - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
         Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         rigidbody.MoveRotation(rotation);
-        rigidbody.MovePosition(transform.position + targetPos * moveSpeed * 0.1f * Time.fixedDeltaTime);
+        rigidbody.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
     }
 
     public Vector3 SetRandomPos()
@@ -33,7 +34,7 @@ public class Monster : Entity
         return new Vector3(targetX, transform.position.y, targetZ);
     }
 
-    public override void SetDamage(int damage)
+    public override void Hit(int damage)
     {
         currentHp -= damage;
     }
@@ -58,13 +59,19 @@ public class Monster : Entity
         targetPos = SetRandomPos();
     }
 
-    virtual public void NomalMoving()
+    virtual public void NormalMoving(float moveSpeed)
     {
-        animator.Play("NomalWalking");
+        animator.Play("NormalWalking");
         // GroundCheck 필요
-        Move(1, targetPos);
+        Move(moveSpeed, targetPos);
     }
-
+    
+    public void TrackingPlayer(Transform targetTr)
+    {
+        animator.Play("BattleTracking");
+        // GroundCheck 필요함
+        Move(5, targetTr.position);
+    }
 
 
 }
