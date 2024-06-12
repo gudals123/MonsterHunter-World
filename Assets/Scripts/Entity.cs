@@ -6,8 +6,6 @@ abstract public class Entity : MonoBehaviour
 {
     public int maxHp { get; protected set; }
     public int currentHp { get; protected set; }
-    public int attackDamage { get; protected set; }
-    public Vector3 startPosition { get; protected set; }
     public Rigidbody rigidbody { get; protected set; }
     public Animator animator { get; protected set; }
 
@@ -22,12 +20,7 @@ abstract public class Entity : MonoBehaviour
     }
     abstract public int Attack();
 
-    abstract public void SetDamage(int damage);
+    abstract public void Hit(int damage);
 
-    virtual public Vector3 Detect(Vector3 targetPos)
-    {
-        Vector3 direction = (targetPos - transform.position).normalized;
 
-        return direction;
-    }
 }
