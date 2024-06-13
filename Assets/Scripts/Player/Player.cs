@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -131,6 +132,12 @@ public class Player : Entity
         }
         currentHp -= damage;
 
+    }
+
+    public void Heal(int healingAmount)
+    {
+        currentHp += healingAmount;
+        currentHp = Math.Clamp(currentHp , 0 , maxHp);
     }
 
 
