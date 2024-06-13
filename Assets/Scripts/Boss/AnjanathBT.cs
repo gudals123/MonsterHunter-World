@@ -56,7 +56,7 @@ public class AnjanathBT : BossBehaviorTree
                         .Condition("ChanceForWalking", () => anjanathState == State.Walk)
                             .Do("NomalWalking", () =>
                             {
-                                anjanath.NormalMoving(3);
+                                anjanath.NormalMoving(2);
                                 return TaskStatus.Success;
                             })
                     .End()

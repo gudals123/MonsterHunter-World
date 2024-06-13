@@ -8,30 +8,30 @@ public class Anjanath : Monster
 
     public int DamageStack;
     public Transform playerTr;
+    public Transform attackTr;
     private float distancePtoB;
-
-    protected bool checkTarget;
-    protected Transform targetTr;
+    private float distanceTtoB;
+    public bool isBossRecognized;
+    public Transform targetTr;
     public int getOtherAttackDamage;
 
     public bool startNormalAttaking;
     public bool startBreathAttaking;
 
     public float perceptionTime = 0;
-    public bool isBossRecognized;
 
     private void Awake()
     {
         anjanathBT.anjanathState = State.Idle;
-
+        targetTr = playerTr;
         anjanathBT = GetComponent<AnjanathBT>();
+        animator = GetComponentInChildren<Animator>();
+        rigidbody = GetComponent<Rigidbody>();
         grade = 1;
         maxHp = 2000;
         currentHp = maxHp;
-        rigidbody = GetComponent<Rigidbody>();
         rotationSpeed = 100;
         setHit = false;
-        animator = GetComponentInChildren<Animator>();
         Idle();
     }
 
@@ -88,7 +88,9 @@ public class Anjanath : Monster
 
     public void SetAttackState()
     {
+        anjanathBT.anjanathState = State.Attack;
         isBossRecognized = true;
+        perceptionTime = 0;
 
         if (currentHp <= 600 && SetChance())
         {
@@ -121,50 +123,48 @@ public class Anjanath : Monster
         }
     }
 
-    public void IsPlayerInRange(Transform target)
+    public void IsPlayerInRange()
     {
         distancePtoB = Vector3.Distance(playerTr.position, transform.position);
+        distanceTtoB = Vector3.Distance(targetTr.position, transform.position);
 
-        Vector3 normalized = (playerTr.position - transform.position).normalized;
-        float _isForward = Vector3.Dot(normalized, transform.forward);
+        // Raycast에 닿으면 공격
+        Debug.DrawRay(attackTr.position, transform.forward * 5f, Color.yellow);
+        RaycastHit hit;
 
-        // 공격 범위
-        if (_isForward > 0 && distancePtoB <= 10f)
+        if (Physics.Raycast(attackTr.position, transform.forward, out hit, 5f) && isBossRecognized)
         {
-            anjanathBT.anjanathState = State.Attack;
-            SetAttackState();
+            if(hit.collider.gameObject.name == targetTr.gameObject.name)
+            {
+                SetAttackState();
+            }
         }
 
-        // 인식 범위
-        else if (_isForward > 0 && distancePtoB <= 17f)
+        else if(isBossRecognized && distancePtoB >= 11)
         {
-            DetectPlayer();
+            perceptionTime += Time.deltaTime;
+
+            if (perceptionTime >= 20f)
+            {
+                isBossRecognized = false;
+                perceptionTime = 0;
+            }
         }
 
-        else if (isBossRecognized && distancePtoB <= 17f)
+        // 인식 범위 - capsule Collider 닿으면 인식
+        else if (isBossRecognized)
         {
             anjanathBT.anjanathState = State.Tracking;
         }
 
-        else
+        else if (!isBossRecognized)
         {
-            if (isBossRecognized)
-            {
-                perceptionTime += Time.deltaTime;
-                if (perceptionTime >= 2f)
-                {
-                    perceptionTime = 0;
-                    isBossRecognized = false;
-                }
-            }
+            if (SetChance())
+                anjanathBT.anjanathState = State.Walk;
 
             else
-            {
-                if (SetChance())
-                    anjanathBT.anjanathState = State.Walk;
-                else
-                    anjanathBT.anjanathState = State.Idle;
-            }
+                anjanathBT.anjanathState = State.Idle;
+
         }
     }
 
@@ -173,10 +173,31 @@ public class Anjanath : Monster
         if (gameObject != null)
         {
             Gizmos.color = anjanathBT.anjanathState == State.Attack ? Color.red : Color.green;
-            Gizmos.DrawWireSphere(transform.position, 10f);
-
+            Gizmos.DrawWireSphere(transform.position, 5f);
             Gizmos.color = anjanathBT.anjanathState == State.Tracking? Color.yellow : Color.blue; ;
-            Gizmos.DrawWireSphere(transform.position, 17f);
+            Gizmos.DrawWireSphere(transform.position, 12f);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (isBossRecognized)
+        {
+            anjanathBT.anjanathState = State.Tracking;
+        }
+
+        else if (!isBossRecognized)
+        {
+            perceptionTime += Time.deltaTime;
+            if (perceptionTime >= 2f)
+            {
+                perceptionTime = 0;
+                if (other.CompareTag("Player"))
+                {
+                    isBossRecognized = true;
+                    targetTr = playerTr;
+                }
+            }
         }
     }
 
