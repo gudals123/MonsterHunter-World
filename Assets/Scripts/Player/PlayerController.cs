@@ -61,8 +61,8 @@ public class PlayerController : Controller
         moveSpeed = walkSpeed;
         isRoll = false;
         potion = new Item_Potion(player, 10, 10);
-        catAttack = new Skill_CatAttack(player, cat);
-        catHeal = new Skill_CatHeal(player, cat);
+        catAttack = new Skill_CatAttack(cat);
+        catHeal = new Skill_CatHeal(cat);
         QuickSlot = new Slot[4];
         QuickSlot[0] = potion;
         QuickSlot[1] = catAttack;
@@ -200,7 +200,7 @@ public class PlayerController : Controller
         {
             quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
         }
-        Debug.Log($"ÇöÀç Äü½½·Ô Index{quickSlotIndex}");
+        //Debug.Log($"ÇöÀç Äü½½·Ô Index{quickSlotIndex}");
     }
 
 
