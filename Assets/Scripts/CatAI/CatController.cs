@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
+using Unity.VisualScripting;
 
 public class CatController : AIController
 {
@@ -18,7 +19,7 @@ public class CatController : AIController
         Skill
     }
 
-    private int attackPriority;
+    private Transform attackPriority;
     public CatState catState;
 
     //private AIController catTree;
@@ -30,8 +31,17 @@ public class CatController : AIController
     public bool isBoss;
 
     [Header("Range Info")]
-    private float detectRange;
-    private float interactionRange;
+    //[SerializeField] private Collider collider;
+    public float detectRange;
+    public float interactionRange;
+    public Vector3 dir;
+
+    private void Start()
+    {
+        catState = CatState.Tracking;
+        detectRange = 8f;
+        interactionRange = 1.5f;
+    }
 
     public Vector3 Detect(Vector3 targetPos)
     {
@@ -40,31 +50,58 @@ public class CatController : AIController
         return direction;
     }
 
-    public void Tracking(Transform target)
+    public void Tracking(Transform target) // 상태만 변경
     {
-        Vector3 dir = Detect(target.position);
-
-        // 보스가 감지범위 내에 있을 때
-        if (target.CompareTag("Boss") && dir.magnitude <= detectRange)
+        //// 보스가 감지범위 내에 있을 때
+        //if (target.CompareTag("Boss") && dir.magnitude <= detectRange /*&& dir.magnitude > interactionRange*/)
+        //{
+        //    catState = CatState.Detect;
+        //    isPlayer = false;
+        //    isBoss = true;
+        //    //target = boss;
+        //}
+        //// 보스가 상호작용범위 내에 있을 때
+        //if (target.CompareTag("Boss") && dir.magnitude <= interactionRange)
+        //{
+        //    catState = CatState.Attack;
+        //    isPlayer = false;
+        //    isBoss = true;
+        //    //target = boss;
+        //}
+        // 플레이어가 감지범위 내에 있을 때
+        if (target.CompareTag("Player") /*&& dir.magnitude <= detectRange*//*&& dir.magnitude > interactionRange*/)
         {
-            Debug.Log("Boss, dir.magnitude <= detectRange");
-            transform.position += dir;
-        }
-        // 보스가 상호작용범위 내에 있을 때
-        if (target.CompareTag("Boss") && dir.magnitude <= interactionRange)
-        {
-            Debug.Log("Boss, dir.magnitude <= interactionRange");
+            catState = CatState.Detect;
+            isPlayer = true;
+            //target = player;
         }
         // 플레이어가 상호작용범위 내에 있을 때
         if (target.CompareTag("Player") && dir.magnitude <= interactionRange)
         {
-            Debug.Log("Player, dir.magnitude <= interactionRange");
+            catState = CatState.Idle;
         }
         // else 플레이어 트래킹
-        else
-        {
-            Debug.Log("else Player");
-            target = player;
-        }
+        //if (target == null)
+        //{
+        //    target = player;
+        //    isPlayer = true;
+        //    catState = CatState.Tracking;
+        //}
+    }
+
+    private void Update()
+    {
+        dir = Detect(target.position);
+        Tracking(target);
+        Debug.Log(dir.magnitude);
+        Debug.Log(target.tag);
+        Debug.Log(catState);
+        //OnTriggerEnter(collider);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        target = other.transform;
+        Debug.Log($"trigger : {target.tag}");
     }
 }

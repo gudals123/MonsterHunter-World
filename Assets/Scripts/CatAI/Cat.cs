@@ -12,48 +12,65 @@ public class Cat : Entity
     private float respawnTime;
     private int damage;
     private int heal;
+
+    [Header("Cat Info")]
     private CatController catController;
+    private Vector3 startPosition;
     [SerializeField] private Collider catCollider;
     //private Vector3 detectRange;
 
     [Header("Target Info")]
-    //private Entity target;
+    private Transform target;
     [SerializeField] private Transform player;
     [SerializeField] private Transform boss;
 
-    [Header("Range Info")]
-    private float detectRange;
-    private float interactionRange;
+    //[Header("Range Info")]
+    //private float detectRange;
+    //private float interactionRange;
 
 
     private void Awake()
     {
         currentHp = maxHp;
-        //startPosition = GetComponent<Rigidbody>().position;
 
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         catController = GetComponent<CatController>();
+        animator = GetComponentInChildren<Animator>();
 
-        detectRange = 8f;
-        interactionRange = 3f;
+        target = player;
+        Tracking(target);
+        //target = catController.target;
     }
 
     public override void Move(float moveSpeed, Vector3 targetPos)
     {
-        catController.transform.position += catController.Detect(targetPos) / moveSpeed;
+        animator.Play("Tracking");
+        catController.transform.position -= catController.Detect(targetPos) * moveSpeed;
     }
 
     public override int Attack()
     {
+        if (Vector3.Distance(target.position, transform.position) > catController.interactionRange)
+        {
+            Move(Time.deltaTime, target.position);
+        }
+
         animator.Play("Attack");
+        Debug.Log("Attack!");
         damage = Random.Range(1, 6);
         return damage;
     }
 
+    public void SkillAttack(Transform target)
+    {
+        Move(Time.deltaTime, target.position);
+        Attack();
+    }
+
     public override void Hit(int damage)
     {
-        animator.Play("GetHit");
+        animator.Play("Hit");
         currentHp -= damage;
         catController.catState = CatState.Hit;
         if (currentHp <= 0)
@@ -74,7 +91,7 @@ public class Cat : Entity
 
             Attack();
         }
-        else if(skill == "SkillAttack")
+        else if (skill == "SkillAttack")
         {
             // 스킬 추가
             Attack();
@@ -90,46 +107,89 @@ public class Cat : Entity
     public void Resurrection()
     {
         currentHp = maxHp;
-        //startPosition = transform.position;
+        startPosition = player.position;
         gameObject.SetActive(true);
     }
 
-    public void Tracking(Transform target)
+    public void Tracking(Transform target) // 출력
     {
-        Vector3 dir = catController.Detect(target.position);
-
-        // 보스가 감지범위 내에 있을 때
-        if (target.CompareTag("Boss") && dir.magnitude <= detectRange)
+        //// 보스가 감지범위 내에 있을 때
+        //if (catController.catState == CatState.Detect && target.CompareTag("Boss") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
+        //{
+        //    Debug.Log("Boss, dir.magnitude <= detectRange");
+        //    LookAtTarget(target);
+        //    Move(Time.deltaTime, boss.position);
+        //    animator.Play("Tracking");
+        //}
+        //// 보스가 상호작용범위 내에 있을 때
+        //if (catController.catState == CatState.Attack && catController.dir.magnitude <= catController.interactionRange)
+        //{
+        //    Debug.Log("Boss, dir.magnitude <= interactionRange");
+        //    LookAtTarget(target);
+        //    Attack();
+        //}
+        // 플레이어가 감지범위 내에 있을 때
+        if (catController.catState == CatState.Detect && target.CompareTag("Player") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
         {
-            Debug.Log("Boss, dir.magnitude <= detectRange");
-            animator.Play("Move");
-            transform.position += dir;
-        }
-        // 보스가 상호작용범위 내에 있을 때
-        if (target.CompareTag("Boss") && dir.magnitude <= interactionRange)
-        {
-            Debug.Log("Boss, dir.magnitude <= interactionRange");
-            animator.Play("Attack");
-            Attack();
+            Debug.Log("Player, dir.magnitude <= detectRange");
+            LookAtTarget(target);
+            Move(Time.deltaTime, player.position);
+            animator.Play("Tracking");
         }
         // 플레이어가 상호작용범위 내에 있을 때
-        if (target.CompareTag("Player") && dir.magnitude <= interactionRange)
+        if (catController.catState == CatState.Idle /*&& catController.dir.magnitude <= interactionRange*/)
         {
             Debug.Log("Player, dir.magnitude <= interactionRange");
+            LookAtTarget(target);
             animator.Play("Idle");
         }
         // else 플레이어 트래킹
-        else
-        {
-            Debug.Log("else Player");
-            target = player;
-            animator.Play("Move");
-        }
+        //if (/*!(catController.catState == CatState.Detect) ||*/ target != boss /*&& catController.dir.magnitude > interactionRange*/)
+        //{
+        //    Debug.Log("else Player");
+        //    target = player;
+        //    LookAtTarget(player);
+        //    Move(Time.deltaTime, player.position);
+        //}
+
+        //if (target == null)
+        //{
+        //    Debug.Log("else Player");
+        //    target = player;
+        //    LookAtTarget(player);
+        //    Move(Time.deltaTime, player.position);
+        //}
     }
 
     public void LookAtTarget(Transform target)
     {
         Vector3 dir = new Vector3(target.transform.position.x, 0, target.transform.position.z) - new Vector3(catController.transform.position.x, 0, catController.transform.position.z);
-        catController.transform.rotation = Quaternion.Lerp(catController.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime);
+        catController.transform.rotation = Quaternion.Lerp(catController.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 10);
+    }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (target == null)
+    //    {
+    //        target = player;
+    //    }
+
+    //    if (target != null)
+    //    {
+    //        target = other.transform;
+    //    }
+    //}
+
+    private void Update()
+    {
+        target = catController.target;
+        LookAtTarget(target);
+        Tracking(target);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, catController.detectRange);
+        Gizmos.DrawWireSphere(transform.position, catController.interactionRange);
     }
 }
