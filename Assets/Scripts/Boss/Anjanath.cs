@@ -11,7 +11,7 @@ public class Anjanath : Monster
     private float distancePtoB;
 
     protected bool checkTarget;
-    protected Transform targetTr;    // ����� �Ǵ� �÷��̾�
+    protected Transform targetTr;
     public int getOtherAttackDamage;
 
     public bool startNormalAttaking;
@@ -19,7 +19,6 @@ public class Anjanath : Monster
 
     public float perceptionTime = 0;
     public bool isBossRecognized;
-
 
     private void Awake()
     {
@@ -51,7 +50,6 @@ public class Anjanath : Monster
     public override void Hit(int damage)
     {
         base.Hit(damage);
-        // targetTr = ���� ���� ����
 
         if(currentHp <= 0)
         {
@@ -80,9 +78,8 @@ public class Anjanath : Monster
 
     public void StartTracking()
     {
-        TrackingPlayer(playerTr);
-   }
-
+        TrackingPlayer(targetTr);
+    }
 
     public bool SetChance()
     {
@@ -131,20 +128,20 @@ public class Anjanath : Monster
         Vector3 normalized = (playerTr.position - transform.position).normalized;
         float _isForward = Vector3.Dot(normalized, transform.forward);
 
-        // ���� ����
-        if (_isForward > 0 && distancePtoB <= 15f)
+        // 공격 범위
+        if (_isForward > 0 && distancePtoB <= 10f)
         {
             anjanathBT.anjanathState = State.Attack;
             SetAttackState();
         }
 
-        // �þ� ����
-        else if (_isForward > 0 && distancePtoB <= 40f)
+        // 인식 범위
+        else if (_isForward > 0 && distancePtoB <= 17f)
         {
             DetectPlayer();
         }
 
-        else if (isBossRecognized && distancePtoB <= 40f)
+        else if (isBossRecognized && distancePtoB <= 17f)
         {
             anjanathBT.anjanathState = State.Tracking;
         }
@@ -163,7 +160,6 @@ public class Anjanath : Monster
 
             else
             {
-                Debug.Log("!@#$%^&*%$#@!#$%^");
                 if (SetChance())
                     anjanathBT.anjanathState = State.Walk;
                 else
@@ -176,13 +172,11 @@ public class Anjanath : Monster
     {
         if (gameObject != null)
         {
-            // ���� ���� (15f)
             Gizmos.color = anjanathBT.anjanathState == State.Attack ? Color.red : Color.green;
-            Gizmos.DrawWireSphere(transform.position, 15f);
+            Gizmos.DrawWireSphere(transform.position, 10f);
 
-            // �þ� ���� / ���� ���� (40f)
             Gizmos.color = anjanathBT.anjanathState == State.Tracking? Color.yellow : Color.blue; ;
-            Gizmos.DrawWireSphere(transform.position, 40f);
+            Gizmos.DrawWireSphere(transform.position, 17f);
         }
     }
 

@@ -62,23 +62,18 @@ public class Monster : Entity
     virtual public void NormalMoving(float moveSpeed)
     {
         animator.Play("NormalWalking");
-        // GroundCheck �ʿ�
+        // GroundCheck
         Move(moveSpeed, targetPos);
     }
     
     public void TrackingPlayer(Transform targetTr)
     { 
-        // ���� �ִϸ��̼� ���¸� ������
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // ���� �ִϸ��̼��� �������� Ȯ��
         if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime < 1.0f)
         {
-            // ���� �ִϸ��̼��� ���� ������ ����
             return;
         }
-
-        // ���� �ִϸ��̼��� �����ų� ���� �ִϸ��̼��� �ƴ� ��� Ʈ��ŷ ����
         else
         {
             animator.Play("BattleTracking");

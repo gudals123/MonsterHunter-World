@@ -26,9 +26,4 @@ public class AnjanathController : AIController
         anjanathBT.anjanathState = State.SetDamage;    // @@@@@@@
     }
 
-    public void SetTarget(GameObject inputTarget)
-    {
-        target = inputTarget;
-    }
-
 }
