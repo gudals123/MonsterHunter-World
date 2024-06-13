@@ -52,7 +52,7 @@ public class AnjanathBT : BossBehaviorTree
 
                 // Right SubTree
                 .Selector()
-                    .Condition("IsNomalStates", () => anjanathState == State.Idle)
+                    //.Condition("IsNomalStates", () => anjanathState == State.Idle)
                     .Sequence()
                         .Condition("IsTargetSelected", () => anjanath.isSetTargetPos)
                         .Do("NomalWalking", () =>

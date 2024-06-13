@@ -32,8 +32,8 @@ public class Monster : Entity
 
     public Vector3 SetRandomPos()
     {
-        float targetX = Random.Range(transform.position.x - 100, transform.position.x + 100);
-        float targetZ = Random.Range(transform.position.z - 100, transform.position.z + 100);
+        float targetX = Random.Range(140, 140);
+        float targetZ = Random.Range(140, 140);
         return new Vector3(targetX, transform.position.y, targetZ);
     }
 
@@ -58,8 +58,6 @@ public class Monster : Entity
 
     virtual public void Idle()
     {
-        Debug.Log("13456432345321345");
-
         animator.Play("Idle");
 
         if (isArrivalTargetPos)
@@ -72,11 +70,19 @@ public class Monster : Entity
 
     virtual public void NormalMoving(float moveSpeed)
     {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("Idle") && stateInfo.normalizedTime < 1.0f)
+        {
+            return;
+        }
+
+
         animator.Play("NormalWalking");
         // GroundCheck
         Move(moveSpeed, arrivalPos.position);
 
-        if (!isArrivalTargetPos)
+        if (isArrivalTargetPos)
         {
             isSetTargetPos = false;
         }
