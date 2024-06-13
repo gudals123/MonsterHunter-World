@@ -24,8 +24,9 @@ public class Player : Entity
     private float rollPower = 8.5f;
     private float knockbackPower = 2.5f;
 
-    private Entity Taget;
 
+    public float currentStamina;
+    public float maxStamina;
     public int damage {  get; private set; }
     public bool isArmed {  get; private set; }
     
@@ -35,9 +36,39 @@ public class Player : Entity
         playerController = GetComponent<PlayerController>();
         rigidbody = GetComponent<Rigidbody>();
         animator = characterBody.GetComponent<Animator>();
-        maxHp = 100;
+        maxHp = 150;
         currentHp = maxHp;
+        maxStamina = 100f;
+        currentStamina = maxStamina;
         isArmed = false;
+    }
+
+    public void DrainStamina(float value)
+    {
+        currentStamina -= value;
+        currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
+    }
+
+    public void StaminerRecovery(float value)
+    {
+        if (currentStamina >= maxStamina)
+        {
+            return;
+        }
+        currentStamina += value;
+        currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
+    }
+
+    public bool StaminaCheck(float cost)
+    {
+        if(currentStamina - cost <= 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public override void Move(float moveSpeed, Vector2 moveInput)

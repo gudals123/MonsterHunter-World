@@ -5,32 +5,36 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 
-
-
+public enum PlayerState
+{
+    Idle,
+    GetHit,
+    Dead,
+    Attack,
+    Roll,
+    Fall,
+    Walk,
+    Run,
+    WeaponSheath
+}
 public class PlayerController : Controller
 {
-    public enum PlayerState
-    {
-        Idle,
-        GetHit,
-        Dead,
-        Attack,
-        Roll,
-        Fall,
-        Walk,
-        Run,
-        WeaponSheath
-    }
-
     private Player player;
-    [SerializeField]  private Cat cat;
+    [SerializeField] 
+    private Cat cat;
 
     private GreatSword greatSword;
     private float walkSpeed = 4f;
     private float runSpeed = 7f;
 
-    [SerializeField] private Transform cameraArm;
-    [SerializeField] private GameObject weaponObj;
+    private float staminaCostRun = 1f;
+    private float staminaCostRoll = 30f;
+    private float staminaRecoveryCost = 10;
+
+    [SerializeField]
+    private Transform cameraArm;
+    [SerializeField]
+    private GameObject weaponObj;
 
     //Pet pet
     public bool isRightAttack { get; private set; }
@@ -79,19 +83,25 @@ public class PlayerController : Controller
         player.GroundCheck();
         LookAround();
         QuickSlotIndexChange();
+        StaminerRecovery();
+        Debug.Log(player.currentStamina);
+        Debug.Log(playerState);
     }
 
     public void InputSend()
     {
-
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
+        
         //±¸¸£±â
         if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
-            isRoll = true;
-            playerState = PlayerState.Roll;
-            player.Roll();
+            if (player.StaminaCheck(staminaCostRoll))
+            {
+                isRoll = true;
+                playerState = PlayerState.Roll;
+                player.DrainStamina(staminaCostRoll);
+                player.Roll();
+            }
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
@@ -109,9 +119,13 @@ public class PlayerController : Controller
         else if (moveInput != Vector2.zero && Input.GetKey(KeyCode.LeftShift) && !player.isArmed
             && player.SwitchDoneCheck())
         {
-            playerState = PlayerState.Run;
-            moveSpeed = runSpeed;
-            player.Move(moveSpeed, moveInput);
+            if (player.StaminaCheck(staminaCostRun))
+            {
+                playerState = PlayerState.Run;
+                player.DrainStamina(staminaCostRun * Time.deltaTime);
+                moveSpeed = runSpeed;
+                player.Move(moveSpeed, moveInput);
+            }
         }
         //°È±â
         else if (moveInput != Vector2.zero)
@@ -130,7 +144,7 @@ public class PlayerController : Controller
             playerState = PlayerState.Idle;
             player.ApplyState();
         }
-        if (player.isArmed)
+        if (player.isArmed && player.StaminaCheck(0))
         {
             if (Input.GetMouseButton(0))
             {
@@ -197,12 +211,19 @@ public class PlayerController : Controller
         {
             quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
         }
-        else if(scroll < 0f)
+        else if (scroll < 0f)
         {
             quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
         }
         //Debug.Log($"ÇöÀç Äü½½·Ô Index{quickSlotIndex}");
     }
 
+    public void StaminerRecovery()
+    {
+        if((playerState != PlayerState.Run) && (playerState != PlayerState.Roll))
+        {
+            player.StaminerRecovery(staminaRecoveryCost * Time.deltaTime);
+        }
+    }
 
 }
