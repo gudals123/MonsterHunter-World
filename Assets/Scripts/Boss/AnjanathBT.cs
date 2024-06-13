@@ -1,27 +1,13 @@
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public enum State
-{
-    Idle,
-    Walk,
-    Tracking,
-    Attack,
-    Roar,
-    SetDamage,
-    Sturn,
-    Dead,
-}
 
-public class AnjanathBTController : Controller
+public class AnjanathBT : BossBehaviorTree
 {
-    private bool checkTarget;
-    public GameObject Target;    // 고양이 또는 플레이어
     private Anjanath anjanath;
-    public int getOtherAttackDamage;
+    public State anjanathState;
+    AnjanathController bossController;
 
+    // 임시 변수
     public bool SetDamage;
 
     private void Awake()
@@ -33,7 +19,7 @@ public class AnjanathBTController : Controller
             .Selector()
                 // Left SubTree
                 .Sequence()
-                    .Condition("isPlayerInAttackRange", () => anjanath.AnjanathState == State.Attack)
+                    .Condition("isPlayerInAttackRange", () => anjanathState == State.Attack)
                         .Selector()
                             .Sequence()
                                 .Condition("BreathAttack", () => anjanath.startBreathAttaking)
@@ -56,10 +42,10 @@ public class AnjanathBTController : Controller
 
                 // Midle SubTree
                 .Sequence()
-                    .Condition("TrackingPlayer", () => anjanath.AnjanathState == State.Tracking)
+                    .Condition("TrackingPlayer", () => anjanathState == State.Tracking)
                         .Do("TrackingPlayer", () =>
                         {
-                            anjanath.TrackingPlayer();
+                            anjanath.StartTracking();
                             return TaskStatus.Success;
                         })
                 .End()
@@ -67,20 +53,20 @@ public class AnjanathBTController : Controller
                 // Right SubTree
                 .Selector()
                     .Sequence()
-                        .Condition("ChanceForWalking", () => anjanath.AnjanathState == State.Walk)
+                        .Condition("ChanceForWalking", () => anjanathState == State.Walk)
                             .Do("NomalWalking", () =>
                             {
-                                anjanath.NomalMoving();
+                                anjanath.NormalMoving(3);
                                 return TaskStatus.Success;
                             })
                     .End()
                     .Sequence()
-                        .Condition("ChanceForWalking", () => anjanath.AnjanathState == State.Idle)
-                            .Do(() =>
-                            {
-                                anjanath.Idle();
-                                return TaskStatus.Success;
-                            })
+                        .Condition("ChanceForWalking", () => anjanathState == State.Idle)
+                        .Do(() =>
+                        {
+                            anjanath.Idle();
+                            return TaskStatus.Success;
+                        })
                     .End()
                 .End()
             .End()
@@ -89,11 +75,9 @@ public class AnjanathBTController : Controller
 
     private void Update()
     {
-        anjanath.isPlayerInRange(Target.transform, transform);
-
-        if (SetDamage)   // anjanath.AnjanathState == State.SetDamage
+        if (anjanathState == State.SetDamage)   // anjanath.AnjanathState == State.SetDamage
         {
-            anjanath.SetDamage(getOtherAttackDamage);
+            anjanath.Hit(bossController.getOtherAttackDamage);
         }
 
         else

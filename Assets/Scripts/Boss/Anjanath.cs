@@ -4,69 +4,52 @@ using UnityEngine;
 
 public class Anjanath : Monster
 {
-    public State AnjanathState;
-    public Vector3 targetObjectPos;
+    public AnjanathBT anjanathBT;
+
     public int DamageStack;
+    public Transform playerTr;
+    private float distancePtoB;
+
+    protected bool checkTarget;
+    protected Transform targetTr;
+    public int getOtherAttackDamage;
 
     public bool startNormalAttaking;
     public bool startBreathAttaking;
 
-    public bool isPlayerInAttackRange;
-    public bool isPlayerInVisualRange;
-
-    public float distancePtoB { get; private set; }
-    public bool _bossAttackRange { get; private set; }
-    public bool _bossVisualRange { get; private set; }
-    public bool _bossPerceptionRange { get; private set; }
-    public float _playerAttackDamege { get; private set; }
-
-
+    public float perceptionTime = 0;
+    public bool isBossRecognized;
 
     private void Awake()
     {
+        anjanathBT.anjanathState = State.Idle;
+
+        anjanathBT = GetComponent<AnjanathBT>();
         grade = 1;
         maxHp = 2000;
         currentHp = maxHp;
         rigidbody = GetComponent<Rigidbody>();
-        startPosition = rigidbody.position;
         rotationSpeed = 100;
         setHit = false;
         animator = GetComponentInChildren<Animator>();
-    }
-
-    public void SetAttackState()
-    {
-        if (currentHp <= 600 && SetChance())
-        {
-            Debug.Log("Breath@@@@@@@@@@@");
-            startBreathAttaking = true;
-            startNormalAttaking = false;
-        }
-        else
-        {
-            Debug.Log("Normal###########");
-            startBreathAttaking = false;
-            startNormalAttaking = true;
-        }
+        Idle();
     }
 
     public void BreathAttacking()
     {
-        attackDamage = 5;
+        //attackDamage = 5;
         animator.Play("BreathAttack");
     }
 
     public void NormalAttacking()
     {
-        attackDamage = 10;
+        //attackDamage = 10;
         animator.Play("NormalAttack");
     }
 
-    public override void SetDamage(int damage)
+    public override void Hit(int damage)
     {
-        AnjanathState = State.SetDamage;
-
-        base.SetDamage(damage);
+        base.Hit(damage);
 
         if(currentHp <= 0)
         {
@@ -93,54 +76,108 @@ public class Anjanath : Monster
         canAttack = true;
     }
 
+    public void StartTracking()
+    {
+        TrackingPlayer(targetTr);
+    }
+
     public bool SetChance()
     {
-        return Random.Range(0f, 1.0f) <= 0.5f? true: false;
+        return Random.Range(0f, 1.0f) <= 0.5f ? true : false;
     }
 
-
-    public void TrackingPlayer()
+    public void SetAttackState()
     {
-        animator.Play("BattleTracking");
-        // GroundCheck ÇÊ¿äÇÔ
-        Move(5, targetObjectPos);
-    }
+        isBossRecognized = true;
 
-    public void isPlayerInRange(Transform player, Transform boss)
-    {
-        distancePtoB = Vector3.Distance(player.position, boss.position);
-
-        Vector3 normalized = (player.position - boss.position).normalized;
-        float _isForward = Vector3.Dot(normalized, boss.forward);
-
-        // °ø°Ý ¹üÀ§
-        if (_isForward > 0 && distancePtoB <= 7f)
+        if (currentHp <= 600 && SetChance())
         {
-            Debug.Log("°ø°Ý ¹üÀ§");
-            AnjanathState = State.Attack;
+            startBreathAttaking = true;
+            startNormalAttaking = false;
+        }
+        else
+        {
+            startBreathAttaking = false;
+            startNormalAttaking = true;
+        }
+    }
+
+    public void DetectPlayer()
+    {
+        if (isBossRecognized)
+        {
+            anjanathBT.anjanathState = State.Tracking;
+        }
+
+        else if (!isBossRecognized)
+        {
+            perceptionTime += Time.deltaTime;
+            if(perceptionTime >= 2f)
+            {
+                perceptionTime = 0;
+                isBossRecognized = true;
+                targetTr = playerTr;
+            }
+        }
+    }
+
+    public void IsPlayerInRange(Transform target)
+    {
+        distancePtoB = Vector3.Distance(playerTr.position, transform.position);
+
+        Vector3 normalized = (playerTr.position - transform.position).normalized;
+        float _isForward = Vector3.Dot(normalized, transform.forward);
+
+        // ê³µê²© ë²”ìœ„
+        if (_isForward > 0 && distancePtoB <= 10f)
+        {
+            anjanathBT.anjanathState = State.Attack;
             SetAttackState();
         }
 
-        // ½Ã¾ß ¹üÀ§
-        else if (_isForward > 0 && distancePtoB <= 20f)
+        // ì¸ì‹ ë²”ìœ„
+        else if (_isForward > 0 && distancePtoB <= 17f)
         {
-            Debug.Log("½Ã¾ß ¹üÀ§");
-            AnjanathState = State.Tracking;
+            DetectPlayer();
         }
 
-        // ÀÎÁö ¹üÀ§
-        else if (distancePtoB <= 18f)
+        else if (isBossRecognized && distancePtoB <= 17f)
         {
-            Debug.Log("ÀÎÁö ¹üÀ§");
-            AnjanathState = State.Walk;
+            anjanathBT.anjanathState = State.Tracking;
         }
 
         else
         {
-            Debug.Log("¾Æ¹«°Íµµ");
-            AnjanathState = State.Idle;
-        }
+            if (isBossRecognized)
+            {
+                perceptionTime += Time.deltaTime;
+                if (perceptionTime >= 2f)
+                {
+                    perceptionTime = 0;
+                    isBossRecognized = false;
+                }
+            }
 
+            else
+            {
+                if (SetChance())
+                    anjanathBT.anjanathState = State.Walk;
+                else
+                    anjanathBT.anjanathState = State.Idle;
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (gameObject != null)
+        {
+            Gizmos.color = anjanathBT.anjanathState == State.Attack ? Color.red : Color.green;
+            Gizmos.DrawWireSphere(transform.position, 10f);
+
+            Gizmos.color = anjanathBT.anjanathState == State.Tracking? Color.yellow : Color.blue; ;
+            Gizmos.DrawWireSphere(transform.position, 17f);
+        }
     }
 
 }

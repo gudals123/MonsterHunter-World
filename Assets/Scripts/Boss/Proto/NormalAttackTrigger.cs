@@ -2,51 +2,51 @@
 using System.Collections;
 using UnityEngine;
 
-public class NomalAttackTrigger : MonoBehaviour
+public class NormalAttackTrigger : MonoBehaviour
 {
-    [SerializeField] private int _nomalAttackValue;
-    private bool _isNomalAttacking;
+    [SerializeField] private int _normalAttackValue;
+    private bool _isNormalAttacking;
 
     public GameObject _hitprefab;
     public GameObject _hitEffect;
 
     private void Start()
     {
-        _nomalAttackValue = 10;
-        _isNomalAttacking = false;
+        _normalAttackValue = 10;
+        _isNormalAttacking = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !_isNomalAttacking)
+        if (other.CompareTag("Player") && !_isNormalAttacking)
         {
-            //Debug.Log("Start Nomal Attacking~~~~~~");
-            NowNomalAttacking();
+            //Debug.Log("Start Normal Attacking~~~~~~");
+            NowNormalAttacking();
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, other.gameObject);
-            CombatManager.Instance.TakeDamage("Boss", _nomalAttackValue);
+            //CombatManager.Instance.TakeDamage("Boss", _normalAttackValue);
         }
     }
 
     /// <summary>
-    /// NomalAttack을 한 번 실행하는 동안 공격이 중첩되지 않도록 
-    /// _isNomalAttacking를 잠시 켰다 꺼는 코루틴 CoNomalAttack을 실행합니다.
+    /// normalAttack을 한 번 실행하는 동안 공격이 중첩되지 않도록 
+    /// _isnormalAttacking를 잠시 켰다 꺼는 코루틴 CoNormalAttack을 실행합니다.
     /// </summary>
-    public void NowNomalAttacking()
+    public void NowNormalAttacking()
     {
-        StartCoroutine(CoNomalAttack());
+        StartCoroutine(CoNormalAttack());
     }
 
-    public IEnumerator CoNomalAttack()
+    public IEnumerator CoNormalAttack()
     {
-        _isNomalAttacking = true;
+        _isNormalAttacking = true;
         yield return new WaitForSeconds(2f);
         //Debug.Log("Quit Nomal Attack~~~~~~");
-        _isNomalAttacking = false;
+        _isNormalAttacking = false;
     }
 
     /// <summary>
-    /// boss의 nomalAttack에 충돌된 위치에 HitEffect를 나타내는 코루틴을 실행합니다.
+    /// boss의 normalAttack에 충돌된 위치에 HitEffect를 나타내는 코루틴을 실행합니다.
     /// 해당 코루틴은 CoHitEffect입니다.
     /// </summary>
     /// <param name="hitPos">충돌된 개체가 맞은 곳</param>
