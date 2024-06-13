@@ -77,7 +77,7 @@ public class Monster : Entity
         else
         {
             animator.Play("BattleTracking");
-            Move(5, targetTr.position);
+            Move(4, targetTr.position);
         }
     }
 

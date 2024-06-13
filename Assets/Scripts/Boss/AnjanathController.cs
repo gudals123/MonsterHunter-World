@@ -18,7 +18,7 @@ public class AnjanathController : AIController
 
     private void Update()
     {
-        anjanath.IsPlayerInRange(anjanath.playerTr);
+        anjanath.IsPlayerInRange();
     }
 
     public void Hit(int damage)
