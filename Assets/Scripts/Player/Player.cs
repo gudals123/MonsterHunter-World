@@ -63,7 +63,10 @@ public class Player : Entity
         AnimatorControll(playerController.playerState);
     }
 
-
+    public bool SwitchDoneCheck()
+    {
+        return animator.GetBool(PlayerAnimatorParamiter.IsSwitchDone);
+    }
 
     public void GroundCheck()
     {

@@ -80,7 +80,7 @@ public class PlayerController : Controller
         }
         //´Þ¸®±â
         else if (moveInput != Vector2.zero && Input.GetKey(KeyCode.LeftShift) && !player.isArmed
-            && player.animator.GetBool(PlayerAnimatorParamiter.IsSwitchDone))
+            && player.SwitchDoneCheck())
         {
             playerState = PlayerState.Run;
             moveSpeed = runSpeed;
