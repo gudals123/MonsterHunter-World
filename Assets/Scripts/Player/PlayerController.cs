@@ -99,7 +99,8 @@ public class PlayerController : Controller
         }
         //무기 스위치
         else if ((player.isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
-            (!player.isArmed && Input.GetMouseButtonDown(0)))
+            (!player.isArmed && Input.GetMouseButtonDown(0)) ||
+            (Input.GetKeyDown(KeyCode.E) && player.isArmed))
         {
             playerState = PlayerState.WeaponSheath;
             player.WeaponSwitch();
@@ -119,7 +120,7 @@ public class PlayerController : Controller
             moveSpeed = walkSpeed;
             player.Move(moveSpeed, moveInput);
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E) && !player.isArmed)
         {
             QuickSlot[quickSlotIndex].Activate();
         }
