@@ -6,10 +6,13 @@ using UnityEngine.EventSystems;
 public class Monster : Entity
 {
     public int grade { get; set; }
-    protected Vector3 targetPos;
+    public Vector3 targetPos;
     protected int rotationSpeed;
     protected bool canAttack;
     protected bool setHit;
+    public bool isArrivalTargetPos;
+    public bool isSetTargetPos;
+    public Transform arrivalPos;
 
     public override int Attack()
     {
@@ -55,19 +58,32 @@ public class Monster : Entity
 
     virtual public void Idle()
     {
+        Debug.Log("13456432345321345");
+
         animator.Play("Idle");
-        targetPos = SetRandomPos();
+
+        if (isArrivalTargetPos)
+        {
+            arrivalPos.position = SetRandomPos();
+            isSetTargetPos = true;
+            isArrivalTargetPos = false;
+        }
     }
 
     virtual public void NormalMoving(float moveSpeed)
     {
         animator.Play("NormalWalking");
         // GroundCheck
-        Move(moveSpeed, targetPos);
+        Move(moveSpeed, arrivalPos.position);
+
+        if (!isArrivalTargetPos)
+        {
+            isSetTargetPos = false;
+        }
     }
     
     public void TrackingPlayer(Transform targetTr)
-    { 
+    {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime < 1.0f)

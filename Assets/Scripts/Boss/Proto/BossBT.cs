@@ -89,13 +89,14 @@ public class BossBT : MonoBehaviour
                 .Selector()
                     .Sequence()
                         .Condition("ChanceForWalking", () => SetNomalWalkingChance())
-                        .StateAction("NomalWalking", () => 
+                        .StateAction("NormalWalking", () => 
                         {
+                            Debug.Log("normalWalking");
                             _trackingPlayer = false;
                             _randomPosToWalk = RandomPosForWalking();
                             _canNomalWalking = true;
                         })
-                        .Do("NomalWalking", () =>
+                        .Do("NormalWalking", () =>
                         {
                             _canNomalWalking = false;
                             return TaskStatus.Success;
@@ -103,6 +104,7 @@ public class BossBT : MonoBehaviour
                     .End()
                     .StateAction("Idle", () =>
                     {
+                        Debug.Log("Idle");
                         _trackingPlayer = false;
                     })
                     .Do(() =>

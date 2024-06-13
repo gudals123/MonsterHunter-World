@@ -159,12 +159,7 @@ public class Anjanath : Monster
 
         else if (!isBossRecognized)
         {
-            if (SetChance())
-                anjanathBT.anjanathState = State.Walk;
-
-            else
-                anjanathBT.anjanathState = State.Idle;
-
+            anjanathBT.anjanathState = State.Idle;
         }
     }
 
