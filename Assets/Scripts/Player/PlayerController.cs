@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
+
+
 
 public class PlayerController : Controller
 {
@@ -20,6 +23,8 @@ public class PlayerController : Controller
     }
 
     private Player player;
+    [SerializeField]  private Cat cat;
+
     private GreatSword greatSword;
     private float walkSpeed = 4f;
     private float runSpeed = 7f;
@@ -38,6 +43,16 @@ public class PlayerController : Controller
 
     public PlayerState playerState { get; private set; }
 
+    //½½·Ô
+    private Item_Potion potion;
+    private Skill_CatAttack catAttack;
+    private Skill_CatHeal catHeal;
+
+    //Äü½½·Ô
+    private Slot[] QuickSlot;
+    private int quickSlotIndex = 0;
+    private int quickSlotCount = 0;
+
     public void Start()
     {
         player = GetComponent<Player>();
@@ -45,7 +60,17 @@ public class PlayerController : Controller
         playerState = PlayerState.Idle;
         moveSpeed = walkSpeed;
         isRoll = false;
+        potion = new Item_Potion(player, 10, 10);
+        catAttack = new Skill_CatAttack(player, cat);
+        catHeal = new Skill_CatHeal(player, cat);
+        QuickSlot = new Slot[4];
+        QuickSlot[0] = potion;
+        QuickSlot[1] = catAttack;
+        QuickSlot[2] = catHeal;
+        quickSlotCount = 3;
     }
+
+
 
 
     public void Update()
@@ -53,6 +78,7 @@ public class PlayerController : Controller
         InputSend();
         player.GroundCheck();
         LookAround();
+        QuickSlotIndexChange();
     }
 
     public void InputSend()
@@ -92,6 +118,10 @@ public class PlayerController : Controller
             playerState = PlayerState.Walk;
             moveSpeed = walkSpeed;
             player.Move(moveSpeed, moveInput);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            QuickSlot[quickSlotIndex].Activate();
         }
         //Á¤Áö
         else
@@ -136,9 +166,7 @@ public class PlayerController : Controller
                 //playerState = PlayerState.Idle;
                 player.ApplyState();
             }
-
         }
-
     }
 
     private void LookAround()
@@ -159,4 +187,21 @@ public class PlayerController : Controller
 
         cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
     }
+
+    private void QuickSlotIndexChange()
+    {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (scroll > 0f)
+        {
+            quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
+        }
+        else if(scroll < 0f)
+        {
+            quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
+        }
+        Debug.Log($"ÇöÀç Äü½½·Ô Index{quickSlotIndex}");
+    }
+
+
 }

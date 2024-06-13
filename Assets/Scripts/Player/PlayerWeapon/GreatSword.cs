@@ -32,9 +32,6 @@ public class GreatSword : Weapon
         }
     }
 
-
-
-
     protected override void AppearHitEffect(Vector3 hitPos, float duration)
     {
         base.AppearHitEffect(hitPos, duration);
