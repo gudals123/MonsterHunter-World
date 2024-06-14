@@ -683,7 +683,8 @@ GameObject:
   - component: {fileID: 9055791104001212950}
   - component: {fileID: 9116157678702734532}
   - component: {fileID: 7143435964395719017}
-  - component: {fileID: 1955419867365339950}
+  - component: {fileID: 148897346324223003}
+  - component: {fileID: 2871277221370156765}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -758,7 +759,7 @@ CapsuleCollider:
   m_Height: 2.5262237
   m_Direction: 1
   m_Center: {x: 0.025873527, y: 1.2368882, z: 0.01992786}
---- !u!114 &1955419867365339950
+--- !u!114 &148897346324223003
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -767,17 +768,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1994513090600075941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2991e7dea681164bbc4ae9886f624c5, type: 3}
+  m_Script: {fileID: 11500000, guid: d585c5d6c97062f47b1858067ba948c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 4
-  runSpeed: 7
-  _characterBody: {fileID: 2917617824821667798}
-  _cameraArm: {fileID: 6906201647623708226}
+  characterBody: {fileID: 2917617824821667798}
+  cameraArm: {fileID: 6906201647623708226}
   groundcheckDistance: 0.5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &2871277221370156765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994513090600075941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844514328b28ebf448123e8e89c7f317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cat: {fileID: 0}
+  cameraArm: {fileID: 6906201647623708226}
+  weaponObj: {fileID: 6737051817905813825}
 --- !u!1 &2196387413024421371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1927,7 +1941,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5363097627177491204}
   - component: {fileID: 2915476267180710025}
-  - component: {fileID: 9137739776715067023}
+  - component: {fileID: 724939175304432256}
   m_Layer: 3
   m_Name: AttackRange
   m_TagString: Untagged
@@ -1971,7 +1985,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.40513256, y: 0.17380533, z: 0.9647337}
   m_Center: {x: -0.2226882, y: -0.013137924, z: 1.9602475}
---- !u!114 &9137739776715067023
+--- !u!114 &724939175304432256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1980,11 +1994,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6737051817905813825}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08056a7dc9a6964459586437d67372ea, type: 3}
+  m_Script: {fileID: 11500000, guid: d041ffee3b58cbe458c0508ae91ba954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitprefab: {fileID: 0}
-  _hitEffect: {fileID: 0}
+  _hitEffect: {fileID: 3129132353051845892, guid: 49b9e164749f5ab4c81feb376c562ce8,
+    type: 3}
 --- !u!1 &6745781128946168244
 GameObject:
   m_ObjectHideFlags: 0

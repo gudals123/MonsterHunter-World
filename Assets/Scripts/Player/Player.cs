@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using static PlayerController;
 using static UnityEngine.UI.Image;
 
@@ -24,8 +25,9 @@ public class Player : Entity
     private float rollPower = 8.5f;
     private float knockbackPower = 2.5f;
 
-    private Entity Taget;
 
+    public float currentStamina { get; private set; }
+    public float maxStamina { get; private set; }
     public int damage {  get; private set; }
     public bool isArmed {  get; private set; }
     
@@ -35,9 +37,41 @@ public class Player : Entity
         playerController = GetComponent<PlayerController>();
         rigidbody = GetComponent<Rigidbody>();
         animator = characterBody.GetComponent<Animator>();
-        maxHp = 100;
+        maxHp = 150;
         currentHp = maxHp;
+        maxStamina = 100f;
+        currentStamina = maxStamina;
         isArmed = false;
+    }
+
+    public void DrainStamina(float value)
+    {
+        currentStamina -= value;
+        currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
+        animator.SetFloat("Stamina", currentStamina);
+    }
+
+    public void StaminerRecovery(float value)
+    {
+        if (currentStamina >= maxStamina)
+        {
+            return;
+        }
+        currentStamina += value;
+        currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
+        animator.SetFloat("Stamina", currentStamina);
+    }
+
+    public bool StaminaCheck(float cost)
+    {
+        if(currentStamina - cost <= 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public override void Move(float moveSpeed, Vector2 moveInput)
@@ -88,9 +122,9 @@ public class Player : Entity
     public void AnimatorControll(PlayerState state)
     {
         animator.SetBool(PlayerAnimatorParamiter.IsDead, state == PlayerState.Dead);
-        animator.SetBool(PlayerAnimatorParamiter.IsMoving, (state == PlayerState.Run) || (state == PlayerState.Walk));
+        animator.SetBool(PlayerAnimatorParamiter.IsMoving, (state == PlayerState.Run) || (state == PlayerState.Walk) ||(state == PlayerState.Tired));
         animator.SetBool(PlayerAnimatorParamiter.IsRoll, state == PlayerState.Roll);
-        animator.SetBool(PlayerAnimatorParamiter.IsRun, state == PlayerState.Run);
+        animator.SetBool("IsLeftShift", state == PlayerState.Run || (state == PlayerState.Tired));
         animator.SetBool(PlayerAnimatorParamiter.IsAttacking, state == PlayerState.Attack);
         animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, playerController.isRightAttack);
         animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);

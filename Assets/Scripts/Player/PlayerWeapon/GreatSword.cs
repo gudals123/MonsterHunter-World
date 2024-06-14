@@ -45,6 +45,7 @@ public class GreatSword : Weapon
 
     protected override void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
+
+        //Cat.막타누구임(other);
     }
 }
