@@ -5,6 +5,8 @@ using UnityEngine;
 public class Anjanath : Monster
 {
     public AnjanathBT anjanathBT;
+    public NormalAttackMethod normalattackMethod;
+    public GameObject breathAttackMethod;
 
     public int DamageStack;
     public Transform playerTr;
@@ -96,11 +98,14 @@ public class Anjanath : Monster
         {
             startBreathAttaking = true;
             startNormalAttaking = false;
+            breathAttackMethod.SetActive(true);
         }
         else
         {
             startBreathAttaking = false;
             startNormalAttaking = true;
+            // 노말어택
+            normalattackMethod.NowBossAttacking();
         }
     }
 
