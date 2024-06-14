@@ -21,9 +21,10 @@ public class Cat : Entity
 
     [Header("Target Info")]
     private Transform target;
-    [SerializeField] private Transform player;
-    [SerializeField] private Transform boss;
+    [SerializeField] private Player player;
+    [SerializeField] private Monster boss;
 
+    [SerializeField] private PlayerController playerController;
     //[Header("Range Info")]
     //private float detectRange;
     //private float interactionRange;
@@ -37,9 +38,11 @@ public class Cat : Entity
         rigidbody = GetComponent<Rigidbody>();
         catController = GetComponent<CatController>();
         animator = GetComponentInChildren<Animator>();
+        //player = GameObject.Find("Player").GetComponent<Player>();
+        //playerController = GetComponent<PlayerController>();
 
-        target = player;
-        Tracking(target);
+        target = player.transform;
+        PlayerTracking();
         //target = catController.target;
     }
 
@@ -107,11 +110,11 @@ public class Cat : Entity
     public void Resurrection()
     {
         currentHp = maxHp;
-        startPosition = player.position;
+        startPosition = player.transform.position;
         gameObject.SetActive(true);
     }
 
-    public void Tracking(Transform target) // 출력
+    public void PlayerTracking() // 출력
     {
         //// 보스가 감지범위 내에 있을 때
         //if (catController.catState == CatState.Detect && target.CompareTag("Boss") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
@@ -119,7 +122,7 @@ public class Cat : Entity
         //    Debug.Log("Boss, dir.magnitude <= detectRange");
         //    LookAtTarget(target);
         //    Move(Time.deltaTime, boss.position);
-        //    animator.Play("Tracking");
+        //    animator.Play("PlayerTracking");
         //}
         //// 보스가 상호작용범위 내에 있을 때
         //if (catController.catState == CatState.Attack && catController.dir.magnitude <= catController.interactionRange)
@@ -128,21 +131,44 @@ public class Cat : Entity
         //    LookAtTarget(target);
         //    Attack();
         //}
+
         // 플레이어가 감지범위 내에 있을 때
-        if (catController.catState == CatState.Detect && target.CompareTag("Player") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
+        if (catController.catState == CatState.Detect /*&& player.CompareTag("Player")*/ /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
         {
             Debug.Log("Player, dir.magnitude <= detectRange");
-            LookAtTarget(target);
-            Move(Time.deltaTime, player.position);
+            LookAtTarget(player.transform);
+            Move(Time.deltaTime, player.transform.position);
             animator.Play("Tracking");
         }
         // 플레이어가 상호작용범위 내에 있을 때
         if (catController.catState == CatState.Idle /*&& catController.dir.magnitude <= interactionRange*/)
         {
             Debug.Log("Player, dir.magnitude <= interactionRange");
-            LookAtTarget(target);
+            LookAtTarget(player.transform);
             animator.Play("Idle");
         }
+        else
+        {
+            Move(Time.deltaTime, player.transform.position);
+            animator.Play("Tracking");
+        }
+
+        //switch (catController.catState)
+        //{
+        //    case CatState.Detect:
+        //        LookAtTarget(player.transform);
+        //        Move(Time.deltaTime, player.transform.position);
+        //        animator.Play("Tracking");
+        //        break;
+        //    case CatState.Idle:
+        //        LookAtTarget(player.transform);
+        //        animator.Play("Idle");
+        //        break;
+        //    default:
+        //        Move(Time.deltaTime, player.transform.position);
+        //        animator.Play("Tracking");
+        //        break;
+        //}
         // else 플레이어 트래킹
         //if (/*!(catController.catState == CatState.Detect) ||*/ target != boss /*&& catController.dir.magnitude > interactionRange*/)
         //{
@@ -159,6 +185,34 @@ public class Cat : Entity
         //    LookAtTarget(player);
         //    Move(Time.deltaTime, player.position);
         //}
+    }
+
+    public void BossTracking(Collider target)
+    {
+        if (playerController.playerState == PlayerController.PlayerState.Attack)
+        {
+            //boss = target.GetComponentInParent<Monster>();
+        }
+
+        if (player.isArmed)
+        {
+            if (Vector3.Distance(target.transform.position, transform.position) < catController.detectRange
+                && Vector3.Distance(target.transform.position, transform.position) > catController.interactionRange)
+            {
+                transform.position -= target.transform.position;
+            }
+
+            if (Vector3.Distance(target.transform.position, transform.position) < catController.interactionRange)
+            {
+                Attack();
+                animator.Play("Attack");
+            }
+        }
+
+        else
+        {
+            PlayerTracking();
+        }
     }
 
     public void LookAtTarget(Transform target)
@@ -184,7 +238,7 @@ public class Cat : Entity
     {
         target = catController.target;
         LookAtTarget(target);
-        Tracking(target);
+        PlayerTracking();
     }
 
     private void OnDrawGizmos()
