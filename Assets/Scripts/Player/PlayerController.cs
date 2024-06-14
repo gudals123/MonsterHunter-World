@@ -15,7 +15,9 @@ public enum PlayerState
     Fall,
     Walk,
     Run,
-    WeaponSheath
+    WeaponSheath,
+    Tired
+
 }
 public class PlayerController : Controller
 {
@@ -24,12 +26,14 @@ public class PlayerController : Controller
     private Cat cat;
 
     private GreatSword greatSword;
+    
     private float walkSpeed = 4f;
+    private float tiredSpeed = 2f;
     private float runSpeed = 7f;
 
     private float staminaCostRun = 1f;
     private float staminaCostRoll = 30f;
-    private float staminaRecoveryCost = 10;
+    private float staminaRecoveryCost = 30f;
 
     [SerializeField]
     private Transform cameraArm;
@@ -44,6 +48,7 @@ public class PlayerController : Controller
 
     private float chargeTime = 0f;
     private float maxChargeTime = 3f;
+    private float switchWaitingTime = 0;
 
     public PlayerState playerState { get; private set; }
 
@@ -84,14 +89,12 @@ public class PlayerController : Controller
         LookAround();
         QuickSlotIndexChange();
         StaminerRecovery();
-        Debug.Log(player.currentStamina);
-        Debug.Log(playerState);
     }
 
     public void InputSend()
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        
+
         //구르기
         if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
@@ -102,10 +105,7 @@ public class PlayerController : Controller
                 player.DrainStamina(staminaCostRoll);
                 player.Roll();
             }
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            isRoll = false;
+            StartCoroutine(RollCoolTime());
         }
         //무기 스위치
         else if ((player.isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
@@ -115,15 +115,23 @@ public class PlayerController : Controller
             playerState = PlayerState.WeaponSheath;
             player.WeaponSwitch();
         }
-        //달리기
         else if (moveInput != Vector2.zero && Input.GetKey(KeyCode.LeftShift) && !player.isArmed
             && player.SwitchDoneCheck())
         {
-            if (player.StaminaCheck(staminaCostRun))
+            //지침
+            if (player.currentStamina < 30f)
+            {
+                playerState = PlayerState.Tired;
+                moveSpeed = tiredSpeed;
+                player.DrainStamina(staminaCostRun * Time.deltaTime);
+                player.Move(moveSpeed, moveInput);
+            }
+            //달리기
+            else
             {
                 playerState = PlayerState.Run;
-                player.DrainStamina(staminaCostRun * Time.deltaTime);
                 moveSpeed = runSpeed;
+                player.DrainStamina(staminaCostRun * Time.deltaTime);
                 player.Move(moveSpeed, moveInput);
             }
         }
@@ -141,8 +149,13 @@ public class PlayerController : Controller
         //정지
         else
         {
-            playerState = PlayerState.Idle;
-            player.ApplyState();
+            switchWaitingTime += Time.deltaTime;
+            if (switchWaitingTime > 0.1)
+            {
+                playerState = PlayerState.Idle;
+                player.ApplyState();
+                switchWaitingTime =0;
+            }
         }
         if (player.isArmed && player.StaminaCheck(0))
         {
@@ -155,7 +168,6 @@ public class PlayerController : Controller
                 if (chargeTime > maxChargeTime)
                 {
                     isCharging = false;
-                    //playerState = PlayerState.Idle;
                     player.ApplyState();
                     greatSword.AttackDamageSet(isRightAttack, chargeTime);
                     chargeTime =0;
@@ -164,7 +176,6 @@ public class PlayerController : Controller
             if (Input.GetMouseButtonUp(0))
             {
                 isCharging = false;
-                //playerState = PlayerState.Idle;
                 player.ApplyState();
                 greatSword.AttackDamageSet(isRightAttack, chargeTime);
                 chargeTime = 0;
@@ -178,7 +189,6 @@ public class PlayerController : Controller
             }
             if (Input.GetMouseButtonUp(1))
             {
-                //playerState = PlayerState.Idle;
                 player.ApplyState();
             }
         }
@@ -220,10 +230,15 @@ public class PlayerController : Controller
 
     public void StaminerRecovery()
     {
-        if((playerState != PlayerState.Run) && (playerState != PlayerState.Roll))
+        if((playerState != PlayerState.Run) && (playerState != PlayerState.Roll) && (playerState != PlayerState.Tired))
         {
             player.StaminerRecovery(staminaRecoveryCost * Time.deltaTime);
         }
     }
 
+    private IEnumerator RollCoolTime()
+    {
+        yield return new WaitForSeconds(1f);
+        isRoll = false;
+    }
 }
