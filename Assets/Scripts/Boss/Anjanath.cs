@@ -159,12 +159,7 @@ public class Anjanath : Monster
 
         else if (!isBossRecognized)
         {
-            if (SetChance())
-                anjanathBT.anjanathState = State.Walk;
-
-            else
-                anjanathBT.anjanathState = State.Idle;
-
+            anjanathBT.anjanathState = State.Idle;
         }
     }
 
@@ -179,6 +174,14 @@ public class Anjanath : Monster
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Finish"))
+        {
+            isArrivalTargetPos = true;
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (isBossRecognized)
@@ -188,14 +191,17 @@ public class Anjanath : Monster
 
         else if (!isBossRecognized)
         {
-            perceptionTime += Time.deltaTime;
-            if (perceptionTime >= 2f)
+            if (other.CompareTag("Player"))
             {
-                perceptionTime = 0;
-                if (other.CompareTag("Player"))
+                perceptionTime += Time.deltaTime;
+
+                if (perceptionTime >= 2f)
                 {
-                    isBossRecognized = true;
-                    targetTr = playerTr;
+                    perceptionTime = 0;
+                    {
+                        isBossRecognized = true;
+                        targetTr = playerTr;
+                    }
                 }
             }
         }

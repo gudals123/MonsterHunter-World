@@ -52,16 +52,16 @@ public class AnjanathBT : BossBehaviorTree
 
                 // Right SubTree
                 .Selector()
+                    //.Condition("IsNomalStates", () => anjanathState == State.Idle)
                     .Sequence()
-                        .Condition("ChanceForWalking", () => anjanathState == State.Walk)
-                            .Do("NomalWalking", () =>
-                            {
-                                anjanath.NormalMoving(2);
-                                return TaskStatus.Success;
-                            })
+                        .Condition("IsTargetSelected", () => anjanath.isSetTargetPos)
+                        .Do("NomalWalking", () =>
+                        {
+                            anjanath.NormalMoving(2);
+                            return TaskStatus.Success;
+                        })
                     .End()
                     .Sequence()
-                        .Condition("ChanceForWalking", () => anjanathState == State.Idle)
                         .Do(() =>
                         {
                             anjanath.Idle();

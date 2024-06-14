@@ -6,10 +6,13 @@ using UnityEngine.EventSystems;
 public class Monster : Entity
 {
     public int grade { get; set; }
-    protected Vector3 targetPos;
+    public Vector3 targetPos;
     protected int rotationSpeed;
     protected bool canAttack;
     protected bool setHit;
+    public bool isArrivalTargetPos;
+    public bool isSetTargetPos;
+    public Transform arrivalPos;
 
     public override int Attack()
     {
@@ -29,8 +32,8 @@ public class Monster : Entity
 
     public Vector3 SetRandomPos()
     {
-        float targetX = Random.Range(transform.position.x - 100, transform.position.x + 100);
-        float targetZ = Random.Range(transform.position.z - 100, transform.position.z + 100);
+        float targetX = Random.Range(-140, 140);
+        float targetZ = Random.Range(-140, 140);
         return new Vector3(targetX, transform.position.y, targetZ);
     }
 
@@ -56,18 +59,37 @@ public class Monster : Entity
     virtual public void Idle()
     {
         animator.Play("Idle");
-        targetPos = SetRandomPos();
+
+        if (isArrivalTargetPos)
+        {
+            arrivalPos.position = SetRandomPos();
+            isSetTargetPos = true;
+            isArrivalTargetPos = false;
+        }
     }
 
     virtual public void NormalMoving(float moveSpeed)
     {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName("Idle") && stateInfo.normalizedTime < 1.0f)
+        {
+            return;
+        }
+
+
         animator.Play("NormalWalking");
         // GroundCheck
-        Move(moveSpeed, targetPos);
+        Move(moveSpeed, arrivalPos.position);
+
+        if (isArrivalTargetPos)
+        {
+            isSetTargetPos = false;
+        }
     }
     
     public void TrackingPlayer(Transform targetTr)
-    { 
+    {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime < 1.0f)
