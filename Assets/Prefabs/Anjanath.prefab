@@ -89,12 +89,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227674714492192135}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.49759445, y: 0.5023941, z: 0.49759445, w: 0.5023941}
-  m_LocalPosition: {x: -0.30585736, y: 1.3055472, z: -0}
+  m_LocalRotation: {x: -0.49759433, y: 0.502394, z: 0.49759442, w: 0.50239414}
+  m_LocalPosition: {x: -0.23, y: 0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 191630364251638048}
+  m_Father: {fileID: 8910223179252517639}
   m_LocalEulerAnglesHint: {x: -89.45, y: 90, z: 0}
 --- !u!136 &795365556419772761
 CapsuleCollider:
@@ -115,10 +115,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.68
+  m_Radius: 0.57
   m_Height: 2.46
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: -0.62}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8139734956765545277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,9 +131,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c2d6f98e193d64690dc84673ebaf84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nomalAttackValue: 10
-  _hitprefab: {fileID: 0}
   _hitEffect: {fileID: 0}
+  bossAttackValue: 0
+  weightValue: 0
+  isBossAttacking: 0
+  attackCollider: {fileID: 0}
 --- !u!1 &255490019037696362
 GameObject:
   m_ObjectHideFlags: 0
@@ -1571,9 +1573,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6f8deb367129245973965a6f71c559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnjanathState: 0
-  targetObjectPos: {x: 0, y: 0, z: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  isArrivalTargetPos: 0
+  isSetTargetPos: 0
+  arrivalPos: {fileID: 0}
+  anjanathBT: {fileID: 0}
   DamageStack: 0
+  playerTr: {fileID: 0}
+  attackTr: {fileID: 0}
+  isBossRecognized: 0
+  targetTr: {fileID: 0}
+  getOtherAttackDamage: 0
+  startNormalAttaking: 0
+  startBreathAttaking: 0
+  perceptionTime: 0
 --- !u!1 &3574292172619466240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,7 +2056,7 @@ Transform:
   - {fileID: 9166819323547287444}
   - {fileID: 4284088668364975959}
   - {fileID: 2818173347180866329}
-  - {fileID: 1671653431003266732}
+  - {fileID: 8910223179252517639}
   - {fileID: 755501130874433759}
   - {fileID: 4460452709940183371}
   m_Father: {fileID: 5391810831147675005}
@@ -2740,6 +2753,38 @@ Transform:
   - {fileID: 1318877986698745974}
   m_Father: {fileID: 1747080010068044912}
   m_LocalEulerAnglesHint: {x: -1.1620941, y: 1.7903895, z: 7.3279233}
+--- !u!1 &7387145009374340620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8910223179252517639}
+  m_Layer: 6
+  m_Name: NormalAttackPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8910223179252517639
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7387145009374340620}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1671653431003266732}
+  m_Father: {fileID: 191630364251638048}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7774572776880076069
 GameObject:
   m_ObjectHideFlags: 0

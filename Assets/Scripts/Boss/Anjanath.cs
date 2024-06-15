@@ -5,6 +5,8 @@ using UnityEngine;
 public class Anjanath : Monster
 {
     public AnjanathBT anjanathBT;
+    public NormalAttackMethod normalattackMethod;
+    public GameObject breathAttackMethod;
 
     public int DamageStack;
     public Transform playerTr;
@@ -37,14 +39,13 @@ public class Anjanath : Monster
 
     public void BreathAttacking()
     {
-        //attackDamage = 5;
-        animator.Play("BreathAttack");
+        breathAttackMethod.SetActive(true);
     }
 
     public void NormalAttacking()
     {
-        //attackDamage = 10;
-        animator.Play("NormalAttack");
+        breathAttackMethod.SetActive(false);
+        normalattackMethod.NowBossAttacking();
     }
 
     public override void Hit(int damage)
@@ -81,22 +82,18 @@ public class Anjanath : Monster
         TrackingPlayer(targetTr);
     }
 
-    public bool SetChance()
-    {
-        return Random.Range(0f, 1.0f) <= 0.5f ? true : false;
-    }
-
     public void SetAttackState()
     {
         anjanathBT.anjanathState = State.Attack;
         isBossRecognized = true;
         perceptionTime = 0;
 
-        if (currentHp <= 600 && SetChance())
+        if (SetChance(0.5f))
         {
             startBreathAttaking = true;
             startNormalAttaking = false;
         }
+
         else
         {
             startBreathAttaking = false;
@@ -134,13 +131,13 @@ public class Anjanath : Monster
 
         if (Physics.Raycast(attackTr.position, transform.forward, out hit, 5f) && isBossRecognized)
         {
-            if(hit.collider.gameObject.name == targetTr.gameObject.name)
+            if (hit.collider.gameObject.name == targetTr.gameObject.name)
             {
                 SetAttackState();
             }
         }
 
-        else if(isBossRecognized && distancePtoB >= 11)
+        else if (isBossRecognized && distancePtoB >= 11)
         {
             perceptionTime += Time.deltaTime;
 

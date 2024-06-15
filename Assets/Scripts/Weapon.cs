@@ -14,7 +14,6 @@ public class Weapon : MonoBehaviour
         hit.SetActive(false);
     }
 
-
     protected virtual void OnTriggerEnter(Collider other) { }
 
     protected virtual void AppearHitEffect(Vector3 hitPos, float duration)
