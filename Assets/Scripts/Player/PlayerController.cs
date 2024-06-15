@@ -44,6 +44,8 @@ public class PlayerController : Controller
     public bool isRightAttack { get; private set; }
     public bool isRoll { get; private set; }
     public bool isCharging { get; set; }
+    public bool isMediumCharged { get; private set; }
+    public bool isMaxCharged { get; private set; }
 
 
     private float chargeTime = 0f;
@@ -69,6 +71,8 @@ public class PlayerController : Controller
         playerState = PlayerState.Idle;
         moveSpeed = walkSpeed;
         isRoll = false;
+        isMediumCharged = false;
+        isMaxCharged = false;
         potion = new Item_Potion(player, 10, 10);
         catAttack = new Skill_CatAttack(cat);
         catHeal = new Skill_CatHeal(cat);
@@ -164,18 +168,34 @@ public class PlayerController : Controller
                 playerState = PlayerState.Attack;
                 isRightAttack = false;
                 player.ApplyState();
-                chargeTime += Time.deltaTime;
-                if (chargeTime > maxChargeTime)
+                if (isCharging)
                 {
-                    isCharging = false;
-                    player.ApplyState();
-                    greatSword.AttackDamageSet(isRightAttack, chargeTime);
-                    chargeTime =0;
+                    chargeTime += Time.deltaTime;
+                    Debug.Log(chargeTime);
+                    if (chargeTime >= 1f && !isMediumCharged)
+                    {
+                        player.ChargingEffectPlay();
+                        isMediumCharged = true;
+                    }
+                    else if (chargeTime >= 2.5f && !isMaxCharged)
+                    {
+                        player.ChargingEffectPlay();
+                        isMaxCharged = true;
+                    }
+                    if (chargeTime > maxChargeTime)
+                    {
+                        isCharging = false;
+                        player.ApplyState();
+                        greatSword.AttackDamageSet(isRightAttack, chargeTime);
+                        chargeTime = 0;
+                    }
                 }
             }
             if (Input.GetMouseButtonUp(0))
             {
                 isCharging = false;
+                isMediumCharged = false;
+                isMaxCharged = false;
                 player.ApplyState();
                 greatSword.AttackDamageSet(isRightAttack, chargeTime);
                 chargeTime = 0;
