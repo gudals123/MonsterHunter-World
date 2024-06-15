@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
-using static PlayerController;
-using static UnityEngine.UI.Image;
+using static UnityEngine.Rendering.DebugUI;
+
 
 public class Player : Entity
 {
     private PlayerController playerController;
-    
+
     [Header("Object")]
+    [SerializeField] private GameObject chargingEffect;
     [SerializeField] private Transform characterBody;
     [SerializeField] private Transform cameraArm;
 
@@ -42,6 +43,7 @@ public class Player : Entity
         maxStamina = 100f;
         currentStamina = maxStamina;
         isArmed = false;
+        chargingEffect.SetActive(false);
     }
 
     public void DrainStamina(float value)
@@ -210,4 +212,16 @@ public class Player : Entity
         animator.SetBool(PlayerAnimatorParamiter.IsGetHit, false);
     }
 
+
+    public void ChargingEffectPlay()
+    {
+        chargingEffect.SetActive(true);
+        StartCoroutine(ObjectDeactivated(chargingEffect, 1.0f));
+    }
+
+    private IEnumerator ObjectDeactivated(GameObject target , float time)
+    {
+        yield return new WaitForSeconds(time);
+        target.SetActive(false);
+    }
 }

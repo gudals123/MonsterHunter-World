@@ -9,7 +9,7 @@ public class GreatSword : Weapon
         base.Awake();
     }
 
-    public void AttackDamageSet(bool isRightAttack, float ChargeTime)
+    public void AttackDamageSet(bool isRightAttack, float chargeTime)
     {
         if (isRightAttack)
         {
@@ -17,11 +17,11 @@ public class GreatSword : Weapon
         }
         else
         {
-            if(ChargeTime < 1)
+            if(chargeTime < 1)
             {
                 attackDamage = 10;
             }
-            else if(ChargeTime < 2.5)
+            else if(chargeTime < 2.5)
             {
                 attackDamage = 20;
             }
