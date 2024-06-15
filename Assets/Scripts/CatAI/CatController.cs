@@ -20,9 +20,9 @@ public class CatController : AIController
     }
 
     private Transform attackPriority;
+    private Cat cat;
     public CatState catState;
 
-    //private AIController catTree;
     [SerializeField] public Transform player;
     [SerializeField] public Transform boss;
     [SerializeField] public Transform target;
@@ -31,62 +31,53 @@ public class CatController : AIController
     public bool isBoss;
 
     [Header("Range Info")]
-    //[SerializeField] private Collider collider;
     public float detectRange;
     public float interactionRange;
     public Vector3 dir;
 
     private void Start()
     {
+        cat = GetComponent<Cat>();
         catState = CatState.Tracking;
         detectRange = 8f;
         interactionRange = 1.5f;
     }
 
+    public void Hit()
+    {
+        catState = CatState.Hit;
+        cat.Hit(10);
+        if (cat.currentHP <= 0)
+        {
+            catState = CatState.Dead;
+        }
+    }
+
     public Vector3 Detect(Vector3 targetPos)
     {
-        Vector3 direction = (transform.position - targetPos)/*.normalized*/;
+        Vector3 direction = (transform.position - targetPos);
 
         return direction;
     }
 
-    public void Tracking(Transform target) // »óÅÂ¸¸ º¯°æ
+    public void Tracking(Transform target) // ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
-        //// º¸½º°¡ °¨Áö¹üÀ§ ³»¿¡ ÀÖÀ» ¶§
-        //if (target.CompareTag("Boss") && dir.magnitude <= detectRange /*&& dir.magnitude > interactionRange*/)
-        //{
-        //    catState = CatState.Detect;
-        //    isPlayer = false;
-        //    isBoss = true;
-        //    //target = boss;
-        //}
-        //// º¸½º°¡ »óÈ£ÀÛ¿ë¹üÀ§ ³»¿¡ ÀÖÀ» ¶§
-        //if (target.CompareTag("Boss") && dir.magnitude <= interactionRange)
-        //{
-        //    catState = CatState.Attack;
-        //    isPlayer = false;
-        //    isBoss = true;
-        //    //target = boss;
-        //}
-        // ÇÃ·¹ÀÌ¾î°¡ °¨Áö¹üÀ§ ³»¿¡ ÀÖÀ» ¶§
-        if (target.CompareTag("Player") /*&& dir.magnitude <= detectRange*//*&& dir.magnitude > interactionRange*/)
+        // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+        if (target.CompareTag("Player"))
         {
             catState = CatState.Detect;
             isPlayer = true;
-            //target = player;
         }
-        // ÇÃ·¹ÀÌ¾î°¡ »óÈ£ÀÛ¿ë¹üÀ§ ³»¿¡ ÀÖÀ» ¶§
+        // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½È£ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         if (target.CompareTag("Player") && dir.magnitude <= interactionRange)
         {
             catState = CatState.Idle;
         }
-        // else ÇÃ·¹ÀÌ¾î Æ®·¡Å·
-        //if (target == null)
-        //{
-        //    target = player;
-        //    isPlayer = true;
-        //    catState = CatState.Tracking;
-        //}
+        else
+        {
+            this.target = player;
+            catState = CatState.Detect;
+        }
     }
 
     private void Update()
@@ -96,12 +87,23 @@ public class CatController : AIController
         Debug.Log(dir.magnitude);
         Debug.Log(target.tag);
         Debug.Log(catState);
-        //OnTriggerEnter(collider);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        target = other.transform;
-        Debug.Log($"trigger : {target.tag}");
+        if (other.name == "Plane")
+        {
+            return;
+        }
+
+        if (other.CompareTag("BossAttack"))
+        {
+            catState = CatState.Hit;
+        }
+        else
+        {
+            target = other.transform;
+            Debug.Log($"trigger : {target.tag}");
+        }
     }
 }
