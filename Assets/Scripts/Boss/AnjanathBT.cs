@@ -23,19 +23,11 @@ public class AnjanathBT : BossBehaviorTree
                         .Selector()
                             .Sequence()
                                 .Condition("BreathAttack", () => anjanath.startBreathAttaking)
-                                    .Do(() =>
-                                    {
-                                        anjanath.BreathAttacking();
-                                        return TaskStatus.Success;
-                                    })
+                                    .StateAction("BreathAttack", () => anjanath.BreathAttacking())
                             .End()
                             .Sequence()
                                 .Condition("NormalAttack", () => anjanath.startNormalAttaking)
-                                    .Do(() =>
-                                    {
-                                        anjanath.NormalAttacking();
-                                        return TaskStatus.Success;
-                                    })
+                                    .StateAction("NormalAttack", () => anjanath.NormalAttacking())
                             .End()
                         .End()
                 .End()

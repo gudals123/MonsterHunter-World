@@ -13,6 +13,7 @@ public class Monster : Entity
     public bool isArrivalTargetPos;
     public bool isSetTargetPos;
     public Transform arrivalPos;
+    protected AnimatorStateInfo stateInfo;
 
     public override int Attack()
     {
@@ -70,13 +71,12 @@ public class Monster : Entity
 
     virtual public void NormalMoving(float moveSpeed)
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (stateInfo.IsName("Idle") && stateInfo.normalizedTime < 1.0f)
         {
             return;
         }
-
 
         animator.Play("NormalWalking");
         // GroundCheck
@@ -90,18 +90,25 @@ public class Monster : Entity
     
     public void TrackingPlayer(Transform targetTr)
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime < 1.0f)
+        if(stateInfo.IsName("NormalAttack") || stateInfo.IsName("BreathAttack"))
         {
-            return;
+            if (stateInfo.normalizedTime < 1.0f)
+                return;
         }
-        else
+
+        // 애니메이션이 끝났다면 추적 상태로 전환
+        if (!stateInfo.IsName("BattleTracking"))
         {
             animator.Play("BattleTracking");
-            Move(4, targetTr.position);
         }
+        Move(4, targetTr.position);
     }
 
+    public bool SetChance(float setValue)
+    {
+        return Random.Range(0f, 1.0f) <= setValue ? true : false;
+    }
 
 }
