@@ -38,6 +38,7 @@ public class CatController : AIController
     private void Start()
     {
         cat = GetComponent<Cat>();
+        target = player;
         catState = CatState.Tracking;
         detectRange = 8f;
         interactionRange = 1.5f;
@@ -60,15 +61,15 @@ public class CatController : AIController
         return direction;
     }
 
-    public void Tracking(Transform target) // ���¸� ����
+    public void PlayerTracking(Transform target) // 상태만 변경
     {
-        // �÷��̾ �������� ���� ���� ��
+        // 플레이어가 감지범위 내에 있을 때
         if (target.CompareTag("Player"))
         {
             catState = CatState.Detect;
             isPlayer = true;
         }
-        // �÷��̾ ��ȣ�ۿ���� ���� ���� ��
+        // 플레이어가 상호작용범위 내에 있을 때
         if (target.CompareTag("Player") && dir.magnitude <= interactionRange)
         {
             catState = CatState.Idle;
@@ -83,7 +84,7 @@ public class CatController : AIController
     private void Update()
     {
         dir = Detect(target.position);
-        Tracking(target);
+        PlayerTracking(target);
         Debug.Log(dir.magnitude);
         Debug.Log(target.tag);
         Debug.Log(catState);

@@ -37,7 +37,6 @@ public class Cat : Entity
         animator = GetComponentInChildren<Animator>();
 
         target = player.transform;
-        PlayerTracking();
     }
 
     public override void Move(float moveSpeed, Vector3 targetPos)
@@ -106,7 +105,7 @@ public class Cat : Entity
         gameObject.SetActive(true);
     }
 
-    public void Tracking(Transform target) // 출력
+    public void PlayerTracking(Transform target) // 출력
     {
         // 플레이어가 감지범위 내에 있을 때
         if (catController.catState == CatState.Detect && target.CompareTag("Player") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
@@ -140,7 +139,7 @@ public class Cat : Entity
     {
         target = catController.target;
         LookAtTarget(target);
-        PlayerTracking();
+        PlayerTracking(player);
         this.currentHP = currentHp;
     }
 
