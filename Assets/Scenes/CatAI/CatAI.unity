@@ -447,12 +447,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 399367704}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &399367708 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9055791104001212950, guid: f140e689e2a78d54e828536c733f1d4e,
-    type: 3}
-  m_PrefabInstance: {fileID: 399367704}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &399367709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d585c5d6c97062f47b1858067ba948c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chargingEffect: {fileID: 0}
   characterBody: {fileID: 1987402821}
   cameraArm: {fileID: 399367707}
   groundcheckDistance: 0.85
@@ -522,6 +517,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 148897346324223003, guid: f140e689e2a78d54e828536c733f1d4e,
+        type: 3}
+      propertyPath: cameraArm
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 461956904142473200, guid: f140e689e2a78d54e828536c733f1d4e,
         type: 3}
       propertyPath: m_IsActive
@@ -541,6 +541,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2871277221370156765, guid: f140e689e2a78d54e828536c733f1d4e,
+        type: 3}
+      propertyPath: cameraArm
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4464783020766103924, guid: f140e689e2a78d54e828536c733f1d4e,
         type: 3}
@@ -621,6 +626,8 @@ PrefabInstance:
     - {fileID: 1955419867365339950, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
     - {fileID: 8180106197465738532, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
     - {fileID: 9137739776715067023, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
+    - {fileID: 148897346324223003, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
+    - {fileID: 2871277221370156765, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2196387413024421371, guid: f140e689e2a78d54e828536c733f1d4e, type: 3}
     m_AddedGameObjects:
@@ -993,6 +1000,8 @@ MonoBehaviour:
   target: {fileID: 1083054402}
   isPlayer: 0
   isBoss: 0
+  detectRange: 0
+  interactionRange: 0
   dir: {x: 0, y: 0, z: 0}
 --- !u!114 &1821463061
 MonoBehaviour:
