@@ -5,7 +5,7 @@ public enum State
     Tracking,
     Attack,
     Roar,
-    SetDamage,
+    GetHit,
     Sturn,
     Dead,
 }

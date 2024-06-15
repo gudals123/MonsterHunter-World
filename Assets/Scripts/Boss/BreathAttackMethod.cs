@@ -5,7 +5,7 @@ public class BreathAttackMethod : BossAttackMethod
 {
     override protected void Awake()
     {
-        bossAttackValue = 5;
+        attackDamage = 5;
         weightValue = 2;
 
         isBossAttacking = false;

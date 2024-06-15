@@ -21,6 +21,8 @@ public class Anjanath : Monster
     public bool startBreathAttaking;
 
     public float perceptionTime = 0;
+    private bool isBusy;
+    private State currentState;
 
     private void Awake()
     {
@@ -51,20 +53,34 @@ public class Anjanath : Monster
     public override void Hit(int damage)
     {
         base.Hit(damage);
-
-        if(currentHp <= 0)
+        DamageStack++;
+        if (currentHp <= 0)
         {
+            anjanathBT.anjanathState = State.Dead;
             Dead();
         }
 
         else if(DamageStack == 5)
         {
-            animator.Play("Sturn");
+            animator.Play("Sturn"); //2.0
+            afterGetHit(2f);
+            DamageStack = 0;
         }
 
         else if(DamageStack == 2)
         {
-            animator.Play("Hit");
+            animator.Play("Hit");//0.26
+            afterGetHit(0.26f);
+        }
+    }
+
+    public IEnumerator afterGetHit(float delayTime)
+    {
+        if (isBusy)
+        {
+            yield return new WaitForSeconds(delayTime);
+            anjanathBT.anjanathState = currentState;
+            isBusy = false;
         }
     }
 
@@ -176,6 +192,15 @@ public class Anjanath : Monster
         if (other.CompareTag("Finish"))
         {
             isArrivalTargetPos = true;
+        }
+
+        if (other.CompareTag("Weapon"))
+        {
+            isBusy = true;
+            currentState = anjanathBT.anjanathState;
+            anjanathBT.anjanathState = State.GetHit;
+            int WeaponDamage = other.gameObject.GetComponent<Weapon>().attackDamage;
+            Hit(WeaponDamage);
         }
     }
 
