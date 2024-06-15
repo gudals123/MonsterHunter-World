@@ -1,12 +1,20 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GreatSword : Weapon
 {
+
+    [SerializeField] private GameObject playerObj;
+    private Player player;
+    private CinemachineImpulseSource impulseSource;
+
     protected override void Awake()
     {
         base.Awake();
+        player = playerObj.GetComponent<Player>();
+        impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     public void AttackDamageSet(bool isRightAttack, float chargeTime)
@@ -45,7 +53,15 @@ public class GreatSword : Weapon
 
     protected override void OnTriggerEnter(Collider other)
     {
-
+        if(other.CompareTag("Boss") || other.CompareTag("Monster"))
+        {
+            Vector3 hitPos = other.ClosestPoint(transform.position);
+            AppearHitEffect(hitPos, 0.1f);
+            StartCoroutine(player.Snag());
+            impulseSource.GenerateImpulse();
+        }
         //Cat.막타누구임(other);
     }
+
+
 }

@@ -7,13 +7,17 @@ public class AttackState : StateMachineBehaviour
     private int comboCount;
     private Animator _animator;
     private PlayerController _playerController;
-    
+    private bool isAppliedAnimatorSpeedDone;
+
+
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _animator = animator.GetComponent<Animator>();
         _playerController = _animator.GetComponentInParent<PlayerController>();
         _animator.speed = 0.5f;
+        isAppliedAnimatorSpeedDone = false;
+
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -23,9 +27,10 @@ public class AttackState : StateMachineBehaviour
             CombatManager.Instance._isCharging = false;
         }
         */
-        if (_playerController.isCharging == false)
+        if (!_playerController.isCharging && !isAppliedAnimatorSpeedDone)
         {
             _animator.speed = 0.5f;
+            isAppliedAnimatorSpeedDone = true;
         }
     }
 
