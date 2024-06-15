@@ -67,7 +67,7 @@ public class AnjanathBT : BossBehaviorTree
 
     private void Update()
     {
-        if (anjanathState == State.SetDamage)   // anjanath.AnjanathState == State.SetDamage
+        if (anjanathState == State.GetHit)
         {
             anjanath.Hit(bossController.getOtherAttackDamage);
         }
