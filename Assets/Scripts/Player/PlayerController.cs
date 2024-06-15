@@ -171,7 +171,6 @@ public class PlayerController : Controller
                 if (isCharging)
                 {
                     chargeTime += Time.deltaTime;
-                    Debug.Log(chargeTime);
                     if (chargeTime >= 1f && !isMediumCharged)
                     {
                         player.ChargingEffectPlay();

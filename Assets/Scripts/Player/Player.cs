@@ -176,10 +176,6 @@ public class Player : Entity
         currentHp = Math.Clamp(currentHp , 0 , maxHp);
     }
 
-
-
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("BossAttack"))
@@ -223,5 +219,13 @@ public class Player : Entity
     {
         yield return new WaitForSeconds(time);
         target.SetActive(false);
+    }
+
+
+    public IEnumerator Snag()
+    {
+        animator.speed = 0.01f;
+        yield return new WaitForSeconds(0.1f);
+        animator.speed = 1f;
     }
 }
