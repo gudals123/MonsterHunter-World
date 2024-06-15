@@ -36,6 +36,7 @@ public class AttackState : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        _playerController.isAnimationPauseDone = false;
         _animator.speed = 1f;
         comboCount++;
         if (comboCount >= 2)
