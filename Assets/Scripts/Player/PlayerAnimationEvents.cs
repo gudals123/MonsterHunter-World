@@ -41,6 +41,7 @@ public class PlayerAnimationEvents : MonoBehaviour
             GetComponent<Animator>().speed = 0.01f;
         }
         _playerController.isCharging = true;
+        _playerController.isAnimationPauseDone = true;
     }
 
     public void AttackRangeCollierTurnOn()

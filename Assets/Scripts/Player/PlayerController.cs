@@ -44,6 +44,7 @@ public class PlayerController : Controller
     public bool isRightAttack { get; private set; }
     public bool isRoll { get; private set; }
     public bool isCharging { get; set; }
+    public bool isAnimationPauseDone { get; set; }
     public bool isMediumCharged { get; private set; }
     public bool isMaxCharged { get; private set; }
 
@@ -71,6 +72,7 @@ public class PlayerController : Controller
         playerState = PlayerState.Idle;
         moveSpeed = walkSpeed;
         isRoll = false;
+        isAnimationPauseDone = false;
         isMediumCharged = false;
         isMaxCharged = false;
         potion = new Item_Potion(player, 10, 10);

@@ -228,4 +228,6 @@ public class Player : Entity
         yield return new WaitForSeconds(0.1f);
         animator.speed = 1f;
     }
+
+
 }

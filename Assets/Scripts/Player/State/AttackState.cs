@@ -27,7 +27,7 @@ public class AttackState : StateMachineBehaviour
             CombatManager.Instance._isCharging = false;
         }
         */
-        if (!_playerController.isCharging && !isAppliedAnimatorSpeedDone)
+        if (!_playerController.isCharging && !isAppliedAnimatorSpeedDone && _playerController.isAnimationPauseDone)
         {
             _animator.speed = 0.5f;
             isAppliedAnimatorSpeedDone = true;
