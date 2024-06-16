@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Purchasing;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -9,7 +11,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Slider hpBar;
     [SerializeField] private Slider spBar;
-
+    [SerializeField] GameObject damageTextPrefab;
 
     public static UIManager Instance
     {
@@ -17,7 +19,7 @@ public class UIManager : MonoBehaviour
         {
             if (instance == null)
             {
-                return null;
+                return FindObjectOfType<UIManager>();
             }
             else
             {
@@ -51,6 +53,21 @@ public class UIManager : MonoBehaviour
         spBar.maxValue = maxSP;
         spBar.value = currentSP;
     }
+
+
+
+    public void CreateDamageText(int damage, Vector3 hitPos)
+    {
+        GameObject damageTextInstance = Instantiate(damageTextPrefab, hitPos, Quaternion.identity);
+        DamageText damageText = damageTextInstance.GetComponent<DamageText>();
+        damageText.SetText(damage.ToString());
+    }
+
+
+
+    
+
+
 
 }
 
