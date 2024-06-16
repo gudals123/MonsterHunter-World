@@ -61,7 +61,7 @@ public class PlayerController : Controller
     private Skill_CatHeal catHeal;
 
     //Äü½½·Ô
-    private Slot[] QuickSlot;
+    private Slot[] quickSlot;
     private int quickSlotIndex = 0;
     private int quickSlotCount = 0;
 
@@ -78,11 +78,12 @@ public class PlayerController : Controller
         potion = new Item_Potion(player, 10, 10);
         catAttack = new Skill_CatAttack(cat);
         catHeal = new Skill_CatHeal(cat);
-        QuickSlot = new Slot[4];
-        QuickSlot[0] = potion;
-        QuickSlot[1] = catAttack;
-        QuickSlot[2] = catHeal;
+        quickSlot = new Slot[4];
+        quickSlot[0] = potion;
+        quickSlot[1] = catAttack;
+        quickSlot[2] = catHeal;
         quickSlotCount = 3;
+
     }
 
 
@@ -150,7 +151,7 @@ public class PlayerController : Controller
         }
         else if (Input.GetKeyDown(KeyCode.E) && !player.isArmed)
         {
-            QuickSlot[quickSlotIndex].Activate();
+            quickSlot[quickSlotIndex].Activate();
         }
         //Á¤Áö
         else
@@ -244,9 +245,10 @@ public class PlayerController : Controller
         }
         else if (scroll < 0f)
         {
-            quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
+            quickSlotIndex = (quickSlotIndex - 1 + quickSlotCount) % (quickSlotCount);
         }
-        //Debug.Log($"ÇöÀç Äü½½·Ô Index{quickSlotIndex}");
+        UIManager.Instance.UpdateQuickSlotIcon(quickSlot, quickSlotIndex, quickSlotCount);
+        Debug.Log($"ÇöÀç Äü½½·Ô Index{quickSlotIndex}");
     }
 
     public void StaminerRecovery()
