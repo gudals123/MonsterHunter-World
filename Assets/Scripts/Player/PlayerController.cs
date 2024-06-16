@@ -55,12 +55,12 @@ public class PlayerController : Controller
 
     public PlayerState playerState { get; private set; }
 
-    //½½·Ô
+    //ìŠ¬ë¡¯
     private Item_Potion potion;
     private Skill_CatAttack catAttack;
     private Skill_CatHeal catHeal;
 
-    //Äü½½·Ô
+    //í€µìŠ¬ë¡¯
     private Slot[] QuickSlot;
     private int quickSlotIndex = 0;
     private int quickSlotCount = 0;
@@ -101,7 +101,7 @@ public class PlayerController : Controller
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        //±¸¸£±â
+        //êµ¬ë¥´ê¸°
         if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
         {
             if (player.StaminaCheck(staminaCostRoll))
@@ -113,7 +113,7 @@ public class PlayerController : Controller
             }
             StartCoroutine(RollCoolTime());
         }
-        //¹«±â ½ºÀ§Ä¡
+        //ë¬´ê¸° ìŠ¤ìœ„ì¹˜
         else if ((player.isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
             (!player.isArmed && Input.GetMouseButtonDown(0)) ||
             (Input.GetKeyDown(KeyCode.E) && player.isArmed))
@@ -124,7 +124,7 @@ public class PlayerController : Controller
         else if (moveInput != Vector2.zero && Input.GetKey(KeyCode.LeftShift) && !player.isArmed
             && player.SwitchDoneCheck())
         {
-            //ÁöÄ§
+            //ì§€ì¹¨
             if (player.currentStamina < 30f)
             {
                 playerState = PlayerState.Tired;
@@ -132,7 +132,7 @@ public class PlayerController : Controller
                 player.DrainStamina(staminaCostRun * Time.deltaTime);
                 player.Move(moveSpeed, moveInput);
             }
-            //´Þ¸®±â
+            //ë‹¬ë¦¬ê¸°
             else
             {
                 playerState = PlayerState.Run;
@@ -141,7 +141,7 @@ public class PlayerController : Controller
                 player.Move(moveSpeed, moveInput);
             }
         }
-        //°È±â
+        //ê±·ê¸°
         else if (moveInput != Vector2.zero)
         {
             playerState = PlayerState.Walk;
@@ -152,7 +152,7 @@ public class PlayerController : Controller
         {
             QuickSlot[quickSlotIndex].Activate();
         }
-        //Á¤Áö
+        //ì •ì§€
         else
         {
             switchWaitingTime += Time.deltaTime;
@@ -246,7 +246,7 @@ public class PlayerController : Controller
         {
             quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
         }
-        //Debug.Log($"ÇöÀç Äü½½·Ô Index{quickSlotIndex}");
+        //Debug.Log($"í˜„ìž¬ í€µìŠ¬ë¡¯ Index{quickSlotIndex}");
     }
 
     public void StaminerRecovery()
