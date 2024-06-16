@@ -12,7 +12,7 @@ public class Cat : Entity
     private int damage;
     private int heal;
 
-    [Header("Cat Info")]
+    [Header("CatController Info")]
     private CatController catController;
     private Vector3 startPosition;
     [SerializeField] private Collider catCollider;
@@ -62,6 +62,7 @@ public class Cat : Entity
         currentHp -= damage;
         if (catController.catState == CatState.Dead)
         {
+            startPosition = transform.position;
             gameObject.SetActive(false);
         }
     }
@@ -72,10 +73,10 @@ public class Cat : Entity
         return heal;
     }
 
-    public void Resurrection()
+    public void Respawn()
     {
         currentHp = maxHp;
-        startPosition = player.position;
+        transform.position = startPosition;
         gameObject.SetActive(true);
     }
 
