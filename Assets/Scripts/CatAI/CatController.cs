@@ -61,7 +61,7 @@ public class CatController : AIController
         return direction;
     }
 
-    public void PlayerTracking(Transform target) // 상태만 변경
+    public void PlayerTracking() // 상태만 변경
     {
         // 플레이어가 감지범위 내에 있을 때
         if (target.CompareTag("Player"))
@@ -84,7 +84,7 @@ public class CatController : AIController
     private void Update()
     {
         dir = Detect(target.position);
-        PlayerTracking(target);
+        PlayerTracking();
         Debug.Log(dir.magnitude);
         Debug.Log(target.tag);
         Debug.Log(catState);

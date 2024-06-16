@@ -8,7 +8,6 @@ using static CatController;
 public class Cat : Entity
 {
     [Header("Cat Info")]
-    private string skill;
     private float respawnTime;
     private int damage;
     private int heal;
@@ -54,14 +53,7 @@ public class Cat : Entity
 
         animator.Play("Attack");
         Debug.Log("Attack!");
-        damage = Random.Range(1, 6);
         return damage;
-    }
-
-    public void SkillAttack(Transform target)
-    {
-        Move(Time.deltaTime, target.position);
-        Attack();
     }
 
     public override void Hit(int damage)
@@ -71,24 +63,6 @@ public class Cat : Entity
         if (catController.catState == CatState.Dead)
         {
             gameObject.SetActive(false);
-        }
-    }
-
-    public void Skill()
-    {
-        if (skill == "Heal")
-        {
-            Heal();
-        }
-        else if (skill == "Attack")
-        {
-
-            Attack();
-        }
-        else if (skill == "SkillAttack")
-        {
-            // 스킬 추가
-            Attack();
         }
     }
 
@@ -105,7 +79,7 @@ public class Cat : Entity
         gameObject.SetActive(true);
     }
 
-    public void PlayerTracking(Transform target) // 출력
+    public void PlayerTracking() // 출력
     {
         // 플레이어가 감지범위 내에 있을 때
         if (catController.catState == CatState.Detect && target.CompareTag("Player") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
@@ -139,13 +113,13 @@ public class Cat : Entity
     {
         target = catController.target;
         LookAtTarget(target);
-        PlayerTracking(player);
+        PlayerTracking();
         this.currentHP = currentHp;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, catController.detectRange);
-        Gizmos.DrawWireSphere(transform.position, catController.interactionRange);
+        Gizmos.DrawWireSphere(transform.position, 8f);
+        Gizmos.DrawWireSphere(transform.position, 1.5f);
     }
 }
