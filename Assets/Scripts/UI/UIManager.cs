@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Slider hpBar;
     [SerializeField] private Slider spBar;
+    [SerializeField] private TextMesh catName;
     [SerializeField] GameObject damageTextPrefab;
 
     public static UIManager Instance
@@ -30,13 +31,13 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        // ÀÎ½ºÅÏ½º°¡ nullÀÌ¸é »õ·Î »ý¼º
+        // ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ nullï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // ¾ÀÀÌ ¹Ù²î¾îµµ ÆÄ±«µÇÁö ¾Êµµ·Ï ¼³Á¤
+            DontDestroyOnLoad(gameObject); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½îµµ ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
-        // ÀÎ½ºÅÏ½º°¡ ÀÌ¹Ì Á¸ÀçÇÏ°í, ÇöÀç ÀÎ½ºÅÏ½º°¡ ±× ÀÎ½ºÅÏ½º¿Í ´Ù¸£¸é ÀÚ½ÅÀ» ÆÄ±«
+        // ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ä±ï¿½
         else if (instance != this)
         {
             Destroy(gameObject);
@@ -54,6 +55,10 @@ public class UIManager : MonoBehaviour
         spBar.value = currentSP;
     }
 
+    public void UpdateCatName(string _catName)
+    {
+        catName.text = _catName;
+    }
 
 
     public void CreateDamageText(int damage, Vector3 hitPos)
