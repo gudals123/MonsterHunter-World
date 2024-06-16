@@ -253,7 +253,7 @@ public class PlayerController : Controller
     {
         if((playerState != PlayerState.Run) && (playerState != PlayerState.Roll) && (playerState != PlayerState.Tired))
         {
-            player.StaminerRecovery(staminaRecoveryCost * Time.deltaTime);
+            player.RecoveryStaminer(staminaRecoveryCost * Time.deltaTime);
         }
     }
 

@@ -5,7 +5,7 @@ public class NormalAttackMethod : BossAttackMethod
 {
     override protected void Awake()
     {
-        bossAttackValue = 10;
+        attackDamage = 10;
         weightValue = 1;
 
         isBossAttacking = false;

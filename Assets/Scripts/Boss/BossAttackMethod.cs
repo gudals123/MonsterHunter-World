@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class BossAttackMethod : Weapon
 {
-    [SerializeField] protected int bossAttackValue;
-    [SerializeField] protected int weightValue;
-
+    protected int weightValue;
     protected bool isBossAttacking;
     protected bool isBossValidAttack;
     protected float startDuration;

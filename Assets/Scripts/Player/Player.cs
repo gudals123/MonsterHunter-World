@@ -51,9 +51,10 @@ public class Player : Entity
         currentStamina -= value;
         currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
         animator.SetFloat("Stamina", currentStamina);
+        UIManager.Instance.UpdateSPBar(currentStamina, maxStamina);
     }
 
-    public void StaminerRecovery(float value)
+    public void RecoveryStaminer(float value)
     {
         if (currentStamina >= maxStamina)
         {
@@ -62,6 +63,7 @@ public class Player : Entity
         currentStamina += value;
         currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
         animator.SetFloat("Stamina", currentStamina);
+        UIManager.Instance.UpdateSPBar(currentStamina, maxStamina);
     }
 
     public bool StaminaCheck(float cost)
@@ -89,7 +91,8 @@ public class Player : Entity
             Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
             Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
-            characterBody.forward = moveDir;
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            characterBody.rotation = Quaternion.Slerp(characterBody.rotation, targetRotation, Time.deltaTime * moveSpeed);
 
             rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
         }
@@ -167,13 +170,14 @@ public class Player : Entity
             return;
         }
         currentHp -= damage;
-
+        UIManager.Instance.UpdateHPBar(currentHp, maxHp);
     }
 
     public void Heal(int healingAmount)
     {
         currentHp += healingAmount;
         currentHp = Math.Clamp(currentHp , 0 , maxHp);
+        UIManager.Instance.UpdateHPBar(currentHp, maxHp);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -182,6 +186,7 @@ public class Player : Entity
         {
             knockback(transform.position, other.transform.position);
             StartCoroutine(GetHit());
+            Hit(10);
 
             /*            other = GetComponent<Anjanath>();
                         int damage = other.Attack();*/
