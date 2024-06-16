@@ -12,7 +12,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider hpBar;
     [SerializeField] private Slider spBar;
     [SerializeField] private TextMesh catName;
-    [SerializeField] GameObject damageTextPrefab;
+    [SerializeField] private GameObject damageTextPrefab;
+    [SerializeField] private Image currentSlot;
+    [SerializeField] private Image leftSlot;
+    [SerializeField] private Image rightSlot;
+    [SerializeField] private Image[] slotsIcon;
+
 
     public static UIManager Instance
     {
@@ -28,16 +33,14 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-
+    
     private void Awake()
     {
-        // �ν��Ͻ��� null�̸� ���� ����
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // ���� �ٲ� �ı����� �ʵ��� ����
+            DontDestroyOnLoad(gameObject);
         }
-        // �ν��Ͻ��� �̹� �����ϰ�, ���� �ν��Ͻ��� �� �ν��Ͻ��� �ٸ��� �ڽ��� �ı�
         else if (instance != this)
         {
             Destroy(gameObject);
@@ -60,7 +63,31 @@ public class UIManager : MonoBehaviour
         catName.text = _catName;
     }
 
+    public void UpdateQuickSlotIcon(Slot[] quickSlot, int currentIndex, int quickSlotCount)
+    {
+        int leftIndex = (currentIndex - 1 + quickSlotCount) % (quickSlotCount);
+        int rightIndex = (currentIndex + 1) % (quickSlotCount);
+        
+        currentSlot.sprite = quickSlot[currentIndex].icon.sprite;
+        leftSlot.sprite = quickSlot[leftIndex].icon.sprite;
+        rightSlot.sprite = quickSlot[rightIndex].icon.sprite;
+    }
 
+    public void SetIcon(Slot slot)
+    {
+        if(slot.GetType() == typeof(Item_Potion)) 
+        {
+            slot.icon = slotsIcon[0];
+        }
+        else if (slot.GetType() == typeof(Skill_CatAttack))
+        {
+            slot.icon = slotsIcon[1];
+        }
+        else if (slot.GetType() == typeof(Skill_CatHeal))
+        {
+            slot.icon = slotsIcon[2];
+        }
+    }
     public void PlayerDamageText(int damage, Vector3 hitPos)
     {
         damageTextPrefab.transform.position = hitPos;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine.UI;
 
 public class Item_Potion : Slot
 {
@@ -14,7 +14,9 @@ public class Item_Potion : Slot
         player = _player;
         healingAmount = _healingAmount;
         count = _count;
+        UIManager.Instance.SetIcon(this);
     }
+
 
     public override void Activate()
     {
