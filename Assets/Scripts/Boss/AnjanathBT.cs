@@ -7,7 +7,7 @@ public class AnjanathBT : BossBehaviorTree
     public State anjanathState;
     AnjanathController bossController;
 
-    // ÀÓ½Ã º¯¼ö
+    // ìž„ì‹œ ë³€ìˆ˜
     public bool SetDamage;
 
     private void Awake()
