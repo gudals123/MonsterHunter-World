@@ -61,18 +61,18 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void CreateDamageText(int damage, Vector3 hitPos)
+    public void PlayerDamageText(int damage, Vector3 hitPos)
     {
-        GameObject damageTextInstance = Instantiate(damageTextPrefab, hitPos, Quaternion.identity);
-        DamageText damageText = damageTextInstance.GetComponent<DamageText>();
-        damageText.SetText(damage.ToString());
+        damageTextPrefab.transform.position = hitPos;
+        damageTextPrefab.GetComponent<DamageText>().SetText(damage.ToString());
+        damageTextPrefab.SetActive(true);
+        StartCoroutine(SetFalse(damageTextPrefab));
     }
 
-
-
-    
-
-
-
+    public IEnumerator SetFalse(GameObject gameObject)
+    {
+        yield return new WaitForSeconds(0.5f);
+        gameObject.SetActive(false);
+    }
 }
 

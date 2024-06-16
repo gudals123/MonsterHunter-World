@@ -6,14 +6,9 @@ using UnityEngine.UI;
 
 public class DamageText : MonoBehaviour
 {
-    [SerializeField] private TextMeshPro damageText;
-    private float lifeTime = 1f; 
+    [SerializeField] private TextMesh damageText;
     private float speed = 1f;
 
-    void Awake()
-    {
-        Destroy(gameObject, lifeTime);
-    }
 
     void Update()
     {
