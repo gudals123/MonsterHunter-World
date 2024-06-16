@@ -25,18 +25,16 @@ public class CatBT : AIController
                     .Do(() =>
                     {
                         Debug.Log("Attack!");
-                        //catController.catState = CatController.CatState.Attack;
-                        //int damage = cat.Attack();
                         return TaskStatus.Success;
                     })
                 .End()
                 // 플레이어 트래킹 트리
                 .Sequence()
-                    .Condition("Tracking", () => catController.catState == CatController.CatState.Tracking && catController.isPlayer)
+                    .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Tracking && catController.isPlayer)
                     .Do(() =>
                     {
                         Debug.Log("Tracking");
-                        //cat.Move(moveSpeed, catController.player.transform.position);
+                        cat.PlayerTracking();
                         return TaskStatus.Success;
                     })
                     // 보스 트래킹 트리
@@ -57,7 +55,7 @@ public class CatBT : AIController
                         .Do(() =>
                         {
                             Debug.Log("PlayerCommand");
-                            cat.Skill();
+                            //cat.Skill();
                             //catController.catState = CatController.CatState.Skill;
                             return TaskStatus.Success;
                         })
@@ -78,7 +76,7 @@ public class CatBT : AIController
                         .Do(() =>
                         {
                             Debug.Log("PlayerCommand");
-                            cat.Skill();
+                            //cat.Skill();
                             //catController.catState = CatController.CatState.Skill;
                             return TaskStatus.Success;
                         })
@@ -91,11 +89,8 @@ public class CatBT : AIController
     private void Update()
     {
         tree.Tick();
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("BossAttack"))
+        if (catController.catState == CatController.CatState.Hit)
         {
             catController.Hit();
         }
