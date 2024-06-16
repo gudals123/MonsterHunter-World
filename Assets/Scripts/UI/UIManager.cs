@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Slider hpBar;
     [SerializeField] private Slider spBar;
-
+    [SerializeField] private TextMesh catName;
 
     public static UIManager Instance
     {
@@ -52,5 +52,9 @@ public class UIManager : MonoBehaviour
         spBar.value = currentSP;
     }
 
+    public void UpdateCatName(string _catName)
+    {
+        catName.text = _catName;
+    }
 }
 
