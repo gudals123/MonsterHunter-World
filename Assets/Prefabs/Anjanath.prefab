@@ -692,8 +692,8 @@ GameObject:
   - component: {fileID: 5284785106113401890}
   - component: {fileID: 1775968571112777717}
   - component: {fileID: 8533121082207780226}
-  - component: {fileID: 5108520435944496035}
   - component: {fileID: 1434643011378300901}
+  - component: {fileID: 578785609114674413}
   m_Layer: 6
   m_Name: Anjanath
   m_TagString: Boss
@@ -746,6 +746,7 @@ MonoBehaviour:
   startNormalAttaking: 0
   startBreathAttaking: 0
   perceptionTime: 0
+  isbossAngry: 0
 --- !u!114 &1775968571112777717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,8 +774,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anjanathBT: {fileID: 1775968571112777717}
-  getOtherAttackDamage: 0
---- !u!54 &5108520435944496035
+--- !u!136 &1434643011378300901
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699348392216218028}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 10
+  m_Height: 22
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 2}
+--- !u!54 &578785609114674413
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -799,31 +822,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 116
   m_CollisionDetection: 0
---- !u!136 &1434643011378300901
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1699348392216218028}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 10
-  m_Height: 22
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 2}
 --- !u!1 &1747393381696168983
 GameObject:
   m_ObjectHideFlags: 0

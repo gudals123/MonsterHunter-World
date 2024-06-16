@@ -17,10 +17,18 @@ public class AnjanathBT : BossBehaviorTree
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
+/*                .Sequence()
+                    .Condition("Roar", () => anjanathState == State.Roar)
+                        .StateAction("Roar", () => { })
+                .End()*/
                 // Left SubTree
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => anjanathState == State.Attack)
                         .Selector()
+                            .Sequence()
+                                .Condition("BattleIdle", () => anjanath.SetChance(0.3f))
+                                    .StateAction("BattleIdle", () => { })
+                            .End()
                             .Sequence()
                                 .Condition("BreathAttack", () => anjanath.startBreathAttaking)
                                     .StateAction("BreathAttack", () => anjanath.BreathAttacking())
@@ -69,7 +77,12 @@ public class AnjanathBT : BossBehaviorTree
     {
         if (anjanathState == State.GetHit)
         {
-            anjanath.Hit(bossController.getOtherAttackDamage);
+            anjanath.Hit(anjanath.WeaponDamage);
+        }
+
+        if (anjanathState == State.Dead)
+        {
+            anjanath.Dead();
         }
 
         else

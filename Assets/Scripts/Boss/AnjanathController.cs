@@ -8,7 +8,6 @@ public class AnjanathController : AIController
     private Anjanath anjanath;
 
     protected bool checkTarget;
-    public int getOtherAttackDamage;
 
     private void Awake()
     {
