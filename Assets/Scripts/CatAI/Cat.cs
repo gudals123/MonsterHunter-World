@@ -79,7 +79,7 @@ public class Cat : Entity
         gameObject.SetActive(true);
     }
 
-    public void PlayerTracking(Transform target) // 출력
+    public void PlayerTracking() // 출력
     {
         // 플레이어가 감지범위 내에 있을 때
         if (catController.catState == CatState.Detect && target.CompareTag("Player") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
@@ -113,7 +113,7 @@ public class Cat : Entity
     {
         target = catController.target;
         LookAtTarget(target);
-        PlayerTracking(player);
+        PlayerTracking();
         this.currentHP = currentHp;
     }
 
