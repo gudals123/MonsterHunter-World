@@ -1,15 +1,11 @@
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
-using UnityEngine;
 
 public class AnjanathBT : BossBehaviorTree
 {
     private Anjanath anjanath;
     public State anjanathState;
     AnjanathController bossController;
-
-    // 임시 변수
-    public bool SetDamage;
 
     private void Awake()
     {
@@ -18,16 +14,34 @@ public class AnjanathBT : BossBehaviorTree
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
-/*                .Sequence()
-                    .Condition("Roar", () => anjanathState == State.Roar)
-                        .StateAction("Roar", () => { })
-                .End()*/
+                .Sequence()
+                    .Condition("Dead", () => anjanathState == State.Dead)
+                        .Do("Roar", () =>
+                        {
+                            anjanath.Dead();
+                            return TaskStatus.Success;
+                        })
+                .End()
+                .Sequence()
+                    .Condition("Sturn", () => anjanathState == State.Sturn)
+                        .StateAction("Sturn", () =>
+                        {
+                            anjanath.Sturn();
+                        })
+                .End()
+                .Sequence()
+                    .Condition("Hit", () => anjanathState == State.GetHit)
+                        .StateAction("Hit", () =>
+                        {
+                            anjanath.GetHit();
+                        })
+                .End()
                 // Left SubTree
                 .Sequence()
                     .Condition("isPlayerInAttackRange", () => anjanathState == State.Attack)
                         .Selector()
                             .Sequence()
-                                .Condition("BattleIdle", () => anjanath.SetChance(0.3f))
+                                .Condition("BattleIdle", () => anjanath.SetChance(0.4f))
                                     .StateAction("BattleIdle", () => { })
                             .End()
                             .Sequence()
@@ -76,21 +90,7 @@ public class AnjanathBT : BossBehaviorTree
 
     private void Update()
     {
-        if (anjanathState == State.GetHit)
-        {
-            Debug.Log("!@#$!@#$");
-            anjanath.Hit(anjanath.WeaponDamage);
-        }
-
-        if (anjanathState == State.Dead)
-        {
-            anjanath.Dead();
-        }
-
-        else
-        {
-            tree.Tick();
-        }
+        tree.Tick();
     }
 
 }

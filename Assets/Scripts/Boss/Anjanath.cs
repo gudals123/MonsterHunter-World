@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Anjanath : Monster
@@ -19,10 +18,15 @@ public class Anjanath : Monster
     public bool startBreathAttaking;
 
     public float perceptionTime = 0;
-    private bool isBusy;
+
+    public bool getHit;
+
     private State currentState;
 
-    public int WeaponDamage { get; private set; }
+    public int WeaponDamage;
+    public bool isBusy;
+    public bool isSturn;
+    public bool weakness;
 
     private void Awake()
     {
@@ -32,7 +36,7 @@ public class Anjanath : Monster
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         grade = 1;
-        maxHp = 300;
+        maxHp = 500;
         currentHp = maxHp;
         rotationSpeed = 100;
         setHit = false;
@@ -50,36 +54,40 @@ public class Anjanath : Monster
         normalattackMethod.NowBossAttacking();
     }
 
+    public override void Sturn()
+    {
+        base.Sturn();
+        isSturn = false;
+    }
+
+    public override void GetHit()
+    {
+        base.GetHit();
+        getHit = false;
+    }
+
     public override void Hit(int damage)
     {
         base.Hit(damage);
         DamageStack++;
-
-        if (currentHp <= 0)
-        {
-            anjanathBT.anjanathState = State.Dead;
-        }
-
-        else if(DamageStack == 6)
+        if(DamageStack == 8)
         {
             DamageStack = 0;
         }
 
-        else if(DamageStack == 5)
+        else if(DamageStack % 3 == 0)
         {
-            animator.Play("Sturn");
-            afterState(2f);
-            DamageStack = 0;
-        }
-
-        else if(DamageStack == 3)
-        {
-            animator.Play("Hit");
-            afterState(0.26f);
+            getHit = true;
         }
     }
 
-    public IEnumerator afterState(float delayTime)
+    public void afterState(float delayTime, bool some)
+    {
+        StartCoroutine(CoafterState(delayTime, some));
+    }
+
+
+    public IEnumerator CoafterState(float delayTime, bool some)
     {
         if (isBusy)
         {
@@ -87,6 +95,7 @@ public class Anjanath : Monster
             anjanathBT.anjanathState = currentState;
             isBusy = false;
         }
+        some = false;
     }
 
     public IEnumerator AnjanathAttack(GameObject AttackObj, float duration)
@@ -199,12 +208,19 @@ public class Anjanath : Monster
 
         if (other.CompareTag("Weapon"))
         {
-            isBusy = true;
             targetTr = other.transform;
             currentState = anjanathBT.anjanathState;
-            anjanathBT.anjanathState = State.GetHit;
             WeaponDamage = other.gameObject.GetComponent<Weapon>().attackDamage;
+            if (weakness)
+            {
+                WeaponDamage *= 2;
+                weakness = false;
+            }
+            Debug.Log(WeaponDamage);
             isBossRecognized = true;
+            Hit(WeaponDamage);
+            Vector3 hitPos = other.ClosestPoint(transform.position);
+            UIManager.Instance.PlayerDamageText(WeaponDamage, hitPos);
         }
     }
 
