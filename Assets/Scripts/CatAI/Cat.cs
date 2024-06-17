@@ -104,7 +104,7 @@ public class Cat : Entity
 
     public void BossTracking(Collider target)
     {
-        if (playerController.playerState == PlayerController.PlayerState.Attack)
+        if (playerController.playerState == PlayerState.Attack)
         {
             //boss = target.GetComponentInParent<Monster>();
         }
