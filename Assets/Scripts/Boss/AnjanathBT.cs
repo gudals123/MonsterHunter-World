@@ -57,11 +57,18 @@ public class AnjanathBT : BossBehaviorTree
 
                 .Sequence()
                     .Condition("FindPlayer", () => anjanathState == State.Finding)
+                        .StateAction("BattleTracking", () => { anjanath.leaveHere = true;})
+                        .Do("leaveandcome", () =>
+                        {
+                            anjanath.leaveHere = false;
+                            return TaskStatus.Success;
+                        })
+                        /*
                         .Do("BattleTracking", () =>
                         {
                             anjanath.LeaveHere();
                             return TaskStatus.Success;
-                        })
+                        })*/
                 .End()
 
                 // Midle SubTree

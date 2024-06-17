@@ -27,6 +27,7 @@ public class Anjanath : Monster
     public bool isBusy;
     public bool isSturn;
     public bool weakness;
+    public bool leaveHere;
 
     private void Awake()
     {
@@ -83,11 +84,11 @@ public class Anjanath : Monster
 
     public void afterState(float delayTime, bool some)
     {
-        StartCoroutine(CoafterState(delayTime, some));
+        StartCoroutine(CoAfterState(delayTime, some));
     }
 
 
-    public IEnumerator CoafterState(float delayTime, bool some)
+    public IEnumerator CoAfterState(float delayTime, bool some)
     {
         if (isBusy)
         {
@@ -151,7 +152,7 @@ public class Anjanath : Monster
 
     public void LeaveHere()
     {
-        animator.Play("BattleTracking");
+        //animator.Play("BattleTracking");
         Move(4, arrivalPos.position);
     }
 
