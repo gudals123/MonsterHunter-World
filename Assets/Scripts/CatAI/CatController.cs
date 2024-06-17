@@ -35,6 +35,8 @@ public class CatController : AIController
     public float interactionRange;
     public Vector3 dir;
 
+    private float respawnTime;
+
     private void Start()
     {
         cat = GetComponent<Cat>();
@@ -42,7 +44,6 @@ public class CatController : AIController
         catState = CatState.Tracking;
         detectRange = 8f;
         interactionRange = 1.5f;
-        target = player;
     }
 
     public void Hit()
@@ -52,6 +53,7 @@ public class CatController : AIController
         if (cat.currentHP <= 0)
         {
             catState = CatState.Dead;
+            respawnTime += Time.deltaTime;
         }
     }
 
@@ -85,10 +87,11 @@ public class CatController : AIController
     private void Update()
     {
         dir = Detect(target.position);
-        PlayerTracking();
-        Debug.Log(dir.magnitude);
-        Debug.Log(target.tag);
-        Debug.Log(catState);
+
+        if(respawnTime > 10)
+        {
+            cat.Respawn();
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -101,7 +104,9 @@ public class CatController : AIController
         if (other.CompareTag("BossAttack"))
         {
             catState = CatState.Hit;
+            cat.damage = other.GetComponent<BossAttackMethod>().attackDamage;
         }
+
         else
         {
             target = other.transform;

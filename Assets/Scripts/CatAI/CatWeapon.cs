@@ -34,7 +34,7 @@ public class CatWeapon : Weapon
             catController.catState = CatController.CatState.Attack;
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, 0.1f);
-            cat.Attack();
+            cat.Attack(other.transform);
         }
     }
 }
