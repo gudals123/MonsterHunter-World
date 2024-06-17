@@ -31,22 +31,26 @@ public class CatBT : AIController
                     })
                 .End()
                 // 플레이어 트래킹 트리
-                .Sequence()
-                    .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Detect && catController.isPlayer)
+                .Selector()
+                    .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Detect)
                     .Do(() =>
                     {
                         Debug.Log("Tracking");
-                        //catController.PlayerTracking();
+                        cat.Tracking();
                         return TaskStatus.Success;
                     })
                     // 보스 트래킹 트리
                     .Sequence()
-                        .Condition("BossTracking", () => playerController.playerState == PlayerState.Attack && catController.isBoss)
+                        .Condition("BossTracking", () => playerController.playerState == PlayerState.Attack)
                         .Do(() =>
                         {
                             Debug.Log("BossTracking");
-                            cat.BossTracking();
+                            // cat.BossTracking();
                             return TaskStatus.Success;
+                        })
+                        .StateAction("Attack", () =>
+                        {
+                            cat.Attack(catController.boss.transform);
                         })
                     .End()
                     // 플레이어 명령 트리
@@ -62,11 +66,10 @@ public class CatBT : AIController
                 .End()
                 // 플레이어 감지 트리
                 .Sequence()
-                    .Condition("PlayerDetect", () => catController.catState == CatController.CatState.Detect && catController.isPlayer)
+                    .Condition("PlayerDetect", () => catController.catState == CatController.CatState.Detect)
                     .Do(() =>
                     {
                         Debug.Log("PlayerDetect");
-                        //catController.PlayerTracking();
                         return TaskStatus.Success;
                     })
                     // 스킬 사용 트리
@@ -88,8 +91,10 @@ public class CatBT : AIController
     {
         tree.Tick();
 
-        catController.PlayerTracking();
-        catController.BossTracking();
+        catController.TargetCheck();
+        catController.Tracking();
+
+        catController.Tracking();
 
         if (catController.catState == CatController.CatState.Hit)
         {
