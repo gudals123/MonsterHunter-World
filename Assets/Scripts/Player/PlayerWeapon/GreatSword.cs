@@ -58,8 +58,8 @@ public class GreatSword : Weapon
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, 0.1f);
             StartCoroutine(player.Snag());
-            UIManager.Instance.PlayerDamageText(attackDamage, hitPos);
             impulseSource.GenerateImpulse();
+            //UIManager.Instance.PlayerDamageText(attackDamage, hitPos);
         }
         //Cat.막타누구임(other);
     }

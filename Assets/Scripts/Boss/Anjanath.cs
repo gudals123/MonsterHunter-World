@@ -147,7 +147,7 @@ public class Anjanath : Monster
         // Raycast에 닿으면 공격
         Debug.DrawRay(attackTr.position, transform.forward * 5f, Color.yellow);
         RaycastHit hit;
-        Debug.Log(Physics.Raycast(attackTr.position, transform.forward, out hit, 5f));
+        //Debug.Log(Physics.Raycast(attackTr.position, transform.forward, out hit, 5f));
         if (isBossRecognized && Physics.Raycast(attackTr.position, transform.forward, out hit, 5f))
         {
             if (hit.collider.gameObject.name == targetTr.gameObject.name)

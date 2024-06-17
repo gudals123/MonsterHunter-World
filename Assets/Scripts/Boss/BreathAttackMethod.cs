@@ -22,7 +22,7 @@ public class BreathAttackMethod : BossAttackMethod
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("BreathAttackComplete");
+            //Debug.Log("BreathAttackComplete");
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, 1f);
         }

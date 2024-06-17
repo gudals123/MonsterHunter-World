@@ -42,7 +42,6 @@ public class PlayerController : Controller
 
     //Pet pet
     public bool isRightAttack { get; private set; }
-    public bool isRoll { get; private set; }
     public bool isCharging { get; set; }
     public bool isAnimationPauseDone { get; set; }
     public bool isMediumCharged { get; private set; }
@@ -74,7 +73,6 @@ public class PlayerController : Controller
         greatSword = weaponObj.GetComponent<GreatSword>();
         playerState = PlayerState.Idle;
         moveSpeed = walkSpeed;
-        isRoll = false;
         isAnimationPauseDone = false;
         isMediumCharged = false;
         isMaxCharged = false;
@@ -106,27 +104,28 @@ public class PlayerController : Controller
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         //구르기
-        if (Input.GetKeyDown(KeyCode.Space) && !isRoll)
+        if (Input.GetKeyDown(KeyCode.Space) && !player.isRoll && player.SwitchDoneCheck() /*&& !player.DoNotDisturbCheck()*/)
         {
             if (player.StaminaCheck(staminaCostRoll))
             {
-                isRoll = true;
                 playerState = PlayerState.Roll;
-                player.DrainStamina(staminaCostRoll);
-                player.Roll();
+                player.SetAnimator("IsRoll", true);
+                //player.ApplyState();
+                //player.DrainStamina(staminaCostRoll);
+                //player.Roll();
+                //StartCoroutine(RollCoolTime());
             }
-            StartCoroutine(RollCoolTime());
         }
         //무기 스위치
-        else if ((player.isArmed && Input.GetKeyDown(KeyCode.LeftShift)) ||
-            (!player.isArmed && Input.GetMouseButtonDown(0)) ||
-            (Input.GetKeyDown(KeyCode.E) && player.isArmed))
+        else if ((player.isArmed && Input.GetKeyDown(KeyCode.LeftShift) && !player.isRoll) ||
+            (!player.isArmed && Input.GetMouseButtonDown(0) && !player.isRoll) ||
+            (Input.GetKeyDown(KeyCode.E) && player.isArmed && !player.isRoll))
         {
             playerState = PlayerState.WeaponSheath;
             player.WeaponSwitch();
         }
         else if (moveInput != Vector2.zero && Input.GetKey(KeyCode.LeftShift) && !player.isArmed
-            && player.SwitchDoneCheck())
+            && player.SwitchDoneCheck() && !player.DoNotDisturbCheck())
         {
             //지침
             if (player.currentStamina < 30f)
@@ -146,7 +145,7 @@ public class PlayerController : Controller
             }
         }
         //걷기
-        else if (moveInput != Vector2.zero)
+        else if (moveInput != Vector2.zero && !player.DoNotDisturbCheck())
         {
             playerState = PlayerState.Walk;
             moveSpeed = walkSpeed;
@@ -258,15 +257,11 @@ public class PlayerController : Controller
 
     public void StaminerRecovery()
     {
-        if((playerState != PlayerState.Run) && (playerState != PlayerState.Roll) && (playerState != PlayerState.Tired))
+        if((playerState != PlayerState.Run) && (!player.isRoll) && (playerState != PlayerState.Tired))
         {
             player.RecoveryStaminer(staminaRecoveryCost * Time.deltaTime);
         }
     }
 
-    private IEnumerator RollCoolTime()
-    {
-        yield return new WaitForSeconds(1f);
-        isRoll = false;
-    }
+    
 }

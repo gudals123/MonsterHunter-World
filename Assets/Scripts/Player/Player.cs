@@ -31,7 +31,9 @@ public class Player : Entity
     public float maxStamina { get; private set; }
     public int damage {  get; private set; }
     public bool isArmed {  get; private set; }
-    
+    public bool isRoll;
+
+
 
     void Start()
     {
@@ -43,6 +45,7 @@ public class Player : Entity
         maxStamina = 100f;
         currentStamina = maxStamina;
         isArmed = false;
+        isRoll = false;
         chargingEffect.SetActive(false);
     }
 
@@ -80,22 +83,15 @@ public class Player : Entity
 
     public override void Move(float moveSpeed, Vector2 moveInput)
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("DoNotDisturb"))
-        {
-            return;
-        }
-        else
-        {
-            AnimatorControll(playerController.playerState);
-            Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
-            Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
-            Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
+        AnimatorControll(playerController.playerState);
+        Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
+        Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
+        Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            characterBody.rotation = Quaternion.Slerp(characterBody.rotation, targetRotation, Time.deltaTime * moveSpeed);
+        Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+        characterBody.rotation = Quaternion.Slerp(characterBody.rotation, targetRotation, Time.deltaTime * moveSpeed);
 
-            rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
-        }
+        rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
     }
 
     public void ApplyState()
@@ -135,18 +131,23 @@ public class Player : Entity
         animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
         
     }
+
+    public void SetAnimator(string name, bool value)
+    {
+        animator.SetBool(name, value);
+    }
     public void Roll()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("DoNotDisturb"))
-        {
-            return;
-        }
-        AnimatorControll(playerController.playerState);
-
+        //AnimatorControll(playerController.playerState);
+        
         Vector3 rollDirection = new Vector3(animator.transform.localRotation.x, 0, animator.transform.localRotation.z);
         rigidbody.velocity = rollDirection + animator.transform.forward * rollPower;
     }
 
+    public bool DoNotDisturbCheck()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsTag("DoNotDisturb");
+    }
 
     public void WeaponSwitch()
     {
