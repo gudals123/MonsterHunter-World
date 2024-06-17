@@ -23,7 +23,7 @@ public class AnjanathController : AIController
 
     public void Hit(int damage)
     {
-        anjanathBT.anjanathState = State.SetDamage;    // @@@@@@@
+        anjanathBT.anjanathState = State.GetHit;    // @@@@@@@
     }
 
 }

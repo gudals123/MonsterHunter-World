@@ -5,6 +5,8 @@ using UnityEngine;
 public class Anjanath : Monster
 {
     public AnjanathBT anjanathBT;
+    public NormalAttackMethod normalattackMethod;
+    public GameObject breathAttackMethod;
 
     public int DamageStack;
     public Transform playerTr;
@@ -19,6 +21,8 @@ public class Anjanath : Monster
     public bool startBreathAttaking;
 
     public float perceptionTime = 0;
+    private bool isBusy;
+    private State currentState;
 
     private void Awake()
     {
@@ -37,33 +41,46 @@ public class Anjanath : Monster
 
     public void BreathAttacking()
     {
-        //attackDamage = 5;
-        animator.Play("BreathAttack");
+        breathAttackMethod.SetActive(true);
     }
 
     public void NormalAttacking()
     {
-        //attackDamage = 10;
-        animator.Play("NormalAttack");
+        breathAttackMethod.SetActive(false);
+        normalattackMethod.NowBossAttacking();
     }
 
     public override void Hit(int damage)
     {
         base.Hit(damage);
-
-        if(currentHp <= 0)
+        DamageStack++;
+        if (currentHp <= 0)
         {
+            anjanathBT.anjanathState = State.Dead;
             Dead();
         }
 
         else if(DamageStack == 5)
         {
-            animator.Play("Sturn");
+            animator.Play("Sturn"); //2.0
+            afterGetHit(2f);
+            DamageStack = 0;
         }
 
         else if(DamageStack == 2)
         {
-            animator.Play("Hit");
+            animator.Play("Hit");//0.26
+            afterGetHit(0.26f);
+        }
+    }
+
+    public IEnumerator afterGetHit(float delayTime)
+    {
+        if (isBusy)
+        {
+            yield return new WaitForSeconds(delayTime);
+            anjanathBT.anjanathState = currentState;
+            isBusy = false;
         }
     }
 
@@ -81,22 +98,18 @@ public class Anjanath : Monster
         TrackingPlayer(targetTr);
     }
 
-    public bool SetChance()
-    {
-        return Random.Range(0f, 1.0f) <= 0.5f ? true : false;
-    }
-
     public void SetAttackState()
     {
         anjanathBT.anjanathState = State.Attack;
         isBossRecognized = true;
         perceptionTime = 0;
 
-        if (currentHp <= 600 && SetChance())
+        if (SetChance(0.5f))
         {
             startBreathAttaking = true;
             startNormalAttaking = false;
         }
+
         else
         {
             startBreathAttaking = false;
@@ -134,13 +147,13 @@ public class Anjanath : Monster
 
         if (Physics.Raycast(attackTr.position, transform.forward, out hit, 5f) && isBossRecognized)
         {
-            if(hit.collider.gameObject.name == targetTr.gameObject.name)
+            if (hit.collider.gameObject.name == targetTr.gameObject.name)
             {
                 SetAttackState();
             }
         }
 
-        else if(isBossRecognized && distancePtoB >= 11)
+        else if (isBossRecognized && distancePtoB >= 11)
         {
             perceptionTime += Time.deltaTime;
 
@@ -159,12 +172,7 @@ public class Anjanath : Monster
 
         else if (!isBossRecognized)
         {
-            if (SetChance())
-                anjanathBT.anjanathState = State.Walk;
-
-            else
-                anjanathBT.anjanathState = State.Idle;
-
+            anjanathBT.anjanathState = State.Idle;
         }
     }
 
@@ -179,6 +187,23 @@ public class Anjanath : Monster
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Finish"))
+        {
+            isArrivalTargetPos = true;
+        }
+
+        if (other.CompareTag("Weapon"))
+        {
+            isBusy = true;
+            currentState = anjanathBT.anjanathState;
+            anjanathBT.anjanathState = State.GetHit;
+            int WeaponDamage = other.gameObject.GetComponent<Weapon>().attackDamage;
+            Hit(WeaponDamage);
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (isBossRecognized)
@@ -188,14 +213,17 @@ public class Anjanath : Monster
 
         else if (!isBossRecognized)
         {
-            perceptionTime += Time.deltaTime;
-            if (perceptionTime >= 2f)
+            if (other.CompareTag("Player"))
             {
-                perceptionTime = 0;
-                if (other.CompareTag("Player"))
+                perceptionTime += Time.deltaTime;
+
+                if (perceptionTime >= 2f)
                 {
-                    isBossRecognized = true;
-                    targetTr = playerTr;
+                    perceptionTime = 0;
+                    {
+                        isBossRecognized = true;
+                        targetTr = playerTr;
+                    }
                 }
             }
         }

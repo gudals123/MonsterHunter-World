@@ -7,7 +7,7 @@ public class AnjanathBT : BossBehaviorTree
     public State anjanathState;
     AnjanathController bossController;
 
-    // ÀÓ½Ã º¯¼ö
+    // ìž„ì‹œ ë³€ìˆ˜
     public bool SetDamage;
 
     private void Awake()
@@ -23,19 +23,11 @@ public class AnjanathBT : BossBehaviorTree
                         .Selector()
                             .Sequence()
                                 .Condition("BreathAttack", () => anjanath.startBreathAttaking)
-                                    .Do(() =>
-                                    {
-                                        anjanath.BreathAttacking();
-                                        return TaskStatus.Success;
-                                    })
+                                    .StateAction("BreathAttack", () => anjanath.BreathAttacking())
                             .End()
                             .Sequence()
                                 .Condition("NormalAttack", () => anjanath.startNormalAttaking)
-                                    .Do(() =>
-                                    {
-                                        anjanath.NormalAttacking();
-                                        return TaskStatus.Success;
-                                    })
+                                    .StateAction("NormalAttack", () => anjanath.NormalAttacking())
                             .End()
                         .End()
                 .End()
@@ -52,16 +44,16 @@ public class AnjanathBT : BossBehaviorTree
 
                 // Right SubTree
                 .Selector()
+                    //.Condition("IsNomalStates", () => anjanathState == State.Idle)
                     .Sequence()
-                        .Condition("ChanceForWalking", () => anjanathState == State.Walk)
-                            .Do("NomalWalking", () =>
-                            {
-                                anjanath.NormalMoving(2);
-                                return TaskStatus.Success;
-                            })
+                        .Condition("IsTargetSelected", () => anjanath.isSetTargetPos)
+                        .Do("NomalWalking", () =>
+                        {
+                            anjanath.NormalMoving(2);
+                            return TaskStatus.Success;
+                        })
                     .End()
                     .Sequence()
-                        .Condition("ChanceForWalking", () => anjanathState == State.Idle)
                         .Do(() =>
                         {
                             anjanath.Idle();
@@ -75,7 +67,7 @@ public class AnjanathBT : BossBehaviorTree
 
     private void Update()
     {
-        if (anjanathState == State.SetDamage)   // anjanath.AnjanathState == State.SetDamage
+        if (anjanathState == State.GetHit)
         {
             anjanath.Hit(bossController.getOtherAttackDamage);
         }

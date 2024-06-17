@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Skill_CatAttack : Slot
 {
@@ -8,6 +9,7 @@ public class Skill_CatAttack : Slot
     public Skill_CatAttack(Cat _cat)
     {
         cat = _cat;
+        UIManager.Instance.SetIcon(this);
     }
 
     public override void Activate()

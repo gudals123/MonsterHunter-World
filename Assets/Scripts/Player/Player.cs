@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerController;
-using static UnityEngine.UI.Image;
+using UnityEngine.Playables;
+using static UnityEngine.Rendering.DebugUI;
+
 
 public class Player : Entity
 {
     private PlayerController playerController;
-    
+
     [Header("Object")]
+    [SerializeField] private GameObject chargingEffect;
     [SerializeField] private Transform characterBody;
     [SerializeField] private Transform cameraArm;
 
@@ -24,8 +26,9 @@ public class Player : Entity
     private float rollPower = 8.5f;
     private float knockbackPower = 2.5f;
 
-    private Entity Taget;
 
+    public float currentStamina { get; private set; }
+    public float maxStamina { get; private set; }
     public int damage {  get; private set; }
     public bool isArmed {  get; private set; }
     
@@ -35,9 +38,44 @@ public class Player : Entity
         playerController = GetComponent<PlayerController>();
         rigidbody = GetComponent<Rigidbody>();
         animator = characterBody.GetComponent<Animator>();
-        maxHp = 100;
+        maxHp = 150;
         currentHp = maxHp;
+        maxStamina = 100f;
+        currentStamina = maxStamina;
         isArmed = false;
+        chargingEffect.SetActive(false);
+    }
+
+    public void DrainStamina(float value)
+    {
+        currentStamina -= value;
+        currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
+        animator.SetFloat("Stamina", currentStamina);
+        UIManager.Instance.UpdateSPBar(currentStamina, maxStamina);
+    }
+
+    public void RecoveryStaminer(float value)
+    {
+        if (currentStamina >= maxStamina)
+        {
+            return;
+        }
+        currentStamina += value;
+        currentStamina = Math.Clamp(currentStamina, 0, maxStamina);
+        animator.SetFloat("Stamina", currentStamina);
+        UIManager.Instance.UpdateSPBar(currentStamina, maxStamina);
+    }
+
+    public bool StaminaCheck(float cost)
+    {
+        if(currentStamina - cost <= 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public override void Move(float moveSpeed, Vector2 moveInput)
@@ -53,7 +91,8 @@ public class Player : Entity
             Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
             Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
 
-            characterBody.forward = moveDir;
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            characterBody.rotation = Quaternion.Slerp(characterBody.rotation, targetRotation, Time.deltaTime * moveSpeed);
 
             rigidbody.MovePosition(transform.position + moveDir * moveSpeed * Time.fixedDeltaTime);
         }
@@ -88,9 +127,9 @@ public class Player : Entity
     public void AnimatorControll(PlayerState state)
     {
         animator.SetBool(PlayerAnimatorParamiter.IsDead, state == PlayerState.Dead);
-        animator.SetBool(PlayerAnimatorParamiter.IsMoving, (state == PlayerState.Run) || (state == PlayerState.Walk));
+        animator.SetBool(PlayerAnimatorParamiter.IsMoving, (state == PlayerState.Run) || (state == PlayerState.Walk) ||(state == PlayerState.Tired));
         animator.SetBool(PlayerAnimatorParamiter.IsRoll, state == PlayerState.Roll);
-        animator.SetBool(PlayerAnimatorParamiter.IsRun, state == PlayerState.Run);
+        animator.SetBool("IsLeftShift", state == PlayerState.Run || (state == PlayerState.Tired));
         animator.SetBool(PlayerAnimatorParamiter.IsAttacking, state == PlayerState.Attack);
         animator.SetBool(PlayerAnimatorParamiter.IsRightAttak, playerController.isRightAttack);
         animator.SetBool(PlayerAnimatorParamiter.IsArmed, isArmed);
@@ -131,18 +170,15 @@ public class Player : Entity
             return;
         }
         currentHp -= damage;
-
+        UIManager.Instance.UpdateHPBar(currentHp, maxHp);
     }
 
     public void Heal(int healingAmount)
     {
         currentHp += healingAmount;
         currentHp = Math.Clamp(currentHp , 0 , maxHp);
+        UIManager.Instance.UpdateHPBar(currentHp, maxHp);
     }
-
-
-
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -150,6 +186,7 @@ public class Player : Entity
         {
             knockback(transform.position, other.transform.position);
             StartCoroutine(GetHit());
+            Hit(10);
 
             /*            other = GetComponent<Anjanath>();
                         int damage = other.Attack();*/
@@ -175,5 +212,27 @@ public class Player : Entity
         yield return new WaitForSeconds(0.2f);
         animator.SetBool(PlayerAnimatorParamiter.IsGetHit, false);
     }
+
+
+    public void ChargingEffectPlay()
+    {
+        chargingEffect.SetActive(true);
+        StartCoroutine(ObjectDeactivated(chargingEffect, 1.0f));
+    }
+
+    private IEnumerator ObjectDeactivated(GameObject target , float time)
+    {
+        yield return new WaitForSeconds(time);
+        target.SetActive(false);
+    }
+
+
+    public IEnumerator Snag()
+    {
+        animator.speed = 0.01f;
+        yield return new WaitForSeconds(0.1f);
+        animator.speed = 1f;
+    }
+
 
 }
