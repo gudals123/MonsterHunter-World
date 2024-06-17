@@ -82,12 +82,6 @@ public class Anjanath : Monster
         }
     }
 
-    public void afterState(float delayTime, bool some)
-    {
-        StartCoroutine(CoAfterState(delayTime, some));
-    }
-
-
     public IEnumerator CoAfterState(float delayTime, bool some)
     {
         if (isBusy)
@@ -97,15 +91,6 @@ public class Anjanath : Monster
             isBusy = false;
         }
         some = false;
-    }
-
-    public IEnumerator AnjanathAttack(GameObject AttackObj, float duration)
-    {
-        canAttack = false;
-        AttackObj.SetActive(true);
-        yield return new WaitForSeconds(duration);
-        AttackObj.SetActive(false);
-        canAttack = true;
     }
 
     public void StartTracking()
@@ -129,24 +114,6 @@ public class Anjanath : Monster
         {
             startBreathAttaking = false;
             startNormalAttaking = true;
-        }
-    }
-
-    public void DetectPlayer()
-    {
-        if (isBossRecognized)
-        {
-            anjanathBT.anjanathState = State.Tracking;
-        }
-
-        else if (!isBossRecognized)
-        {
-            perceptionTime += Time.deltaTime;
-            if(perceptionTime >= 7f)
-            {
-                perceptionTime = 0;
-                targetTr = playerTr;
-            }
         }
     }
 

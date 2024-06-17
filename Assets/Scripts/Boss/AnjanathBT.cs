@@ -63,12 +63,6 @@ public class AnjanathBT : BossBehaviorTree
                             anjanath.leaveHere = false;
                             return TaskStatus.Success;
                         })
-                        /*
-                        .Do("BattleTracking", () =>
-                        {
-                            anjanath.LeaveHere();
-                            return TaskStatus.Success;
-                        })*/
                 .End()
 
                 // Midle SubTree
