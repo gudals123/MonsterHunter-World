@@ -149,6 +149,12 @@ public class Anjanath : Monster
         }
     }
 
+    public void LeaveHere()
+    {
+        animator.Play("BattleTracking");
+        Move(4, arrivalPos.position);
+    }
+
     public void IsPlayerInRange()
     {
         distancePtoB = Vector3.Distance(playerTr.position, transform.position);
@@ -174,6 +180,11 @@ public class Anjanath : Monster
                 isBossRecognized = false;
                 perceptionTime = 0;
             }
+        }
+
+        else if(isBossRecognized && distancePtoB <= 7)
+        {
+            anjanathBT.anjanathState = State.Finding;
         }
 
         // 인식 범위 - capsule Collider 닿으면 인식
