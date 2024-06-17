@@ -15,13 +15,6 @@ public class Monster : Entity
     public Transform arrivalPos;
     protected AnimatorStateInfo stateInfo;
 
-    public override int Attack()
-    {
-        setHit = true;
-        setHit = false;
-        return 1;
-    }
-
     public override void Move(float moveSpeed, Vector3 targetPos)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
