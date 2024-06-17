@@ -21,8 +21,5 @@ abstract public class Entity : MonoBehaviour
 
     }
 
-
-    abstract public int Attack();
-
     abstract public void Hit(int damage);
 }
