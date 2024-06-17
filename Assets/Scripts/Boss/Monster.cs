@@ -14,14 +14,17 @@ public class Monster : Entity
     public bool isSetTargetPos;
     public Transform arrivalPos;
     protected AnimatorStateInfo stateInfo;
+    public Transform bossRecognizeTr;
+
 
     public override void Move(float moveSpeed, Vector3 targetPos)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Vector3 bossDirection = new Vector3(direction.x, 0, direction.z);
+        Quaternion targetRotation = Quaternion.LookRotation(bossDirection);
         Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         rigidbody.MoveRotation(rotation);
-        rigidbody.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
+        rigidbody.MovePosition(transform.position + transform.forward * moveSpeed * Time.fixedDeltaTime);
     }
 
     public Vector3 SetRandomPos()

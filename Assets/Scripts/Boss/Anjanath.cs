@@ -12,10 +12,8 @@ public class Anjanath : Monster
     public Transform playerTr;
     public Transform attackTr;
     private float distancePtoB;
-    private float distanceTtoB;
     public bool isBossRecognized;
     public Transform targetTr;
-    public int getOtherAttackDamage;
 
     public bool startNormalAttaking;
     public bool startBreathAttaking;
@@ -23,6 +21,8 @@ public class Anjanath : Monster
     public float perceptionTime = 0;
     private bool isBusy;
     private State currentState;
+
+    public int WeaponDamage { get; private set; }
 
     private void Awake()
     {
@@ -32,7 +32,7 @@ public class Anjanath : Monster
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         grade = 1;
-        maxHp = 2000;
+        maxHp = 300;
         currentHp = maxHp;
         rotationSpeed = 100;
         setHit = false;
@@ -54,27 +54,32 @@ public class Anjanath : Monster
     {
         base.Hit(damage);
         DamageStack++;
+
         if (currentHp <= 0)
         {
             anjanathBT.anjanathState = State.Dead;
-            Dead();
+        }
+
+        else if(DamageStack == 6)
+        {
+            DamageStack = 0;
         }
 
         else if(DamageStack == 5)
         {
-            animator.Play("Sturn"); //2.0
-            afterGetHit(2f);
+            animator.Play("Sturn");
+            afterState(2f);
             DamageStack = 0;
         }
 
-        else if(DamageStack == 2)
+        else if(DamageStack == 3)
         {
-            animator.Play("Hit");//0.26
-            afterGetHit(0.26f);
+            animator.Play("Hit");
+            afterState(0.26f);
         }
     }
 
-    public IEnumerator afterGetHit(float delayTime)
+    public IEnumerator afterState(float delayTime)
     {
         if (isBusy)
         {
@@ -127,10 +132,9 @@ public class Anjanath : Monster
         else if (!isBossRecognized)
         {
             perceptionTime += Time.deltaTime;
-            if(perceptionTime >= 2f)
+            if(perceptionTime >= 7f)
             {
                 perceptionTime = 0;
-                isBossRecognized = true;
                 targetTr = playerTr;
             }
         }
@@ -139,13 +143,12 @@ public class Anjanath : Monster
     public void IsPlayerInRange()
     {
         distancePtoB = Vector3.Distance(playerTr.position, transform.position);
-        distanceTtoB = Vector3.Distance(targetTr.position, transform.position);
 
         // Raycast에 닿으면 공격
         Debug.DrawRay(attackTr.position, transform.forward * 5f, Color.yellow);
         RaycastHit hit;
-
-        if (Physics.Raycast(attackTr.position, transform.forward, out hit, 5f) && isBossRecognized)
+        Debug.Log(Physics.Raycast(attackTr.position, transform.forward, out hit, 5f));
+        if (isBossRecognized && Physics.Raycast(attackTr.position, transform.forward, out hit, 5f))
         {
             if (hit.collider.gameObject.name == targetTr.gameObject.name)
             {
@@ -197,10 +200,11 @@ public class Anjanath : Monster
         if (other.CompareTag("Weapon"))
         {
             isBusy = true;
+            targetTr = other.transform;
             currentState = anjanathBT.anjanathState;
             anjanathBT.anjanathState = State.GetHit;
-            int WeaponDamage = other.gameObject.GetComponent<Weapon>().attackDamage;
-            Hit(WeaponDamage);
+            WeaponDamage = other.gameObject.GetComponent<Weapon>().attackDamage;
+            isBossRecognized = true;
         }
     }
 
@@ -220,10 +224,8 @@ public class Anjanath : Monster
                 if (perceptionTime >= 2f)
                 {
                     perceptionTime = 0;
-                    {
-                        isBossRecognized = true;
-                        targetTr = playerTr;
-                    }
+                    isBossRecognized = true;
+                    targetTr = playerTr;
                 }
             }
         }

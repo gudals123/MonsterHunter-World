@@ -27,7 +27,7 @@ public class BreathAttack : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        while (countTime <= 0.8f)
+        while (countTime <= 0.7f)
         {
             transform.localScale += new Vector3(0, 0, Time.deltaTime * 8);
             yield return null;
