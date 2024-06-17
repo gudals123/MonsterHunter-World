@@ -25,7 +25,6 @@ public class Cat : Entity
 
     [SerializeField] private PlayerController playerController;
 
-
     private void Awake()
     {
         currentHp = maxHp;

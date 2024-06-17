@@ -16,6 +16,7 @@ public class Monster : Entity
     protected AnimatorStateInfo stateInfo;
     public Transform bossRecognizeTr;
 
+
     public override void Move(float moveSpeed, Vector3 targetPos)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
