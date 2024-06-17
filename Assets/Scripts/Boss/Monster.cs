@@ -50,7 +50,17 @@ public class Monster : Entity
     public void Dead()
     {
         animator.Play("Die");
-        transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);  // �޽��� ������ �ڽ� ������Ʈ ��� ��
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+    }
+
+    virtual public void Sturn()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+    }
+
+    virtual public void GetHit()
+    {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
 

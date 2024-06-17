@@ -59,9 +59,9 @@ public class GreatSword : Weapon
             AppearHitEffect(hitPos, 0.1f);
             StartCoroutine(player.Snag());
             impulseSource.GenerateImpulse();
-            //UIManager.Instance.PlayerDamageText(attackDamage, hitPos);
+
         }
-        //Cat.¸·Å¸´©±¸ÀÓ(other);
+        //Cat.ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(other);
     }
 
 

@@ -30,16 +30,12 @@ public class BossAttackMethod : Weapon
     protected IEnumerator CoBossAttack()
     {
         isBossValidAttack = false;
-        //Debug.Log("공격 시작");
         yield return new WaitForSeconds(startDuration);
         isBossAttacking = true;
-        //Debug.Log("딜 감지 시작");
         yield return new WaitForSeconds(endDuration);
         isBossAttacking = false;
-        //Debug.Log("딜 감지 끝");
         yield return new WaitForSeconds(endAttack);
         isBossValidAttack = true;
-        //Debug.Log("공격 끝");
     }
 
 }
