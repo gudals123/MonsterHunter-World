@@ -1,5 +1,6 @@
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
+using UnityEngine;
 
 public class AnjanathBT : BossBehaviorTree
 {
@@ -77,6 +78,7 @@ public class AnjanathBT : BossBehaviorTree
     {
         if (anjanathState == State.GetHit)
         {
+            Debug.Log("!@#$!@#$");
             anjanath.Hit(anjanath.WeaponDamage);
         }
 

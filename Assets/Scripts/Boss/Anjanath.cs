@@ -14,7 +14,6 @@ public class Anjanath : Monster
     private float distancePtoB;
     public bool isBossRecognized;
     public Transform targetTr;
-    public int getOtherAttackDamage;
 
     public bool startNormalAttaking;
     public bool startBreathAttaking;
@@ -33,7 +32,7 @@ public class Anjanath : Monster
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
         grade = 1;
-        maxHp = 2000;
+        maxHp = 300;
         currentHp = maxHp;
         rotationSpeed = 100;
         setHit = false;
@@ -148,8 +147,8 @@ public class Anjanath : Monster
         // Raycast에 닿으면 공격
         Debug.DrawRay(attackTr.position, transform.forward * 5f, Color.yellow);
         RaycastHit hit;
-
-        if (Physics.Raycast(attackTr.position, transform.forward, out hit, 5f) && isBossRecognized)
+        Debug.Log(Physics.Raycast(attackTr.position, transform.forward, out hit, 5f));
+        if (isBossRecognized && Physics.Raycast(attackTr.position, transform.forward, out hit, 5f))
         {
             if (hit.collider.gameObject.name == targetTr.gameObject.name)
             {
