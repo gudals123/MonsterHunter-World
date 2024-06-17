@@ -20,11 +20,10 @@ public class Cat : Entity
 
     [Header("Target Info")]
     private Transform target;
-    [SerializeField] private Transform player;
-    [SerializeField] private Transform boss;
+    [SerializeField] private Player player;
+    [SerializeField] private Monster boss;
 
     [SerializeField] private PlayerController playerController;
-
 
     private void Awake()
     {
@@ -34,7 +33,7 @@ public class Cat : Entity
         rigidbody = GetComponent<Rigidbody>();
         catController = GetComponent<CatController>();
         animator = GetComponentInChildren<Animator>();
-
+  
         target = player.transform;
     }
 
@@ -75,31 +74,59 @@ public class Cat : Entity
     public void Resurrection()
     {
         currentHp = maxHp;
-        startPosition = player.position;
+        startPosition = player.transform.position;
         gameObject.SetActive(true);
     }
 
     public void PlayerTracking() // 출력
     {
         // 플레이어가 감지범위 내에 있을 때
-        if (catController.catState == CatState.Detect && target.CompareTag("Player") /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
+        if (catController.catState == CatState.Detect /*&& player.CompareTag("Player")*/ /*catController.dir.magnitude <= detectRange && catController.dir.magnitude > interactionRange*/)
         {
             Debug.Log("Player, dir.magnitude <= detectRange");
-            LookAtTarget(target);
-            Move(Time.deltaTime, player.position);
+            LookAtTarget(player.transform);
+            Move(Time.deltaTime, player.transform.position);
             animator.Play("Tracking");
         }
         // 플레이어가 상호작용범위 내에 있을 때
         if (catController.catState == CatState.Idle /*&& catController.dir.magnitude <= interactionRange*/)
         {
             Debug.Log("Player, dir.magnitude <= interactionRange");
-            LookAtTarget(target);
+            LookAtTarget(player.transform);
             animator.Play("Idle");
         }
         else
         {
             Move(Time.deltaTime, player.transform.position);
             animator.Play("Tracking");
+        }
+    }
+
+    public void BossTracking(Collider target)
+    {
+        if (playerController.playerState == PlayerController.PlayerState.Attack)
+        {
+            //boss = target.GetComponentInParent<Monster>();
+        }
+
+        if (player.isArmed)
+        {
+            if (Vector3.Distance(target.transform.position, transform.position) < catController.detectRange
+                && Vector3.Distance(target.transform.position, transform.position) > catController.interactionRange)
+            {
+                transform.position -= target.transform.position;
+            }
+
+            if (Vector3.Distance(target.transform.position, transform.position) < catController.interactionRange)
+            {
+                Attack();
+                animator.Play("Attack");
+            }
+        }
+
+        else
+        {
+            PlayerTracking();
         }
     }
 

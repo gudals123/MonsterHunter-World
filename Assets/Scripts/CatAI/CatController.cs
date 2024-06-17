@@ -42,6 +42,7 @@ public class CatController : AIController
         catState = CatState.Tracking;
         detectRange = 8f;
         interactionRange = 1.5f;
+        target = player;
     }
 
     public void Hit()
