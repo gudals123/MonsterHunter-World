@@ -19,7 +19,7 @@ public class Cat : Entity
     [HideInInspector] public int currentHP;
 
     [Header("Target Info")]
-    private Transform target;
+    public Transform target;
     [SerializeField] private Player player;
     [SerializeField] private Monster boss;
 
@@ -33,8 +33,8 @@ public class Cat : Entity
         rigidbody = GetComponent<Rigidbody>();
         catController = GetComponent<CatController>();
         animator = GetComponentInChildren<Animator>();
-  
-        //target = player.transform;
+
+        target = player.transform;
     }
 
     public override void Move(float moveSpeed, Vector3 targetPos)
@@ -66,8 +66,11 @@ public class Cat : Entity
 
     public void Heal()
     {
-        heal = 20;
-        player.Heal(heal);
+        if (catController.catState == CatState.Skill /*|| player.currentHp <= 30*/)
+        {
+            heal = 10;
+            player.Heal(heal);
+        }
     }
 
     public void Respawn()
@@ -80,15 +83,14 @@ public class Cat : Entity
     public void PlayerTracking() // 출력
     {
         // 플레이어가 감지범위 내에 있을 때
-        if (catController.catState == CatState.Detect)
+        if (catController.catState == CatState.Detect && catController.isPlayer)
         {
             Debug.Log("Player, dir.magnitude <= detectRange");
             LookAtTarget(player.transform);
             Move(Time.deltaTime, player.transform.position);
-            animator.Play("Tracking");
         }
         // 플레이어가 상호작용범위 내에 있을 때
-        if (catController.catState == CatState.Idle)
+        if (catController.catState == CatState.Idle && catController.isPlayer)
         {
             Debug.Log("Player, dir.magnitude <= interactionRange");
             LookAtTarget(player.transform);
@@ -97,26 +99,24 @@ public class Cat : Entity
         else
         {
             Move(Time.deltaTime, player.transform.position);
-            animator.Play("Tracking");
         }
     }
 
-    public void BossTracking(Collider target)
+    public void BossTracking()
     {
-        if (playerController.playerState == PlayerState.Attack)
+        if (playerController.playerState == PlayerState.Attack && catController.isBoss)
         {
-            boss = target.GetComponentInParent<Monster>();
+            boss = target.GetComponentInParent<Monster>(); // player에서 target 설정?
         }
 
         if (player.isArmed)
         {
-            if (Vector3.Distance(target.transform.position, transform.position) < catController.detectRange
-                && Vector3.Distance(target.transform.position, transform.position) > catController.interactionRange)
+            if (catController.catState == CatState.Detect && catController.isBoss)
             {
-                transform.position -= target.transform.position;
+                Move(Time.deltaTime, catController.target.transform.position);
             }
 
-            if (Vector3.Distance(target.transform.position, transform.position) < catController.interactionRange)
+            if (catController.catState == CatState.Attack && catController.isBoss)
             {
                 Attack(target.transform);
                 animator.Play("Attack");
@@ -135,11 +135,15 @@ public class Cat : Entity
         catController.transform.rotation = Quaternion.Lerp(catController.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 10);
     }
 
+    public void SetTarget(Collider other)
+    {
+        target = other.transform;
+    }
+
     private void Update()
     {
-        target = catController.target;
+        //target = catController.target;
         LookAtTarget(target);
-        PlayerTracking();
         this.currentHP = currentHp;
     }
 

@@ -14,40 +14,40 @@ public class CatBT : AIController
     private void Awake()
     {
         moveSpeed = 10;
-        catController = GetComponent<CatController>();
         cat = GetComponent<Cat>();
+        catController = GetComponent<CatController>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
                 // 공격 트리
                 .Sequence()
-                    .Condition("Attack", () => catController.catState == CatController.CatState.Attack && playerController.playerState == PlayerState.Attack)
+                    .Condition("Attack", () => playerController.playerState == PlayerState.Attack && catController.catState == CatController.CatState.Attack)
                     .Do(() =>
                     {
+                        Debug.Log("Attack");
                         cat.Attack(catController.target.transform);
                         return TaskStatus.Success;
                     })
                 .End()
                 // 플레이어 트래킹 트리
                 .Sequence()
-                    .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Tracking && catController.isPlayer)
+                    .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Detect && catController.isPlayer)
                     .Do(() =>
                     {
                         Debug.Log("Tracking");
-                        cat.PlayerTracking();
+                        //catController.PlayerTracking();
                         return TaskStatus.Success;
                     })
                     // 보스 트래킹 트리
                     .Sequence()
-                        .Condition("BossTracking", () => playerController.playerState == PlayerState.Attack)
+                        .Condition("BossTracking", () => playerController.playerState == PlayerState.Attack && catController.isBoss)
                         .Do(() =>
                         {
                             Debug.Log("BossTracking");
-                            //cat.Move(moveSpeed, catController.boss.transform.position);
-                            //catController.catState = CatController.CatState.Detect;
+                            cat.BossTracking();
                             return TaskStatus.Success;
                         })
-
                     .End()
                     // 플레이어 명령 트리
                     .Sequence()
@@ -55,8 +55,7 @@ public class CatBT : AIController
                         .Do(() =>
                         {
                             Debug.Log("PlayerCommand");
-                            //cat.Skill();
-                            //catController.catState = CatController.CatState.Skill;
+                            //cat.Heal(); // player가 catController.Heal() 사용
                             return TaskStatus.Success;
                         })
                     .End()
@@ -67,7 +66,7 @@ public class CatBT : AIController
                     .Do(() =>
                     {
                         Debug.Log("PlayerDetect");
-                        //catController.catState = CatController.CatState.Idle;
+                        //catController.PlayerTracking();
                         return TaskStatus.Success;
                     })
                     // 스킬 사용 트리
@@ -75,9 +74,8 @@ public class CatBT : AIController
                         .Condition("PlayerCommand", () => catController.catState == CatController.CatState.Skill)
                         .Do(() =>
                         {
-                            Debug.Log("PlayerCommand");
-                            //cat.Skill();
-                            //catController.catState = CatController.CatState.Skill;
+                            Debug.Log("Skill");
+                            catController.Heal();
                             return TaskStatus.Success;
                         })
                     .End()
@@ -89,6 +87,9 @@ public class CatBT : AIController
     private void Update()
     {
         tree.Tick();
+
+        catController.PlayerTracking();
+        catController.BossTracking();
 
         if (catController.catState == CatController.CatState.Hit)
         {
