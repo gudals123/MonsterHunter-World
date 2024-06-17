@@ -24,7 +24,7 @@ public class CatBT : AIController
                     .Condition("Attack", () => catController.catState == CatController.CatState.Attack && playerController.playerState == PlayerState.Attack)
                     .Do(() =>
                     {
-                        Debug.Log("Attack!");
+                        cat.Attack(catController.target.transform);
                         return TaskStatus.Success;
                     })
                 .End()
@@ -92,7 +92,7 @@ public class CatBT : AIController
 
         if (catController.catState == CatController.CatState.Hit)
         {
-            catController.Hit();
+            cat.Hit(cat.damage);
         }
     }
 }

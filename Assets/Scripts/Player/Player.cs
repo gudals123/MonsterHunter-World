@@ -154,14 +154,6 @@ public class Player : Entity
         isArmed = !isArmed;
     }
 
-
-    public override int Attack()
-    {
-        int value = 10;
-
-        return value;
-    }
-
     public override void Hit(int damage)
     {
         if (currentHp <= 0)

@@ -44,7 +44,6 @@ public class CatController : AIController
         catState = CatState.Tracking;
         detectRange = 8f;
         interactionRange = 1.5f;
-        target = player;
     }
 
     public void Hit()
@@ -88,7 +87,6 @@ public class CatController : AIController
     private void Update()
     {
         dir = Detect(target.position);
-        PlayerTracking();
 
         if(respawnTime > 10)
         {
@@ -106,7 +104,9 @@ public class CatController : AIController
         if (other.CompareTag("BossAttack"))
         {
             catState = CatState.Hit;
+            cat.damage = other.GetComponent<BossAttackMethod>().attackDamage;
         }
+
         else
         {
             target = other.transform;
