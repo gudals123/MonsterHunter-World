@@ -5,7 +5,7 @@ using UnityEngine;
 abstract public class Entity : MonoBehaviour
 {
     protected int maxHp;
-    [SerializeField] protected int currentHp;
+    [SerializeField] public int currentHp;
     //protected int attackDamage;
     //protected Vector3 startPosition;
     protected Rigidbody rigidbody;

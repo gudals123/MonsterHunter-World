@@ -9,7 +9,6 @@ public enum State
     Sturn,
     Dead,
 }
-
 public class BossBehaviorTree : AIController
 {
 }

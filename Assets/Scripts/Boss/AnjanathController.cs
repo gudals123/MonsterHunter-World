@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class AnjanathController : AIController
 {
     public AnjanathBT anjanathBT;
@@ -17,12 +13,24 @@ public class AnjanathController : AIController
 
     private void Update()
     {
-        anjanath.IsPlayerInRange();
-    }
+        if(anjanath.currentHp <= 0) 
+        {
+            anjanathBT.anjanathState = State.Dead;
+        }
 
-    public void Hit(int damage)
-    {
-        anjanathBT.anjanathState = State.GetHit;    // @@@@@@@
-    }
+        else if (anjanath.getHit)
+        {
+            anjanathBT.anjanathState = State.GetHit;
+        }
 
+        else if (anjanath.isSturn)
+        {
+            anjanathBT.anjanathState = State.Sturn;
+        }
+
+        else
+        {
+            anjanath.IsPlayerInRange();
+        }
+    }
 }
