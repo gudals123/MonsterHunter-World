@@ -1,46 +1,47 @@
 using System.Collections;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class Anjanath : Monster
 {
-    public AnjanathBT anjanathBT;
+    private AnjanathBT anjanathBT;
     public NormalAttackMethod normalattackMethod;
     public GameObject breathAttackMethod;
 
-    public int DamageStack;
+    private int DamageStack;
     public Transform playerTr;
     public Transform attackTr;
     private float distancePtoB;
-    public bool isBossRecognized;
+    private bool isBossRecognized;
     public Transform targetTr;
 
     public bool startNormalAttaking;
     public bool startBreathAttaking;
 
-    public float perceptionTime = 0;
+    private float perceptionTime = 0;
 
-    public bool getHit;
 
     private State currentState;
 
-    public int WeaponDamage;
-    public bool isBusy;
+    private int WeaponDamage;
+    private bool isBusy;
     public bool isSturn;
-    public bool weakness;
     public bool leaveHere;
 
     private void Awake()
     {
+        arrivalPos = Instantiate(arrivalPos).GetComponent<Transform>();
+
         anjanathBT.anjanathState = State.Idle;
         targetTr = playerTr;
         anjanathBT = GetComponent<AnjanathBT>();
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
-        grade = 1;
         maxHp = 500;
         currentHp = maxHp;
         rotationSpeed = 100;
         setHit = false;
+        isDead = false;
         Idle();
     }
 
@@ -120,7 +121,7 @@ public class Anjanath : Monster
     public void LeaveHere()
     {
         //animator.Play("BattleTracking");
-        Move(4, arrivalPos.position);
+        Move(4, arrivalPos);
     }
 
     public void IsPlayerInRange()
