@@ -31,8 +31,8 @@ public class Monster : Entity
 
     public Vector3 SetRandomPos()
     {
-        float targetX = Random.Range(-60, 60);
-        float targetZ = Random.Range(-50, 50);
+        float targetX = Random.Range(-64, 64);
+        float targetZ = Random.Range(97, 227);
         return new Vector3(targetX, transform.position.y, targetZ);
     }
 
