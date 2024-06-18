@@ -26,6 +26,7 @@ public class Cat : Entity
 
     private void Awake()
     {
+        maxHp = 80;
         currentHp = maxHp;
 
         animator = GetComponentInChildren<Animator>();
@@ -45,12 +46,15 @@ public class Cat : Entity
 
     public void Attack(Transform target)
     {
+        if (catController.distance > 3f)
+        {
+            Move(Time.deltaTime / 3, target);
+        }
         animator.Play("Attack");
     }
 
     public override void Hit(int damage)
     {
-        animator.Play("Hit");
         currentHp -= damage;
         if (catController.catState == CatState.Dead)
         {
@@ -79,25 +83,21 @@ public class Cat : Entity
     {
         if (catController.isAttack && catController.catState == CatState.Tracking)
         {
-            Debug.Log("1");
             Move(Time.deltaTime / 2, boss.transform);
         }
 
         else if (catController.isAttack && catController.catState == CatState.Attack)
         {
-            Debug.Log("2");
             Attack(boss.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Tracking)
         {
-            Debug.Log("3");
             Move(Time.deltaTime / 2, player.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Idle)
         {
-            Debug.Log("4");
             animator.Play("Idle");
         }
     }

@@ -50,7 +50,7 @@ public class CatController : AIController
     public void Hit()
     {
         catState = CatState.Hit;
-        cat.Hit(cat.damage);
+        //cat.Hit(cat.damage);
         if (cat.currentHP <= 0)
         {
             catState = CatState.Dead;
@@ -95,14 +95,15 @@ public class CatController : AIController
             target = boss;
             catState = CatState.Attack;
         }
-        
-        if(attackDuration > 10f)
+
+        if (attackDuration > 10f)
         {
             isAttack = false;
             isPlayer = true;
             attackDuration = 0;
             catState = CatState.Tracking;
         }
+        cat.Tracking();
     }
 
     public void TargetCheck()
@@ -126,6 +127,10 @@ public class CatController : AIController
 
     private void Update()
     {
+        Debug.Log(isPlayer);
+        Debug.Log(catState);
+        TargetCheck();
+        Tracking();
         distance = Vector3.Distance(transform.position, target.position);
 
         if (respawnTime > 10)
@@ -133,7 +138,7 @@ public class CatController : AIController
             cat.Respawn();
         }
 
-        if(isAttack)
+        if (isAttack)
         {
             attackDuration += Time.deltaTime;
         }
