@@ -64,7 +64,6 @@ public class GreatSword : Weapon
             UIManager.Instance.PlayerDamageText(attackDamage, hitPos);
             impulseSource.GenerateImpulse();
             cat.SetTarget(other);
-
         }
     }
 }

@@ -1974,7 +1974,7 @@ GameObject:
   - component: {fileID: 8511595507231763940}
   m_Layer: 3
   m_Name: AttackRange
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2031,6 +2031,7 @@ MonoBehaviour:
   _hitEffect: {fileID: 5709663623744378833, guid: e3d35b777b3511449a485794cb03f0c8,
     type: 3}
   playerObj: {fileID: 1994513090600075941}
+  catObj: {fileID: 0}
 --- !u!114 &8511595507231763940
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,12 +31,12 @@ public class Anjanath : Monster
     private void Awake()
     {
         arrivalPos = Instantiate(arrivalPos).GetComponent<Transform>();
-
-        anjanathBT.anjanathState = State.Idle;
-        targetTr = playerTr;
         anjanathBT = GetComponent<AnjanathBT>();
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
+
+        anjanathBT.anjanathState = State.Idle;
+        targetTr = playerTr;
         maxHp = 500;
         currentHp = maxHp;
         rotationSpeed = 100;
@@ -165,17 +165,6 @@ public class Anjanath : Monster
         else if (!isBossRecognized)
         {
             anjanathBT.anjanathState = State.Idle;
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (gameObject != null)
-        {
-            Gizmos.color = anjanathBT.anjanathState == State.Attack ? Color.red : Color.green;
-            Gizmos.DrawWireSphere(transform.position, 5f);
-            Gizmos.color = anjanathBT.anjanathState == State.Tracking? Color.yellow : Color.blue; ;
-            Gizmos.DrawWireSphere(transform.position, 12f);
         }
     }
 

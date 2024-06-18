@@ -14,7 +14,7 @@ public class Player : Entity
     [SerializeField] private GameObject chargingEffect;
     [SerializeField] private Transform characterBody;
     [SerializeField] private Transform cameraArm;
-
+    public GameObject attackRange;
 
     [Header("GroundCheck")]
     [SerializeField] private float groundcheckDistance;
@@ -177,6 +177,7 @@ public class Player : Entity
     {
         if (other.CompareTag("BossAttack"))
         {
+            attackRange.SetActive(false);
             knockback(transform.position, other.transform.position);
             StartCoroutine(GetHit());
             Hit(10);
