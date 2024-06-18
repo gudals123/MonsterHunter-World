@@ -10,6 +10,10 @@ public class Player : Entity
 {
     private PlayerController playerController;
 
+    [Header("Weapons")]
+    [SerializeField] private GameObject _handWeapon;
+    [SerializeField] private GameObject _BackWeapon;
+
     [Header("Object")]
     [SerializeField] private GameObject chargingEffect;
     [SerializeField] private Transform characterBody;
@@ -47,6 +51,8 @@ public class Player : Entity
         isArmed = false;
         isRoll = false;
         chargingEffect.SetActive(false);
+        _handWeapon.SetActive(false);
+        _BackWeapon.SetActive(true);
     }
 
     public void DrainStamina(float value)
@@ -177,6 +183,7 @@ public class Player : Entity
     {
         if (other.CompareTag("BossAttack"))
         {
+            WeaponSetActive();
             attackRange.SetActive(false);
             knockback(transform.position, other.transform.position);
             StartCoroutine(GetHit());
@@ -226,6 +233,20 @@ public class Player : Entity
         animator.speed = 0.01f;
         yield return new WaitForSeconds(0.1f);
         animator.speed = 1f;
+    }
+
+    public void WeaponSetActive()
+    {
+        if (isArmed)
+        {
+            _handWeapon.SetActive(true);
+            _BackWeapon.SetActive(false);
+        }
+        else
+        {
+            _handWeapon.SetActive(false);
+            _BackWeapon.SetActive(true);
+        }
     }
 
 
