@@ -22,9 +22,7 @@ public enum PlayerState
 public class PlayerController : Controller
 {
     private Player player;
-    [SerializeField] 
-    private Cat cat;
-
+    [SerializeField] private Cat cat;
     private GreatSword greatSword;
     
     private float walkSpeed = 4f;
