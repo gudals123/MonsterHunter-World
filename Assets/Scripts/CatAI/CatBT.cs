@@ -25,7 +25,6 @@ public class CatBT : AIController
                     .Condition("Attack", () => playerController.playerState == PlayerState.Attack && catController.catState == CatController.CatState.Attack)
                     .Do(() =>
                     {
-                        Debug.Log("Attack");
                         cat.Attack(catController.target.transform);
                         return TaskStatus.Success;
                     })
@@ -35,7 +34,6 @@ public class CatBT : AIController
                     .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Detect)
                     .Do(() =>
                     {
-                        Debug.Log("Tracking");
                         cat.Tracking();
                         return TaskStatus.Success;
                     })
@@ -44,8 +42,6 @@ public class CatBT : AIController
                         .Condition("BossTracking", () => playerController.playerState == PlayerState.Attack)
                         .Do(() =>
                         {
-                            Debug.Log("BossTracking");
-                            // cat.BossTracking();
                             return TaskStatus.Success;
                         })
                         .StateAction("Attack", () =>
@@ -58,8 +54,6 @@ public class CatBT : AIController
                         .Condition("PlayerCommand", () => catController.catState == CatController.CatState.Skill)
                         .Do(() =>
                         {
-                            Debug.Log("PlayerCommand");
-                            //cat.Heal(); // player가 catController.Heal() 사용
                             return TaskStatus.Success;
                         })
                     .End()
@@ -69,7 +63,6 @@ public class CatBT : AIController
                     .Condition("PlayerDetect", () => catController.catState == CatController.CatState.Detect)
                     .Do(() =>
                     {
-                        Debug.Log("PlayerDetect");
                         return TaskStatus.Success;
                     })
                     // 스킬 사용 트리
@@ -77,7 +70,6 @@ public class CatBT : AIController
                         .Condition("PlayerCommand", () => catController.catState == CatController.CatState.Skill)
                         .Do(() =>
                         {
-                            Debug.Log("Skill");
                             catController.Heal();
                             return TaskStatus.Success;
                         })

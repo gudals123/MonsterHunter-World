@@ -29,8 +29,6 @@ public class CatController : AIController
     [SerializeField] public Transform target;
 
     [Header("Range Info")]
-    //public float detectRange;
-    //public float interactionRange;
     public Vector3 dir;
     public float distance;
 
@@ -72,68 +70,39 @@ public class CatController : AIController
         distance = Vector3.Distance(transform.position, target.position);
     }
 
-    // public void Tracking() // 상태만 변경
-    // {
-    //     // 보스 공격
-    //     if (dir.magnitude <= interactionRange)
-    //     {
-    //         if (playerController.playerState == PlayerState.Attack)
-    //         {
-    //             isBoss = true;
-    //             CatStateAttack();
-    //             return;
-    //         }
-
-    //         catState = CatState.Tracking;
-    //         cat.Tracking();
-    //     }
-
-    //     // 플레이어가 감지범위 내에 있을 때
-    //     else if (target.CompareTag("Player") && dir.magnitude > interactionRange)
-    //     {
-    //         Debug.Log("catController.PlayerTracking && dir.magnitude > interactionRange");
-    //         catState = CatState.Detect;
-    //         cat.Tracking();
-    //     }
-    //     // 플레이어가 상호작용범위 내에 있을 때
-    //     else if (target.CompareTag("Player") && dir.magnitude <= interactionRange)
-    //     {
-    //         Debug.Log("catController.PlayerTracking && dir.magnitude <= interactionRange");
-    //         catState = CatState.Idle;
-    //         cat.Tracking();
-    //     }
-    // }
-
     public void Tracking()
     {
         //player
-        if (isPlayer && distance > 1.5f)
+        if (isPlayer && distance > 4f)
         {
+            target = player;
             catState = CatState.Tracking;
         }
-        else if (isPlayer && distance <= 1.5f)
+        else if (isPlayer && distance <= 4f)
         {
+            target = player;
             catState = CatState.Idle;
         }
 
         //boss
-        if (isAttack && distance > 1.5f)
+        if (isAttack && distance > 4f)
         {
+            target = boss;
             catState = CatState.Tracking;
         }
-        else if (isAttack && distance <= 1.5f)
+        else if (isAttack && distance <= 4f)
         {
+            target = boss;
             catState = CatState.Attack;
         }
         
-        if(attackDuration > 5f)
+        if(attackDuration > 10f)
         {
             isAttack = false;
             isPlayer = true;
             attackDuration = 0;
             catState = CatState.Tracking;
         }
-        //cat.Tracking();
     }
 
     public void TargetCheck()
@@ -157,7 +126,6 @@ public class CatController : AIController
 
     private void Update()
     {
-        dir = Detect(target);
         distance = Vector3.Distance(transform.position, target.position);
 
         if (respawnTime > 10)
@@ -169,11 +137,6 @@ public class CatController : AIController
         {
             attackDuration += Time.deltaTime;
         }
-
-        Debug.Log($"isAttack : {isAttack}");
-        Debug.Log($"isPlayer : {isPlayer}");
-        Debug.Log($"catState : {catState}");
-        Debug.Log($"attackDuration : {attackDuration}");
     }
 
     void OnTriggerEnter(Collider other)

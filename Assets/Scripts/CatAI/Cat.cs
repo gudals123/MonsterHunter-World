@@ -8,7 +8,6 @@ using static CatController;
 public class Cat : Entity
 {
     [Header("Cat Info")]
-    private float respawnTime;
     private int heal;
     public int damage;
 
@@ -46,10 +45,6 @@ public class Cat : Entity
 
     public void Attack(Transform target)
     {
-        //if (Vector3.Distance(target.position, transform.position) > 1.5f)
-        //{
-        //    Move(Time.deltaTime, target.position);
-        //}
         animator.Play("Attack");
     }
 
@@ -85,7 +80,7 @@ public class Cat : Entity
         if (catController.isAttack && catController.catState == CatState.Tracking)
         {
             Debug.Log("1");
-            Move(Time.deltaTime, boss.transform);
+            Move(Time.deltaTime / 2, boss.transform);
         }
 
         else if (catController.isAttack && catController.catState == CatState.Attack)
@@ -97,7 +92,7 @@ public class Cat : Entity
         else if (catController.isPlayer && catController.catState == CatState.Tracking)
         {
             Debug.Log("3");
-            Move(Time.deltaTime, player.transform);
+            Move(Time.deltaTime / 2, player.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Idle)
@@ -126,7 +121,6 @@ public class Cat : Entity
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, 8f);
-        Gizmos.DrawWireSphere(transform.position, 1.5f);
+        Gizmos.DrawWireSphere(transform.position, 4f);
     }
 }
