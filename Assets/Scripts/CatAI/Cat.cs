@@ -18,14 +18,13 @@ public class Cat : Entity
     [HideInInspector] public int currentHP;
 
     [Header("Target Info")]
-    public Transform target;
-    [SerializeField] private GameObject playerObj;
-    [SerializeField] private Monster boss;
+    [SerializeField] private Player player;
 
     private Player player;
 
     private void Awake()
     {
+        maxHp = 80;
         currentHp = maxHp;
         player = playerObj.GetComponent<Player>();
 
@@ -34,7 +33,7 @@ public class Cat : Entity
         catController = GetComponent<CatController>();
         animator = GetComponentInChildren<Animator>();
 
-        target = player.transform;
+        catController.target = player.transform;
     }
 
     public override void Move(float moveSpeed, Transform targetPos)
@@ -46,12 +45,16 @@ public class Cat : Entity
 
     public void Attack(Transform target)
     {
+        LookAtTarget(target);
+        if (catController.distance > 4f)
+        {
+            Move(Time.deltaTime / 3, target);
+        }
         animator.Play("Attack");
     }
 
     public override void Hit(int damage)
     {
-        animator.Play("Hit");
         currentHp -= damage;
         if (catController.catState == CatState.Dead)
         {
@@ -77,17 +80,17 @@ public class Cat : Entity
     {
         if (catController.isAttack && catController.catState == CatState.Tracking)
         {
-            Move(Time.deltaTime / 3, boss.transform);
+            Move(Time.deltaTime / 3, catController.target.transform);
         }
 
         else if (catController.isAttack && catController.catState == CatState.Attack)
         {
-            Attack(boss.transform);
+            Attack(catController.target.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Tracking)
         {
-            Move(Time.deltaTime / 3, player.transform);
+            Move(Time.deltaTime / 3, catController.target.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Idle)
@@ -104,17 +107,12 @@ public class Cat : Entity
 
     public void SetTarget(Collider other)
     {
-        target = other.transform;
+        catController.target = other.transform;
         catController.isAttack = true;
     }
 
     private void Update()
     {
         this.currentHP = currentHp;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, 4f);
     }
 }

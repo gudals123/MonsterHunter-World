@@ -24,8 +24,6 @@ public class CatController : AIController
     public CatState catState;
 
     [SerializeField] public Transform player;
-    [SerializeField] private Player playerObj;
-    [SerializeField] public Transform boss;
     [SerializeField] public Transform target;
 
     [Header("Range Info")]
@@ -42,7 +40,6 @@ public class CatController : AIController
     private void Start()
     {
         cat = GetComponent<Cat>();
-        playerObj = GameObject.Find("Player").GetComponent<Player>();
         target = player;
         catState = CatState.Tracking;
     }
@@ -50,7 +47,6 @@ public class CatController : AIController
     public void Hit()
     {
         catState = CatState.Hit;
-        cat.Hit(cat.damage);
         if (cat.currentHP <= 0)
         {
             catState = CatState.Dead;
@@ -75,34 +71,32 @@ public class CatController : AIController
         //player
         if (isPlayer && distance > 4f)
         {
-            target = player;
             catState = CatState.Tracking;
         }
         else if (isPlayer && distance <= 4f)
         {
-            target = player;
             catState = CatState.Idle;
         }
 
         //boss
-        if (isAttack && distance > 4f)
+        if (distance < 10f && isAttack && distance > 4f)
         {
-            target = boss;
             catState = CatState.Tracking;
         }
         else if (isAttack && distance <= 4f)
         {
-            target = boss;
             catState = CatState.Attack;
         }
-        
-        if(attackDuration > 10f)
+
+        if (attackDuration > 10f)
         {
             isAttack = false;
             isPlayer = true;
+            target = player;
             attackDuration = 0;
             catState = CatState.Tracking;
         }
+        cat.Tracking();
     }
 
     public void TargetCheck()
@@ -126,6 +120,8 @@ public class CatController : AIController
 
     private void Update()
     {
+        TargetCheck();
+        Tracking();
         distance = Vector3.Distance(transform.position, target.position);
 
         if (respawnTime > 10)
@@ -133,7 +129,7 @@ public class CatController : AIController
             cat.Respawn();
         }
 
-        if(isAttack)
+        if (isAttack)
         {
             attackDuration += Time.deltaTime;
         }

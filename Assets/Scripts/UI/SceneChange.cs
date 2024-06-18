@@ -29,7 +29,7 @@ public class SceneChange : MonoBehaviour
             image.color = new Color(0, 0, 0, startAlpha);
         }
         StopCoroutine(FadeOut());
-        SceneManager.LoadScene("ProtoType_6.8");
+        SceneManager.LoadScene("MonsterHunter");
         StartCoroutine(FadeIn());
     }
 
