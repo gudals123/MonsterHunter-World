@@ -23,7 +23,7 @@ public class NormalAttackMethod : BossAttackMethod
         if (isBossAttacking && other.CompareTag("Player"))
         {
             Vector3 hitPos = other.ClosestPoint(transform.position);
-            AppearHitEffect(hitPos, 1f);
+            AppearHitEffect(hitPos);
         }
     }
 

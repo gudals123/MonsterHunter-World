@@ -43,7 +43,7 @@ public class GreatSword : Weapon
         }
     }
 
-    protected override void AppearHitEffect(Vector3 hitPos, float duration)
+/*    protected override void AppearHitEffect(Vector3 hitPos, float duration)
     {
         base.AppearHitEffect(hitPos, duration);
     }
@@ -53,13 +53,13 @@ public class GreatSword : Weapon
     {
         return base.CoHitEffect(hitPos, duration);
     }
-
+*/
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Boss") || other.CompareTag("Monster"))
+        if (other.CompareTag("Boss") || other.CompareTag("BossAttack"))
         {
             Vector3 hitPos = other.ClosestPoint(transform.position);
-            AppearHitEffect(hitPos, 0.1f);
+            AppearHitEffect(hitPos);
             StartCoroutine(player.Snag());
             UIManager.Instance.PlayerDamageText(attackDamage, hitPos);
             impulseSource.GenerateImpulse();

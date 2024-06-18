@@ -16,16 +16,6 @@ public class CatWeapon : Weapon
         cat = catObject.GetComponent<Cat>();
         attackDamage = 3;
     }
-    
-    protected override void AppearHitEffect(Vector3 hitPos, float duration)
-    {
-        base.AppearHitEffect(hitPos, duration);
-    }
-
-    protected override IEnumerator CoHitEffect(Vector3 hitPos, float duration)
-    {
-        return base.CoHitEffect(hitPos, duration);
-    }
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -33,7 +23,7 @@ public class CatWeapon : Weapon
         {
             catController.catState = CatController.CatState.Attack;
             Vector3 hitPos = other.ClosestPoint(transform.position);
-            AppearHitEffect(hitPos, 0.1f);
+            AppearHitEffect(hitPos);
             cat.Attack(other.transform);
         }
     }
