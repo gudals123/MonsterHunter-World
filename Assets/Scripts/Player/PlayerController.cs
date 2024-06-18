@@ -169,9 +169,9 @@ public class PlayerController : Controller
                 switchWaitingTime =0;
             }
         }
-        if (player.isArmed && player.StaminaCheck(0) && isChargeAttackDone)
+        if (player.isArmed && player.StaminaCheck(0))
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && isChargeAttackDone)
             {
                 playerState = PlayerState.Attack;
                 isInputAttack = true;   
