@@ -56,7 +56,7 @@ public class GreatSword : Weapon
 */
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Boss") || other.CompareTag("BossAttack"))
+        if (other.CompareTag("Boss"))
         {
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos);
