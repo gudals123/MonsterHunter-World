@@ -145,7 +145,7 @@ public class Player : Entity
     public void Roll()
     {
         //AnimatorControll(playerController.playerState);
-        
+        attackRange.SetActive(false);
         Vector3 rollDirection = new Vector3(animator.transform.localRotation.x, 0, animator.transform.localRotation.z);
         rigidbody.velocity = rollDirection + animator.transform.forward * rollPower;
     }
