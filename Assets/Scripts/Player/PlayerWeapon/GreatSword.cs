@@ -7,13 +7,16 @@ public class GreatSword : Weapon
 {
 
     [SerializeField] private GameObject playerObj;
+    [SerializeField] private GameObject catObj;
     private Player player;
+    private Cat cat;
     private CinemachineImpulseSource impulseSource;
 
     protected override void Awake()
     {
         base.Awake();
         player = playerObj.GetComponent<Player>();
+        cat = catObj.GetComponent<Cat>();
         impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
@@ -25,11 +28,11 @@ public class GreatSword : Weapon
         }
         else
         {
-            if(chargeTime < 1)
+            if (chargeTime < 1)
             {
                 attackDamage = 10;
             }
-            else if(chargeTime < 2.5)
+            else if (chargeTime < 2.5)
             {
                 attackDamage = 20;
             }
@@ -53,16 +56,14 @@ public class GreatSword : Weapon
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Boss") || other.CompareTag("Monster"))
+        if (other.CompareTag("Boss") || other.CompareTag("Monster"))
         {
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos, 0.1f);
             StartCoroutine(player.Snag());
+            UIManager.Instance.PlayerDamageText(attackDamage, hitPos);
             impulseSource.GenerateImpulse();
-
+            cat.SetTarget(other);
         }
-        //Cat.��Ÿ������(other);
     }
-
-
 }

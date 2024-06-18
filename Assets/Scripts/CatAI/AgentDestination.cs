@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class AgentDestination : ActionBase
 {
     private Animator _catAnimator;
-    public Transform target;
 
     protected override void OnInit()
     {
@@ -15,7 +14,6 @@ public class AgentDestination : ActionBase
 
     protected override TaskStatus OnUpdate()
     {
-
         return TaskStatus.Success;
     }
 }

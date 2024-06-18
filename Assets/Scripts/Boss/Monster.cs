@@ -19,6 +19,7 @@ public class Monster : Entity
     public bool weakness;
     public bool isDead;
 
+
     public override void Move(float moveSpeed, Transform targetPos)
     {
         Vector3 direction = (targetPos.position - transform.position).normalized;
