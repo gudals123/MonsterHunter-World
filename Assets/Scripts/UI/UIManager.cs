@@ -79,11 +79,11 @@ public class UIManager : MonoBehaviour
         {
             slot.icon = slotsIcon[0];
         }
-        else if (slot.GetType() == typeof(Skill_CatAttack))
+        else if (slot.GetType() == typeof(Skill_CatHeal))
         {
             slot.icon = slotsIcon[1];
         }
-        else if (slot.GetType() == typeof(Skill_CatHeal))
+        else if (slot.GetType() == typeof(NullSlot))
         {
             slot.icon = slotsIcon[2];
         }

@@ -16,6 +16,7 @@ public class Player : Entity
 
     [Header("Object")]
     [SerializeField] private GameObject chargingEffect;
+    [SerializeField] private GameObject healEffect;
     [SerializeField] private Transform characterBody;
     [SerializeField] private Transform cameraArm;
     public GameObject attackRange;
@@ -53,6 +54,7 @@ public class Player : Entity
         isArmed = false;
         isRoll = false;
         chargingEffect.SetActive(false);
+        healEffect.SetActive(false);
         _handWeapon.SetActive(false);
         _BackWeapon.SetActive(true);
     }
@@ -189,22 +191,15 @@ public class Player : Entity
     {
         if (other.CompareTag("BossAttack") && CollisionCoolTime > 1)
         {
-            Debug.Log("충돌");
+            //Debug.Log("충돌");
             CollisionCoolTime = 0;
             WeaponSetActive();
             attackRange.SetActive(false);
             knockback(transform.position, other.transform.position);
             StartCoroutine(GetHit());
-            Hit(10);
-
-            /*            other = GetComponent<Anjanath>();
-                        int damage = other.Attack();*/
-            /*            other = GetComponentInParent<Test>();
-                        int damage = other.Attack();*/
-            //Taget = other.GetComponent<Anjanath>();
-
-            //            Taget = other.GetComponent<Bresssssssss>();
-            //            SetDamage(Taget.attackValie);
+            BossAttackMethod target = other.GetComponent<BossAttackMethod>();
+            Hit(target.attackDamage);
+            Debug.Log(target.attackDamage);
         }   
     }
     private void knockback(Vector3 playerPos, Vector3 attackColliderPos)
@@ -228,6 +223,12 @@ public class Player : Entity
         chargingEffect.SetActive(true);
         StartCoroutine(ObjectDeactivated(chargingEffect, 1.0f));
     }
+    public void HealEffectPlay()
+    {
+        healEffect.SetActive(true);
+        StartCoroutine(ObjectDeactivated(healEffect, 1.0f));
+    }
+
 
     private IEnumerator ObjectDeactivated(GameObject target , float time)
     {

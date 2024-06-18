@@ -22,6 +22,7 @@ public class Item_Potion : Slot
     {
         if(count > 0)
         {
+            player.HealEffectPlay();
             Heal();
             count--;
             Debug.Log($"포션 사용 count: {count}");
