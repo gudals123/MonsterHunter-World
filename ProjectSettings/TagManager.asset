@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Ground
   - Boss
+  - Monster
+  - Weakness
+  - Weapon
+  - Collide
+  - BossAttack
+  - Cat
   layers:
   - Default
   - TransparentFX
@@ -14,7 +20,7 @@ TagManager:
   - Water
   - UI
   - Boss
-  - 
+  - Ground
   - 
   - 
   - 
