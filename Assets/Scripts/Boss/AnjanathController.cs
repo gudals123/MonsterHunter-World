@@ -18,7 +18,7 @@ public class AnjanathController : AIController
             anjanath.LeaveHere();
         }
 
-        else if(anjanath.currentHp <= 0) 
+        else if(anjanath.isDead) 
         {
             anjanathBT.anjanathState = State.Dead;
         }

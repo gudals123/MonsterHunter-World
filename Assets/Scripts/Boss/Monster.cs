@@ -5,21 +5,24 @@ using UnityEngine.EventSystems;
 
 public class Monster : Entity
 {
-    public int grade { get; set; }
-    public Vector3 targetPos;
     protected int rotationSpeed;
     protected bool canAttack;
     protected bool setHit;
-    public bool isArrivalTargetPos;
+    protected bool isArrivalTargetPos;
+    public GameObject arrivalPosPrefab;
+    public bool getHit;
+    public Vector3 targetPos;
+    protected AnimatorStateInfo stateInfo;
     public bool isSetTargetPos;
     public Transform arrivalPos;
-    protected AnimatorStateInfo stateInfo;
     public Transform bossRecognizeTr;
+    public bool weakness;
+    public bool isDead;
 
 
-    public void Move(float moveSpeed, Vector3 targetPos)
+    public override void Move(float moveSpeed, Transform targetPos)
     {
-        Vector3 direction = (targetPos - transform.position).normalized;
+        Vector3 direction = (targetPos.position - transform.position).normalized;
         Vector3 bossDirection = new Vector3(direction.x, 0, direction.z);
         Quaternion targetRotation = Quaternion.LookRotation(bossDirection);
         Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
@@ -37,14 +40,7 @@ public class Monster : Entity
     public override void Hit(int damage)
     {
         currentHp -= damage;
-    }
-
-    virtual public void DetectOpponent(Monster Opponent)
-    {
-        if(Opponent.grade == grade)
-        {
-            Debug.Log("Same Grade!!!!");
-        }
+        if (currentHp <= 0) isDead = true;
     }
 
     public void Dead()
@@ -87,7 +83,7 @@ public class Monster : Entity
 
         animator.Play("NormalWalking");
         // GroundCheck
-        Move(moveSpeed, arrivalPos.position);
+        Move(moveSpeed, arrivalPos);
 
         if (isArrivalTargetPos)
         {
@@ -110,7 +106,7 @@ public class Monster : Entity
         {
             animator.Play("BattleTracking");
         }
-        Move(4, targetTr.position);
+        Move(4, targetTr);
     }
 
     public bool SetChance(float setValue)
