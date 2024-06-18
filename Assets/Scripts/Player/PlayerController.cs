@@ -95,6 +95,7 @@ public class PlayerController : Controller
 
     public void Update()
     {
+        
         InputSend();
         player.GroundCheck();
         LookAround();

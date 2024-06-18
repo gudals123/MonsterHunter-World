@@ -26,19 +26,18 @@ public class Player : Entity
     [SerializeField] private LayerMask whatIsGround;
     private bool isGrounded;
 
-    private Collider playerCollider;
 
     [Header("Power")]
     private float rollPower = 8.5f;
     private float knockbackPower = 2.5f;
 
+    [SerializeField] private Transform spawnTransform;
 
     public float currentStamina { get; private set; }
     public float maxStamina { get; private set; }
     public int damage {  get; private set; }
     public bool isArmed {  get; private set; }
     public bool isRoll;
-    public float CollisionCoolTime { get; private set; }
 
 
     void Start()
@@ -46,8 +45,7 @@ public class Player : Entity
         playerController = GetComponent<PlayerController>();
         rigidbody = GetComponent<Rigidbody>();
         animator = characterBody.GetComponent<Animator>();
-        playerCollider = GetComponent<Collider>();
-        maxHp = 150;
+        maxHp = 100;
         currentHp = maxHp;
         maxStamina = 100f;
         currentStamina = maxStamina;
@@ -58,10 +56,7 @@ public class Player : Entity
         _handWeapon.SetActive(false);
         _BackWeapon.SetActive(true);
     }
-    private void Update()
-    {
-        CollisionCoolTime += Time.deltaTime;
-    }
+
 
     public void DrainStamina(float value)
     {
@@ -136,7 +131,6 @@ public class Player : Entity
 
     public void AnimatorControll(PlayerState state)
     {
-        animator.SetBool(PlayerAnimatorParamiter.IsDead, state == PlayerState.Dead);
         animator.SetBool(PlayerAnimatorParamiter.IsMoving, (state == PlayerState.Run) || (state == PlayerState.Walk) ||(state == PlayerState.Tired));
         animator.SetBool(PlayerAnimatorParamiter.IsRoll, state == PlayerState.Roll);
         animator.SetBool("IsLeftShift", state == PlayerState.Run || (state == PlayerState.Tired));
@@ -171,13 +165,22 @@ public class Player : Entity
 
     public override void Hit(int damage)
     {
+        currentHp -= damage;
+        currentHp = Math.Clamp(currentHp, 0, maxHp);
+        UIManager.Instance.UpdateHPBar(currentHp, maxHp);
+        Debug.Log(currentHp);
         if (currentHp <= 0)
         {
-            //Dead;
-            return;
+            animator.SetBool("IsDead", true);
+            StartCoroutine(Spawn());
         }
-        currentHp -= damage;
-        UIManager.Instance.UpdateHPBar(currentHp, maxHp);
+    }
+    public IEnumerator Spawn()
+    {
+        yield return new WaitForSeconds(3f);
+        currentHp = maxHp;
+        transform.position = spawnTransform.position;
+        animator.SetBool("IsDead", false);
     }
 
     public void Heal(int healingAmount)
@@ -189,18 +192,16 @@ public class Player : Entity
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("BossAttack") && CollisionCoolTime > 1)
+        if (other.CompareTag("BossAttack"))
         {
-            //Debug.Log("Ãæµ¹");
-            CollisionCoolTime = 0;
+
             WeaponSetActive();
             attackRange.SetActive(false);
             knockback(transform.position, other.transform.position);
             StartCoroutine(GetHit());
             BossAttackMethod target = other.GetComponent<BossAttackMethod>();
             Hit(target.attackDamage);
-            Debug.Log(target.attackDamage);
-        }   
+        }       
     }
     private void knockback(Vector3 playerPos, Vector3 attackColliderPos)
     {
