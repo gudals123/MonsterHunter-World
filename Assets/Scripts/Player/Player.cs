@@ -16,6 +16,7 @@ public class Player : Entity
 
     [Header("Object")]
     [SerializeField] private GameObject chargingEffect;
+    [SerializeField] private GameObject healEffect;
     [SerializeField] private Transform characterBody;
     [SerializeField] private Transform cameraArm;
     public GameObject attackRange;
@@ -53,6 +54,7 @@ public class Player : Entity
         isArmed = false;
         isRoll = false;
         chargingEffect.SetActive(false);
+        healEffect.SetActive(false);
         _handWeapon.SetActive(false);
         _BackWeapon.SetActive(true);
     }
@@ -228,6 +230,12 @@ public class Player : Entity
         chargingEffect.SetActive(true);
         StartCoroutine(ObjectDeactivated(chargingEffect, 1.0f));
     }
+    public void HealEffectPlay()
+    {
+        healEffect.SetActive(true);
+        StartCoroutine(ObjectDeactivated(healEffect, 1.0f));
+    }
+
 
     private IEnumerator ObjectDeactivated(GameObject target , float time)
     {
