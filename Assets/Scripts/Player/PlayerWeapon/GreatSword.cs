@@ -59,10 +59,10 @@ public class GreatSword : Weapon
             AppearHitEffect(hitPos, 0.1f);
             StartCoroutine(player.Snag());
             impulseSource.GenerateImpulse();
-
+            Debug.Log(attackDamage);
+            
         }
         //Cat.��Ÿ������(other);
     }
-
 
 }

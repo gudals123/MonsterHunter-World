@@ -36,7 +36,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void AnimationPause()
     {
-        if(_playerController.playerState == PlayerState.Attack)
+        if(_playerController.isInputAttack)
         {
             GetComponent<Animator>().speed = 0.01f;
         }

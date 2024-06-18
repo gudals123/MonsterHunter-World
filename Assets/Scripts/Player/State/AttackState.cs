@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AttackState : StateMachineBehaviour
 {
@@ -17,26 +18,24 @@ public class AttackState : StateMachineBehaviour
         _playerController = _animator.GetComponentInParent<PlayerController>();
         _animator.speed = 0.5f;
         isAppliedAnimatorSpeedDone = false;
-
+        _playerController.isAttackDone = false;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        /*if(Time.time - CombatManager.Instance._chargingStartTime > _maxChargingTime)
-        {
-            CombatManager.Instance._isCharging = false;
-        }
-        */
+
         if (!_playerController.isCharging && !isAppliedAnimatorSpeedDone && _playerController.isAnimationPauseDone)
         {
             _animator.speed = 0.5f;
-            isAppliedAnimatorSpeedDone = true;
+            _playerController.isChargeAttackDone = false;
         }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _playerController.isAnimationPauseDone = false;
+        _playerController.isChargeAttackDone = true;
+        _playerController.isAttackDone = true;
         _animator.speed = 1f;
         comboCount++;
         if (comboCount >= 2)
