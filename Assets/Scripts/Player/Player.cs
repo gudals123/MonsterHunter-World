@@ -25,6 +25,7 @@ public class Player : Entity
     [SerializeField] private LayerMask whatIsGround;
     private bool isGrounded;
 
+    private Collider playerCollider;
 
     [Header("Power")]
     private float rollPower = 8.5f;
@@ -36,7 +37,7 @@ public class Player : Entity
     public int damage {  get; private set; }
     public bool isArmed {  get; private set; }
     public bool isRoll;
-
+    public float CollisionCoolTime { get; private set; }
 
 
     void Start()
@@ -44,6 +45,7 @@ public class Player : Entity
         playerController = GetComponent<PlayerController>();
         rigidbody = GetComponent<Rigidbody>();
         animator = characterBody.GetComponent<Animator>();
+        playerCollider = GetComponent<Collider>();
         maxHp = 150;
         currentHp = maxHp;
         maxStamina = 100f;
@@ -53,6 +55,10 @@ public class Player : Entity
         chargingEffect.SetActive(false);
         _handWeapon.SetActive(false);
         _BackWeapon.SetActive(true);
+    }
+    private void Update()
+    {
+        CollisionCoolTime += Time.deltaTime;
     }
 
     public void DrainStamina(float value)
@@ -181,8 +187,10 @@ public class Player : Entity
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("BossAttack"))
+        if (other.CompareTag("BossAttack") && CollisionCoolTime > 1)
         {
+            Debug.Log("Ãæµ¹");
+            CollisionCoolTime = 0;
             WeaponSetActive();
             attackRange.SetActive(false);
             knockback(transform.position, other.transform.position);
@@ -226,6 +234,7 @@ public class Player : Entity
         yield return new WaitForSeconds(time);
         target.SetActive(false);
     }
+
 
 
     public IEnumerator Snag()
