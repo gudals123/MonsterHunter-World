@@ -87,7 +87,6 @@ public class PlayerController : Controller
         quickSlot[1] = catAttack;
         quickSlot[2] = catHeal;
         quickSlotCount = 3;
-
     }
 
 
@@ -253,11 +252,11 @@ public class PlayerController : Controller
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0f)
+        if (scroll < 0f)
         {
             quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
         }
-        else if (scroll < 0f)
+        else if (scroll > 0f)
         {
             quickSlotIndex = (quickSlotIndex - 1 + quickSlotCount) % (quickSlotCount);
         }
