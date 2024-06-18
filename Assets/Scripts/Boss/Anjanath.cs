@@ -213,7 +213,6 @@ public class Anjanath : Monster
                 WeaponDamage *= 2;
                 weakness = false;
             }
-
             isBossRecognized = true;
             Hit(WeaponDamage);
 

@@ -57,8 +57,8 @@ public class PlayerController : Controller
 
     //슬롯
     private Item_Potion potion;
-    private Skill_CatAttack catAttack;
     private Skill_CatHeal catHeal;
+    private NullSlot nullSolt;
 
     //퀵슬롯
     private Slot[] quickSlot;
@@ -81,12 +81,12 @@ public class PlayerController : Controller
         isAttackDone = true;
         chargeTime = 0;
         potion = new Item_Potion(player, 10, 10);
-        catAttack = new Skill_CatAttack(cat);
-        catHeal = new Skill_CatHeal(cat);
+        catHeal = new Skill_CatHeal(cat, player);
+        nullSolt = new NullSlot();
         quickSlot = new Slot[4];
         quickSlot[0] = potion;
-        quickSlot[1] = catAttack;
-        quickSlot[2] = catHeal;
+        quickSlot[1] = catHeal;
+        quickSlot[2] = nullSolt;
         quickSlotCount = 3;
     }
 
