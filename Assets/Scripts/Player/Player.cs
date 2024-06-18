@@ -191,22 +191,15 @@ public class Player : Entity
     {
         if (other.CompareTag("BossAttack") && CollisionCoolTime > 1)
         {
-            Debug.Log("충돌");
+            //Debug.Log("충돌");
             CollisionCoolTime = 0;
             WeaponSetActive();
             attackRange.SetActive(false);
             knockback(transform.position, other.transform.position);
             StartCoroutine(GetHit());
-            Hit(10);
-
-            /*            other = GetComponent<Anjanath>();
-                        int damage = other.Attack();*/
-            /*            other = GetComponentInParent<Test>();
-                        int damage = other.Attack();*/
-            //Taget = other.GetComponent<Anjanath>();
-
-            //            Taget = other.GetComponent<Bresssssssss>();
-            //            SetDamage(Taget.attackValie);
+            BossAttackMethod target = other.GetComponent<BossAttackMethod>();
+            Hit(target.attackDamage);
+            Debug.Log(target.attackDamage);
         }   
     }
     private void knockback(Vector3 playerPos, Vector3 attackColliderPos)

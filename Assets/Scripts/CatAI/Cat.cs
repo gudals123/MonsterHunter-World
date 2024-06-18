@@ -19,14 +19,15 @@ public class Cat : Entity
 
     [Header("Target Info")]
     public Transform target;
-    [SerializeField] private Player player;
+    [SerializeField] private GameObject playerObj;
     [SerializeField] private Monster boss;
 
-    [SerializeField] private PlayerController playerController;
+    private Player player;
 
     private void Awake()
     {
         currentHp = maxHp;
+        player = playerObj.GetComponent<Player>();
 
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
@@ -61,11 +62,8 @@ public class Cat : Entity
 
     public void Heal()
     {
-        if (catController.catState == CatState.Skill /*|| player.currentHp <= 30*/)
-        {
-            heal = 10;
-            player.Heal(heal);
-        }
+        heal = 10;
+        player.Heal(heal);
     }
 
     public void Respawn()
@@ -79,25 +77,21 @@ public class Cat : Entity
     {
         if (catController.isAttack && catController.catState == CatState.Tracking)
         {
-            Debug.Log("1");
             Move(Time.deltaTime / 2, boss.transform);
         }
 
         else if (catController.isAttack && catController.catState == CatState.Attack)
         {
-            Debug.Log("2");
             Attack(boss.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Tracking)
         {
-            Debug.Log("3");
             Move(Time.deltaTime / 2, player.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Idle)
         {
-            Debug.Log("4");
             animator.Play("Idle");
         }
     }

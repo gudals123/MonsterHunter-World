@@ -18,12 +18,9 @@ public class Skill_CatHeal : Slot
     {
         player.HealEffectPlay();
         Debug.Log($"CatHeal");
-        CatHeal();
+        cat.Heal();
     }
 
-    private void CatHeal()
-    {
-        //cat.Heal();
-    }
+
 
 }

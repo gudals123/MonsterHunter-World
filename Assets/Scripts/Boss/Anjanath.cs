@@ -196,7 +196,7 @@ public class Anjanath : Monster
                 WeaponDamage *= 2;
                 weakness = false;
             }
-            Debug.Log(WeaponDamage);
+            //Debug.Log(WeaponDamage);
             isBossRecognized = true;
             Hit(WeaponDamage);
             Vector3 hitPos = other.ClosestPoint(transform.position);
