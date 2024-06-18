@@ -60,7 +60,7 @@ public class GreatSword : Weapon
         {
             Vector3 hitPos = other.ClosestPoint(transform.position);
             AppearHitEffect(hitPos);
-            StartCoroutine(player.Snag());
+            //StartCoroutine(player.Snag());
             UIManager.Instance.PlayerDamageText(attackDamage, hitPos);
             impulseSource.GenerateImpulse();
             cat.SetTarget(other);

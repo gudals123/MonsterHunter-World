@@ -241,7 +241,8 @@ public class Player : Entity
     public IEnumerator Snag()
     {
         animator.speed = 0.01f;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.01f);
+        Debug.Log("µé¾î°¨");
         animator.speed = 1f;
     }
 
