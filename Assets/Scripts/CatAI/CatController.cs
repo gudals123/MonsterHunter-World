@@ -4,6 +4,7 @@ using UnityEngine;
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
 using Unity.VisualScripting;
+using static CatController;
 
 public class CatController : AIController
 {
@@ -19,37 +20,37 @@ public class CatController : AIController
         Skill
     }
 
-    private Transform attackPriority;
     private Cat cat;
     public CatState catState;
 
     [SerializeField] public Transform player;
+    [SerializeField] private Player playerObj;
     [SerializeField] public Transform boss;
     [SerializeField] public Transform target;
 
-    public bool isPlayer = true;
-    public bool isBoss;
-
     [Header("Range Info")]
-    public float detectRange;
-    public float interactionRange;
     public Vector3 dir;
+    public float distance;
+
+    public bool isPlayer;
+    public bool isBoss;
+    public bool isAttack;
 
     private float respawnTime;
+    public float attackDuration;
 
     private void Start()
     {
         cat = GetComponent<Cat>();
+        playerObj = GameObject.Find("Player").GetComponent<Player>();
         target = player;
         catState = CatState.Tracking;
-        detectRange = 8f;
-        interactionRange = 1.5f;
     }
 
     public void Hit()
     {
         catState = CatState.Hit;
-        cat.Hit(10);
+        cat.Hit(cat.damage);
         if (cat.currentHP <= 0)
         {
             catState = CatState.Dead;
@@ -57,40 +58,84 @@ public class CatController : AIController
         }
     }
 
-    public Vector3 Detect(Vector3 targetPos)
+    public Vector3 Detect(Transform targetPos)
     {
-        Vector3 direction = (transform.position - targetPos);
+        Vector3 direction = (transform.position - targetPos.position);
 
         return direction;
     }
 
-    public void PlayerTracking() // 상태만 변경
+    public void Distance()
     {
-        // 플레이어가 감지범위 내에 있을 때
-        if (target.CompareTag("Player"))
+        distance = Vector3.Distance(transform.position, target.position);
+    }
+
+    public void Tracking()
+    {
+        //player
+        if (isPlayer && distance > 4f)
         {
-            catState = CatState.Detect;
-            isPlayer = true;
+            target = player;
+            catState = CatState.Tracking;
         }
-        // 플레이어가 상호작용범위 내에 있을 때
-        if (target.CompareTag("Player") && dir.magnitude <= interactionRange)
+        else if (isPlayer && distance <= 4f)
         {
+            target = player;
             catState = CatState.Idle;
         }
-        else
+
+        //boss
+        if (isAttack && distance > 4f)
         {
-            this.target = player;
-            catState = CatState.Detect;
+            target = boss;
+            catState = CatState.Tracking;
         }
+        else if (isAttack && distance <= 4f)
+        {
+            target = boss;
+            catState = CatState.Attack;
+        }
+        
+        if(attackDuration > 10f)
+        {
+            isAttack = false;
+            isPlayer = true;
+            attackDuration = 0;
+            catState = CatState.Tracking;
+        }
+    }
+
+    public void TargetCheck()
+    {
+        // bool 값 변경
+        if (isAttack)
+        {
+            isPlayer = false;
+        }
+
+        else if (!isAttack)
+        {
+            isPlayer = true;
+        }
+    }
+
+    public void Heal()
+    {
+        catState = CatState.Skill;
     }
 
     private void Update()
     {
-        dir = Detect(target.position);
+        distance = Vector3.Distance(transform.position, target.position);
 
-        if(respawnTime > 10)
+        if (respawnTime > 10)
         {
             cat.Respawn();
+        }
+
+        if(isAttack)
+        {
+            attackDuration += Time.deltaTime;
         }
     }
 
@@ -101,16 +146,16 @@ public class CatController : AIController
             return;
         }
 
-        if (other.CompareTag("BossAttack"))
+        if (other.CompareTag("Player"))
         {
-            catState = CatState.Hit;
-            cat.damage = other.GetComponent<BossAttackMethod>().attackDamage;
+            isPlayer = true;
         }
 
-        else
+        if (other.CompareTag("BossAttack"))
         {
-            target = other.transform;
-            Debug.Log($"trigger : {target.tag}");
+            isPlayer = false;
+            catState = CatState.Hit;
+            cat.damage = other.GetComponent<BossAttackMethod>().attackDamage;
         }
     }
 }

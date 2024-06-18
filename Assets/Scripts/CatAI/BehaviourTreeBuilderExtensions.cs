@@ -11,7 +11,6 @@ public static class BehaviourTreeBuildersExtension
         return builder.AddNode(new AgentDestination
         {
             Name = name,
-            target = target,
         });
     }
 

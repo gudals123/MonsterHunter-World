@@ -13,7 +13,12 @@ public class AnjanathController : AIController
 
     private void Update()
     {
-        if(anjanath.currentHp <= 0) 
+        if(anjanath.leaveHere) 
+        {
+            anjanath.LeaveHere();
+        }
+
+        else if(anjanath.isDead) 
         {
             anjanathBT.anjanathState = State.Dead;
         }

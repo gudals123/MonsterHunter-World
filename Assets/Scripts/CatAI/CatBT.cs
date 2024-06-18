@@ -14,14 +14,15 @@ public class CatBT : AIController
     private void Awake()
     {
         moveSpeed = 10;
-        catController = GetComponent<CatController>();
         cat = GetComponent<Cat>();
+        catController = GetComponent<CatController>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
 
         tree = new BehaviorTreeBuilder(gameObject)
             .Selector()
                 // 공격 트리
                 .Sequence()
-                    .Condition("Attack", () => catController.catState == CatController.CatState.Attack && playerController.playerState == PlayerState.Attack)
+                    .Condition("Attack", () => playerController.playerState == PlayerState.Attack && catController.catState == CatController.CatState.Attack)
                     .Do(() =>
                     {
                         cat.Attack(catController.target.transform);
@@ -29,12 +30,11 @@ public class CatBT : AIController
                     })
                 .End()
                 // 플레이어 트래킹 트리
-                .Sequence()
-                    .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Tracking && catController.isPlayer)
+                .Selector()
+                    .Condition("PlayerTracking", () => catController.catState == CatController.CatState.Detect)
                     .Do(() =>
                     {
-                        Debug.Log("Tracking");
-                        cat.PlayerTracking();
+                        cat.Tracking();
                         return TaskStatus.Success;
                     })
                     // 보스 트래킹 트리
@@ -42,32 +42,27 @@ public class CatBT : AIController
                         .Condition("BossTracking", () => playerController.playerState == PlayerState.Attack)
                         .Do(() =>
                         {
-                            Debug.Log("BossTracking");
-                            //cat.Move(moveSpeed, catController.boss.transform.position);
-                            //catController.catState = CatController.CatState.Detect;
                             return TaskStatus.Success;
                         })
-
+                        .StateAction("Attack", () =>
+                        {
+                            cat.Attack(catController.boss.transform);
+                        })
                     .End()
                     // 플레이어 명령 트리
                     .Sequence()
                         .Condition("PlayerCommand", () => catController.catState == CatController.CatState.Skill)
                         .Do(() =>
                         {
-                            Debug.Log("PlayerCommand");
-                            //cat.Skill();
-                            //catController.catState = CatController.CatState.Skill;
                             return TaskStatus.Success;
                         })
                     .End()
                 .End()
                 // 플레이어 감지 트리
                 .Sequence()
-                    .Condition("PlayerDetect", () => catController.catState == CatController.CatState.Detect && catController.isPlayer)
+                    .Condition("PlayerDetect", () => catController.catState == CatController.CatState.Detect)
                     .Do(() =>
                     {
-                        Debug.Log("PlayerDetect");
-                        //catController.catState = CatController.CatState.Idle;
                         return TaskStatus.Success;
                     })
                     // 스킬 사용 트리
@@ -75,9 +70,7 @@ public class CatBT : AIController
                         .Condition("PlayerCommand", () => catController.catState == CatController.CatState.Skill)
                         .Do(() =>
                         {
-                            Debug.Log("PlayerCommand");
-                            //cat.Skill();
-                            //catController.catState = CatController.CatState.Skill;
+                            catController.Heal();
                             return TaskStatus.Success;
                         })
                     .End()
@@ -89,6 +82,9 @@ public class CatBT : AIController
     private void Update()
     {
         tree.Tick();
+
+        catController.TargetCheck();
+        catController.Tracking();
 
         if (catController.catState == CatController.CatState.Hit)
         {

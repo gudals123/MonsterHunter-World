@@ -3,6 +3,7 @@ public enum State
     Idle,
     Walk,
     Tracking,
+    Finding,
     Attack,
     Roar,
     GetHit,
