@@ -37,7 +37,7 @@ public class Cat : Entity
         //target = player.transform;
     }
 
-    public override void Move(float moveSpeed, Vector3 targetPos)
+    public void Move(float moveSpeed, Vector3 targetPos)
     {
         animator.Play("Tracking");
         catController.transform.position -= catController.Detect(targetPos) * moveSpeed;

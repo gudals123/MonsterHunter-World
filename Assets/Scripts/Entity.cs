@@ -5,7 +5,7 @@ using UnityEngine;
 abstract public class Entity : MonoBehaviour
 {
     protected int maxHp;
-    [SerializeField] public int currentHp;
+    [SerializeField] protected int currentHp;
     //protected int attackDamage;
     //protected Vector3 startPosition;
     protected Rigidbody rigidbody;
@@ -16,7 +16,7 @@ abstract public class Entity : MonoBehaviour
 
     }
 
-    virtual public void Move(float moveSpeed, Vector3 targetPos)
+    virtual public void Move(float moveSpeed, Transform targetPos)
     {
 
     }
