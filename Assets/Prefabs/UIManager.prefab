@@ -53,5 +53,5 @@ MonoBehaviour:
   rightSlot: {fileID: 0}
   slotsIcon:
   - {fileID: 4764722610618507702, guid: acb7d5f310a59df4596c5859567f285b, type: 3}
-  - {fileID: 4859866831090211285, guid: be84cbc311e56454e890aba02d7dee90, type: 3}
   - {fileID: 1274648746152666136, guid: 39820ae03592d16479d3836465cf0bd4, type: 3}
+  - {fileID: 4859866831090211285, guid: be84cbc311e56454e890aba02d7dee90, type: 3}

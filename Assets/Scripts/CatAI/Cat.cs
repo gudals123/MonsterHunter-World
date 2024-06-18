@@ -20,13 +20,11 @@ public class Cat : Entity
     [Header("Target Info")]
     [SerializeField] private Player player;
 
-    private Player player;
 
     private void Awake()
     {
         maxHp = 80;
         currentHp = maxHp;
-        player = playerObj.GetComponent<Player>();
 
         animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
