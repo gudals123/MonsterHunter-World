@@ -78,6 +78,7 @@ public class PlayerController : Controller
         isMediumCharged = false;
         isMaxCharged = false;
         isChargeAttackDone = true;
+        isAttackDone = true;
         chargeTime = 0;
         potion = new Item_Potion(player, 10, 10);
         catAttack = new Skill_CatAttack(cat);
@@ -111,6 +112,7 @@ public class PlayerController : Controller
         {
             if (player.StaminaCheck(staminaCostRoll))
             {
+                
                 playerState = PlayerState.Roll;
                 player.SetAnimator("IsRoll", true);
                 //player.ApplyState();
@@ -169,7 +171,7 @@ public class PlayerController : Controller
                 switchWaitingTime =0;
             }
         }
-        if (player.isArmed && player.StaminaCheck(0))
+        if (player.isArmed && player.StaminaCheck(0) && !player.isRoll)
         {
             if (Input.GetMouseButton(0) && isChargeAttackDone)
             {
@@ -203,6 +205,7 @@ public class PlayerController : Controller
             }
             else
             {
+               
                 isInputAttack = false;
                 isCharging = false ;
                 isMediumCharged = false;
