@@ -4,6 +4,7 @@ using UnityEngine;
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
 using Unity.VisualScripting;
+using static CatController;
 
 public class CatController : AIController
 {
@@ -28,8 +29,8 @@ public class CatController : AIController
     [SerializeField] public Transform target;
 
     [Header("Range Info")]
-    public float detectRange;
-    public float interactionRange;
+    //public float detectRange;
+    //public float interactionRange;
     public Vector3 dir;
     public float distance;
 
@@ -38,6 +39,7 @@ public class CatController : AIController
     public bool isAttack;
 
     private float respawnTime;
+    public float attackDuration;
 
     private void Start()
     {
@@ -45,8 +47,6 @@ public class CatController : AIController
         playerObj = GameObject.Find("Player").GetComponent<Player>();
         target = player;
         catState = CatState.Tracking;
-        detectRange = 8f;
-        interactionRange = 1.5f;
     }
 
     public void Hit()
@@ -60,9 +60,9 @@ public class CatController : AIController
         }
     }
 
-    public Vector3 Detect(Vector3 targetPos)
+    public Vector3 Detect(Transform targetPos)
     {
-        Vector3 direction = (transform.position - targetPos);
+        Vector3 direction = (transform.position - targetPos.position);
 
         return direction;
     }
@@ -107,39 +107,46 @@ public class CatController : AIController
     public void Tracking()
     {
         //player
-        if(isPlayer && distance > 1.5f)
+        if (isPlayer && distance > 1.5f)
         {
             catState = CatState.Tracking;
         }
-        else if(isPlayer && distance <= 1.5f)
+        else if (isPlayer && distance <= 1.5f)
         {
             catState = CatState.Idle;
         }
 
         //boss
-        if(isAttack && distance > 1.5f)
+        if (isAttack && distance > 1.5f)
         {
             catState = CatState.Tracking;
         }
-        else if(isAttack && distance <= 1.5f)
+        else if (isAttack && distance <= 1.5f)
         {
             catState = CatState.Attack;
         }
+        
+        if(attackDuration > 5f)
+        {
+            isAttack = false;
+            isPlayer = true;
+            attackDuration = 0;
+            catState = CatState.Tracking;
+        }
+        //cat.Tracking();
     }
 
     public void TargetCheck()
     {
         // bool 값 변경
-        if(playerObj.isArmed)
+        if (isAttack)
         {
-            isAttack = true;
             isPlayer = false;
         }
 
-        else if(!playerObj.isArmed)
+        else if (!isAttack)
         {
             isPlayer = true;
-            isAttack = false;
         }
     }
 
@@ -150,12 +157,23 @@ public class CatController : AIController
 
     private void Update()
     {
-        dir = Detect(target.position);
+        dir = Detect(target);
+        distance = Vector3.Distance(transform.position, target.position);
 
         if (respawnTime > 10)
         {
             cat.Respawn();
         }
+
+        if(isAttack)
+        {
+            attackDuration += Time.deltaTime;
+        }
+
+        Debug.Log($"isAttack : {isAttack}");
+        Debug.Log($"isPlayer : {isPlayer}");
+        Debug.Log($"catState : {catState}");
+        Debug.Log($"attackDuration : {attackDuration}");
     }
 
     void OnTriggerEnter(Collider other)
@@ -165,8 +183,14 @@ public class CatController : AIController
             return;
         }
 
+        if (other.CompareTag("Player"))
+        {
+            isPlayer = true;
+        }
+
         if (other.CompareTag("BossAttack"))
         {
+            isPlayer = false;
             catState = CatState.Hit;
             cat.damage = other.GetComponent<BossAttackMethod>().attackDamage;
         }

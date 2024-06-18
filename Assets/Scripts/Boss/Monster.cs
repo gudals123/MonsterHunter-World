@@ -17,7 +17,7 @@ public class Monster : Entity
     public Transform bossRecognizeTr;
 
 
-    public override void Move(float moveSpeed, Vector3 targetPos)
+    public void Move(float moveSpeed, Vector3 targetPos)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
         Vector3 bossDirection = new Vector3(direction.x, 0, direction.z);

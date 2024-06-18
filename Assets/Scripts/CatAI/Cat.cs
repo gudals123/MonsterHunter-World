@@ -37,19 +37,19 @@ public class Cat : Entity
         target = player.transform;
     }
 
-    public override void Move(float moveSpeed, Vector3 targetPos)
+    public override void Move(float moveSpeed, Transform targetPos)
     {
         animator.Play("Tracking");
+        LookAtTarget(targetPos);
         catController.transform.position -= catController.Detect(targetPos) * moveSpeed;
     }
 
     public void Attack(Transform target)
     {
-        if (Vector3.Distance(target.position, transform.position) > catController.interactionRange)
-        {
-            Move(Time.deltaTime, target.position);
-        }
-
+        //if (Vector3.Distance(target.position, transform.position) > 1.5f)
+        //{
+        //    Move(Time.deltaTime, target.position);
+        //}
         animator.Play("Attack");
     }
 
@@ -80,57 +80,29 @@ public class Cat : Entity
         gameObject.SetActive(true);
     }
 
-    // public void Tracking() // 출력
-    // {
-    //     if(catController.isAttack && catController.dir.magnitude <= catController.interactionRange)
-    //     {
-    //         // boss = target.GetComponentInParent<Monster>(); // player에서 target 설정?
-
-    //         Attack(target.transform);
-    //     }
-        
-    //     if(catController.isAttack && catController.dir.magnitude > catController.interactionRange)
-    //     {
-    //         Move(Time.deltaTime, boss.transform.position);
-    //     }
-
-    //     // 플레이어가 감지범위 내에 있을 때
-    //     else if (catController.catState == CatState.Detect)
-    //     {
-    //         Debug.Log("Player, dir.magnitude <= detectRange");
-    //         LookAtTarget(player.transform);
-    //         Move(Time.deltaTime, player.transform.position);
-    //     }
-
-    //     // 플레이어가 상호작용범위 내에 있을 때
-    //     else if (catController.catState == CatState.Idle)
-    //     {
-    //         Debug.Log("Player, dir.magnitude <= interactionRange");
-    //         LookAtTarget(player.transform);
-    //         isAttack = false;
-    //         animator.Play("Idle");
-    //     }
-    // }
-
     public void Tracking()
     {
-        if(catController.isAttack && catController.catState == CatState.Tracking)
+        if (catController.isAttack && catController.catState == CatState.Tracking)
         {
-            Move(Time.deltaTime, boss.transform.position);
+            Debug.Log("1");
+            Move(Time.deltaTime, boss.transform);
         }
 
-        else if(catController.isAttack && catController.catState == CatState.Idle)
+        else if (catController.isAttack && catController.catState == CatState.Attack)
         {
+            Debug.Log("2");
             Attack(boss.transform);
         }
 
-        else if(catController.isPlayer && catController.catState == CatState.Tracking)
+        else if (catController.isPlayer && catController.catState == CatState.Tracking)
         {
-            Move(Time.deltaTime, player.transform.position);
+            Debug.Log("3");
+            Move(Time.deltaTime, player.transform);
         }
 
-        else if(catController.isPlayer && catController.catState == CatState.Attack)
+        else if (catController.isPlayer && catController.catState == CatState.Idle)
         {
+            Debug.Log("4");
             animator.Play("Idle");
         }
     }
@@ -144,11 +116,11 @@ public class Cat : Entity
     public void SetTarget(Collider other)
     {
         target = other.transform;
+        catController.isAttack = true;
     }
 
     private void Update()
     {
-        LookAtTarget(target);
         this.currentHP = currentHp;
     }
 

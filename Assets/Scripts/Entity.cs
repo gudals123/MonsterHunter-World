@@ -16,7 +16,7 @@ abstract public class Entity : MonoBehaviour
 
     }
 
-    virtual public void Move(float moveSpeed, Vector3 targetPos)
+    virtual public void Move(float moveSpeed, Transform targetPos)
     {
 
     }

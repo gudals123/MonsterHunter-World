@@ -94,8 +94,6 @@ public class CatBT : AIController
         catController.TargetCheck();
         catController.Tracking();
 
-        catController.Tracking();
-
         if (catController.catState == CatController.CatState.Hit)
         {
             cat.Hit(cat.damage);
