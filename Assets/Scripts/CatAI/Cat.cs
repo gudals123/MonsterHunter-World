@@ -77,7 +77,7 @@ public class Cat : Entity
     {
         if (catController.isAttack && catController.catState == CatState.Tracking)
         {
-            Move(Time.deltaTime / 2, boss.transform);
+            Move(Time.deltaTime / 3, boss.transform);
         }
 
         else if (catController.isAttack && catController.catState == CatState.Attack)
@@ -87,7 +87,7 @@ public class Cat : Entity
 
         else if (catController.isPlayer && catController.catState == CatState.Tracking)
         {
-            Move(Time.deltaTime / 2, player.transform);
+            Move(Time.deltaTime / 3, player.transform);
         }
 
         else if (catController.isPlayer && catController.catState == CatState.Idle)

@@ -6,6 +6,7 @@ public class Anjanath : Monster
 {
     public NormalAttackMethod normalattackMethod;
     public GameObject breathAttackMethod;
+    public GameObject nomalAttackColliderObj;
     public Transform playerTr;
     public Transform attackTr;
     public Transform targetTr;
@@ -18,11 +19,12 @@ public class Anjanath : Monster
     private State currentState;
     private float distancePtoB;
     private float distancePerception;
-    private float perceptionTime = 0;
+    [SerializeField]private float perceptionTime = 0;
     private int DamageStack;
     private int WeaponDamage;
     private bool isBossRecognized;
     private bool isBusy;
+    public bool isAttacking;
 
     private void Awake()
     {
@@ -39,7 +41,6 @@ public class Anjanath : Monster
         setHit = false;
         isDead = false;
         Idle();
-
     }
 
     public void BreathAttacking()
@@ -50,23 +51,26 @@ public class Anjanath : Monster
     public void NormalAttacking()
     {
         breathAttackMethod.SetActive(false);
-        normalattackMethod.NowBossAttacking();
+        //normalattackMethod.NowBossAttacking();
     }
 
     public override void Sturn()
     {
         base.Sturn();
         isSturn = false;
+        nomalAttackColliderObj.SetActive(false);
     }
 
     public override void GetHit()
     {
         base.GetHit();
         getHit = false;
+        nomalAttackColliderObj.SetActive(false);
     }
 
     public override void Hit(int damage)
     {
+        nomalAttackColliderObj.SetActive(false);
         base.Hit(damage);
         DamageStack++;
         if(DamageStack == 8)
@@ -117,10 +121,22 @@ public class Anjanath : Monster
 
     public void LeaveHere()
     {
-        //animator.Play("BattleTracking");
-        Move(4, arrivalPos);
+        //animator.Play("Rush");
+        StartCoroutine(MoveForward());
     }
+    IEnumerator MoveForward()
+    {
+        Vector3 direction = transform.forward; // 바라보는 방향
 
+        float elapsedTime = 0f;
+
+        while (elapsedTime < 1f)
+        {
+            rigidbody.MovePosition(rigidbody.position + direction * 8f * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
     public void IsPlayerInRange()
     {
         distancePtoB = Vector3.Distance(targetTr.position, transform.position);
@@ -131,19 +147,7 @@ public class Anjanath : Monster
         Debug.DrawRay(attackTr.position, transform.forward * 5f, Color.yellow);
         RaycastHit hit;
 
-        if (!isBossRecognized && distancePtoB <= 18f)
-        {
-            perceptionTime += Time.deltaTime;
-
-            if (perceptionTime >= 2f)
-            {
-                perceptionTime = 0;
-                isBossRecognized = true;
-                targetTr = playerTr;
-            }
-        }
-
-        else if (isBossRecognized && Physics.Raycast(attackTr.position, transform.forward, out hit, 5f))
+        if (isBossRecognized && Physics.Raycast(attackTr.position, transform.forward, out hit, 5f))
         {
             if (hit.collider.gameObject.name == targetTr.gameObject.name)
             {
@@ -173,6 +177,18 @@ public class Anjanath : Monster
             anjanathBT.anjanathState = State.Tracking;
         }
 
+        else if (!isBossRecognized && distancePtoB <= 18f)
+        {
+            perceptionTime += Time.deltaTime;
+
+            if (perceptionTime >= 2f)
+            {
+                perceptionTime = 0;
+                isBossRecognized = true;
+                targetTr = playerTr;
+            }
+        }
+
         else if (!isBossRecognized)
         {
             anjanathBT.anjanathState = State.Idle;
@@ -190,15 +206,16 @@ public class Anjanath : Monster
         {
             targetTr = other.transform.root;
             currentState = anjanathBT.anjanathState;
+
             WeaponDamage = other.gameObject.GetComponent<Weapon>().attackDamage;
             if (weakness)
             {
                 WeaponDamage *= 2;
                 weakness = false;
             }
-            //Debug.Log(WeaponDamage);
             isBossRecognized = true;
             Hit(WeaponDamage);
+
             Vector3 hitPos = other.ClosestPoint(transform.position);
             UIManager.Instance.PlayerDamageText(WeaponDamage, hitPos);
         }
@@ -210,7 +227,7 @@ public class Anjanath : Monster
         {
             // 인식 범위
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, 11f);
+            Gizmos.DrawWireSphere(transform.position, 18f);
 
             // 공격 범위
             Gizmos.color = Color.yellow;
@@ -220,11 +237,12 @@ public class Anjanath : Monster
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, 7f);
         }
+
         else
         {
             // 기본 인식 범위
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, 11f);
+            Gizmos.DrawWireSphere(transform.position, 18f);
         }
     }
 }
