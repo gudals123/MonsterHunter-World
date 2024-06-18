@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 2320452134441106526}
   m_Layer: 3
   m_Name: AttachPoint
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -509,7 +509,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2416065220738847516}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.95, y: 0, z: 0.38}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
@@ -1299,7 +1299,7 @@ GameObject:
   - component: {fileID: 8258607651246075183}
   m_Layer: 3
   m_Name: AttackRange
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1367,8 +1367,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5460a36c63675a843b355d6556860ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitEffect: {fileID: 5709663623744378833, guid: e3d35b777b3511449a485794cb03f0c8,
+  _hitEffect: {fileID: 5709663623744378833, guid: 3fce3c36b853e1d4e95fcf9f644b6be8,
     type: 3}
+  hitParticleEffect: {fileID: 0}
   catObject: {fileID: 2416065220738847516}
 --- !u!1 &6037808260954023485
 GameObject:

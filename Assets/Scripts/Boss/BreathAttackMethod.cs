@@ -23,7 +23,7 @@ public class BreathAttackMethod : BossAttackMethod
         if (other.CompareTag("Player"))
         {
             Vector3 hitPos = other.ClosestPoint(transform.position);
-            AppearHitEffect(hitPos, 1f);
+            AppearHitEffect(hitPos);
         }
     }
 

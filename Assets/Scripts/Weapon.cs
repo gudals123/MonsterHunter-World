@@ -4,29 +4,22 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [SerializeField] protected GameObject _hitEffect;
+    public ParticleSystem hitParticleEffect;
     protected GameObject hit;
-    protected float duration;
+
     public int attackDamage { get; set; }
 
     protected virtual void Awake()
     {
         hit = Instantiate(_hitEffect);
-        hit.SetActive(false);
+        hitParticleEffect = hit.GetComponent<ParticleSystem>();
     }
 
     protected virtual void OnTriggerEnter(Collider other) { }
 
-    protected virtual void AppearHitEffect(Vector3 hitPos, float duration)
-    {
-        StartCoroutine(CoHitEffect(hitPos, duration));
-    }
-
-    protected virtual IEnumerator CoHitEffect(Vector3 hitPos, float duration)
+    protected virtual void AppearHitEffect(Vector3 hitPos)
     {
         hit.transform.position = hitPos;
-        hit.SetActive(true);
-        yield return new WaitForSeconds(duration);
-        hit.SetActive(false);
+        hitParticleEffect.Play();
     }
-
 }

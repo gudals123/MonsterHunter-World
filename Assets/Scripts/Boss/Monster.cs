@@ -5,19 +5,18 @@ using UnityEngine.EventSystems;
 
 public class Monster : Entity
 {
+    public GameObject arrivalPosPrefab;
+    public Transform arrivalPos;
+    public Transform bossRecognizeTr;
+    public bool getHit;
+    public bool isSetTargetPos;
+    public bool weakness;
+    public bool isDead;
+    protected AnimatorStateInfo stateInfo;
     protected int rotationSpeed;
     protected bool canAttack;
     protected bool setHit;
     protected bool isArrivalTargetPos;
-    public GameObject arrivalPosPrefab;
-    public bool getHit;
-    public Vector3 targetPos;
-    protected AnimatorStateInfo stateInfo;
-    public bool isSetTargetPos;
-    public Transform arrivalPos;
-    public Transform bossRecognizeTr;
-    public bool weakness;
-    public bool isDead;
 
 
     public override void Move(float moveSpeed, Transform targetPos)

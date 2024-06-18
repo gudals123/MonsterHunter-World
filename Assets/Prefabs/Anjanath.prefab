@@ -693,7 +693,6 @@ GameObject:
   - component: {fileID: 1775968571112777717}
   - component: {fileID: 8533121082207780226}
   - component: {fileID: 578785609114674413}
-  - component: {fileID: 1434643011378300901}
   m_Layer: 6
   m_Name: Anjanath
   m_TagString: Untagged
@@ -733,27 +732,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHp: 0
-  targetPos: {x: 0, y: 0, z: 0}
-  isArrivalTargetPos: 1
-  isSetTargetPos: 0
-  arrivalPos: {fileID: 0}
+  arrivalPosPrefab: {fileID: 3017177913322274577, guid: c5055ca578306cb4082c4f6e41e99a5c,
+    type: 3}
+  arrivalPos: {fileID: 1975494893259290122, guid: c5055ca578306cb4082c4f6e41e99a5c,
+    type: 3}
   bossRecognizeTr: {fileID: 8831468372407433281}
-  anjanathBT: {fileID: 1775968571112777717}
+  getHit: 0
+  isSetTargetPos: 0
+  weakness: 0
+  isDead: 0
   normalattackMethod: {fileID: 7895551030523180215}
   breathAttackMethod: {fileID: 8603334793471251494}
-  DamageStack: 0
   playerTr: {fileID: 0}
   attackTr: {fileID: 2609117354351146743}
-  isBossRecognized: 0
   targetTr: {fileID: 0}
   startNormalAttaking: 0
   startBreathAttaking: 0
-  perceptionTime: 0
-  getHit: 0
-  WeaponDamage: 0
-  isBusy: 0
   isSturn: 0
-  weakness: 0
   leaveHere: 0
 --- !u!114 &1775968571112777717
 MonoBehaviour:
@@ -808,29 +803,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!136 &1434643011378300901
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1699348392216218028}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 10
-  m_Height: 22
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 11.29}
 --- !u!1 &1747393381696168983
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,6 +1462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hitEffect: {fileID: 1025285306637258, guid: fa0b15baa54e28547a812aed27898ccf, type: 3}
+  hitParticleEffect: {fileID: 0}
 --- !u!114 &5293766319673387148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2668,6 +2641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hitEffect: {fileID: 1025285306637258, guid: fa0b15baa54e28547a812aed27898ccf, type: 3}
+  hitParticleEffect: {fileID: 0}
 --- !u!1 &8113130326168506590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2905,7 +2879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 688eba846022a1f448a5e4ec1bbe0420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countTime: 0
   fireBreath: {fileID: 5977102299242014829}
 --- !u!1 &8795325051264437419
 GameObject:
@@ -3035,6 +3008,10 @@ PrefabInstance:
     - target: {fileID: 1634767862067424, guid: eea199c4817e5734189c1a481c4928ef, type: 3}
       propertyPath: m_Name
       value: FlameThrower
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634767862067424, guid: eea199c4817e5734189c1a481c4928ef, type: 3}
+      propertyPath: m_TagString
+      value: BossAttack
       objectReference: {fileID: 0}
     - target: {fileID: 4584431484625042, guid: eea199c4817e5734189c1a481c4928ef, type: 3}
       propertyPath: m_LocalScale.x
