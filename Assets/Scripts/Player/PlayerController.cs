@@ -227,6 +227,7 @@ public class PlayerController : Controller
             }
             if (Input.GetMouseButtonUp(1))
             {
+                isChargeAttackDone = true;
                 player.ApplyState();
             }
         }
