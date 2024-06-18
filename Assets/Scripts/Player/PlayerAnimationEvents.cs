@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerController;
 
 public class PlayerAnimationEvents : MonoBehaviour
 {
     [Header("Weapons")]
     [SerializeField] private GameObject _handWeapon;
     [SerializeField] private GameObject _BackWeapon;
-
     [SerializeField] private GameObject _attackRange;
 
 
@@ -36,7 +34,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void AnimationPause()
     {
-        if(_playerController.playerState == PlayerState.Attack)
+        if(_playerController.isInputAttack)
         {
             GetComponent<Animator>().speed = 0.01f;
         }

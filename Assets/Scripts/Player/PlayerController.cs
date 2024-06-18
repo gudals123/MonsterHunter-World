@@ -22,9 +22,7 @@ public enum PlayerState
 public class PlayerController : Controller
 {
     private Player player;
-    [SerializeField] 
-    private Cat cat;
-
+    [SerializeField] private Cat cat;
     private GreatSword greatSword;
     
     private float walkSpeed = 4f;
@@ -46,9 +44,12 @@ public class PlayerController : Controller
     public bool isAnimationPauseDone { get; set; }
     public bool isMediumCharged { get; private set; }
     public bool isMaxCharged { get; private set; }
+    public bool isChargeAttackDone { get; set; }
+    public bool isAttackDone { get; set; }
+    public bool isInputAttack { get; set; }
 
 
-    private float chargeTime = 0f;
+    private float chargeTime;
     private float maxChargeTime = 3f;
     private float switchWaitingTime = 0;
 
@@ -76,6 +77,8 @@ public class PlayerController : Controller
         isAnimationPauseDone = false;
         isMediumCharged = false;
         isMaxCharged = false;
+        isChargeAttackDone = true;
+        chargeTime = 0;
         potion = new Item_Potion(player, 10, 10);
         catAttack = new Skill_CatAttack(cat);
         catHeal = new Skill_CatHeal(cat);
@@ -84,7 +87,6 @@ public class PlayerController : Controller
         quickSlot[1] = catAttack;
         quickSlot[2] = catHeal;
         quickSlotCount = 3;
-
     }
 
 
@@ -97,6 +99,7 @@ public class PlayerController : Controller
         LookAround();
         QuickSlotIndexChange();
         StaminerRecovery();
+        
     }
 
     public void InputSend()
@@ -104,7 +107,7 @@ public class PlayerController : Controller
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         //구르기
-        if (Input.GetKeyDown(KeyCode.Space) && !player.isRoll && player.SwitchDoneCheck() /*&& !player.DoNotDisturbCheck()*/)
+        if (Input.GetKeyDown(KeyCode.Space) && !player.isRoll && player.SwitchDoneCheck())
         {
             if (player.StaminaCheck(staminaCostRoll))
             {
@@ -166,11 +169,12 @@ public class PlayerController : Controller
                 switchWaitingTime =0;
             }
         }
-        if (player.isArmed && player.StaminaCheck(0))
+        if (player.isArmed && player.StaminaCheck(0) && isChargeAttackDone)
         {
             if (Input.GetMouseButton(0))
             {
                 playerState = PlayerState.Attack;
+                isInputAttack = true;   
                 isRightAttack = false;
                 player.ApplyState();
                 if (isCharging)
@@ -181,7 +185,7 @@ public class PlayerController : Controller
                         player.ChargingEffectPlay();
                         isMediumCharged = true;
                     }
-                    else if (chargeTime >= 2.5f && !isMaxCharged)
+                    if (chargeTime >= 2.5f && !isMaxCharged)
                     {
                         player.ChargingEffectPlay();
                         isMaxCharged = true;
@@ -189,27 +193,34 @@ public class PlayerController : Controller
                     if (chargeTime > maxChargeTime)
                     {
                         isCharging = false;
+                        isMediumCharged = false;
+                        isMaxCharged = false;
                         player.ApplyState();
                         greatSword.AttackDamageSet(isRightAttack, chargeTime);
                         chargeTime = 0;
                     }
                 }
             }
-            if (Input.GetMouseButtonUp(0))
+            else
             {
-                isCharging = false;
+                isInputAttack = false;
+                isCharging = false ;
                 isMediumCharged = false;
                 isMaxCharged = false;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
                 player.ApplyState();
                 greatSword.AttackDamageSet(isRightAttack, chargeTime);
                 chargeTime = 0;
             }
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) && isAttackDone)
             {
                 isRightAttack = true;
+                isChargeAttackDone = false;
+                greatSword.AttackDamageSet(isRightAttack, chargeTime);
                 playerState = PlayerState.Attack;
                 player.ApplyState();
-                greatSword.AttackDamageSet(isRightAttack, chargeTime);
             }
             if (Input.GetMouseButtonUp(1))
             {
@@ -241,11 +252,11 @@ public class PlayerController : Controller
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0f)
+        if (scroll < 0f)
         {
             quickSlotIndex = (quickSlotIndex + 1) % (quickSlotCount);
         }
-        else if (scroll < 0f)
+        else if (scroll > 0f)
         {
             quickSlotIndex = (quickSlotIndex - 1 + quickSlotCount) % (quickSlotCount);
         }

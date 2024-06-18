@@ -559,7 +559,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.59901685
+      - time: 0.48843932
         functionName: AttackRangeCollierTurnOff
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: c39a0f918ce523344a209600d8f9ec40,

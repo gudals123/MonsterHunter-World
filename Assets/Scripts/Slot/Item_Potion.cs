@@ -22,9 +22,9 @@ public class Item_Potion : Slot
     {
         if(count > 0)
         {
-            Debug.Log($"포션 사용 count: {count}");
             Heal();
             count--;
+            Debug.Log($"포션 사용 count: {count}");
         }
     }
 

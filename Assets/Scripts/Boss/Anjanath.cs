@@ -39,6 +39,7 @@ public class Anjanath : Monster
         setHit = false;
         isDead = false;
         Idle();
+
     }
 
     public void BreathAttacking()
