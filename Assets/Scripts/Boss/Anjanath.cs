@@ -73,12 +73,13 @@ public class Anjanath : Monster
         nomalAttackColliderObj.SetActive(false);
         base.Hit(damage);
         DamageStack++;
-        if(DamageStack == 8)
+        if(DamageStack == 3)
         {
+            anjanathBT.anjanathState = State.Sturn;
             DamageStack = 0;
         }
 
-        else if(DamageStack % 3 == 0)
+        else if(DamageStack % 2 == 0)
         {
             getHit = true;
         }
