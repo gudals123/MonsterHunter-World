@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: 38e201f44de297a44afe28278865353a
   - enabled: 1
-    path: Assets/Scenes/CatAI/MonsterHunter.unity
+    path: Assets/Scenes/MonsterHunter.unity
     guid: a0b2f9331b44c6147870366f80d2bd38
   m_configObjects: {}
