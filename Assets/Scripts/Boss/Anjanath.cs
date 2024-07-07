@@ -73,7 +73,7 @@ public class Anjanath : Monster
         nomalAttackColliderObj.SetActive(false);
         base.Hit(damage);
         DamageStack++;
-        if(DamageStack == 3)
+        if(DamageStack == 5)
         {
             isSturn = true;
             DamageStack = 0;
