@@ -23,14 +23,14 @@ public class AnjanathController : AIController
             anjanathBT.anjanathState = State.Dead;
         }
 
-        else if (anjanath.getHit)
-        {
-            anjanathBT.anjanathState = State.GetHit;
-        }
-
         else if (anjanath.isSturn)
         {
             anjanathBT.anjanathState = State.Sturn;
+        }
+
+        else if (anjanath.getHit)
+        {
+            anjanathBT.anjanathState = State.GetHit;
         }
 
         else
