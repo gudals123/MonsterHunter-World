@@ -75,11 +75,11 @@ public class Anjanath : Monster
         DamageStack++;
         if(DamageStack == 3)
         {
-            anjanathBT.anjanathState = State.Sturn;
+            isSturn = true;
             DamageStack = 0;
         }
 
-        else if(DamageStack % 2 == 0)
+        else if(DamageStack == 2)
         {
             getHit = true;
         }
